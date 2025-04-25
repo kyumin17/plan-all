@@ -12,3 +12,13 @@ export interface ScheduleProps {
   location?: string;
   color: string;
 };
+
+export interface TimeblockProps {
+  id: string;
+  name: string;
+  day: number;
+  start_at: TimeProps;
+  end_at: TimeProps;
+  color: string;
+  location?: string;
+};
