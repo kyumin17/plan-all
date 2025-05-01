@@ -3,6 +3,13 @@ export interface TimeProps {
   minute: number;
 }
 
+export interface DateProps {
+  year: number;
+  month: number;
+  date: number;
+  time: TimeProps;
+};
+
 export interface ScheduleProps {
   id: string;
   name: string;
@@ -19,6 +26,15 @@ export interface TimeblockProps {
   day: number;
   start_at: TimeProps;
   end_at: TimeProps;
+  color: string;
+  location?: string;
+};
+
+export interface CalendarProps {
+  id: string;
+  name: string;
+  start_date: DateProps;
+  end_date: DateProps;
   color: string;
   location?: string;
 };
