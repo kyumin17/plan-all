@@ -11,8 +11,8 @@ const CalendarPage = () => {
 
   useEffect(() => {
     const data: CalendarProps[] = [
-      {id: '1', start_date: {time: {hour: 1, minute: 0}, year: 2025, month: 4, date: 30}, end_date: {time: {hour: 3, minute: 0}, year: 2025, month: 4, date: 30}, location: 'D102', name: 'ㅎㅇ', color: 'blue'},
-      {id: '2', start_date: {time: {hour: 17, minute: 30}, year: 2025, month: 4, date: 15}, end_date: {time: {hour: 18, minute: 30}, year: 2025, month: 4, date: 15}, name: '시험기간', color: 'green'}
+      {id: 1, start_date: {time: {hour: 1, minute: 0}, year: 2025, month: 4, date: 30}, end_date: {time: {hour: 3, minute: 0}, year: 2025, month: 4, date: 30}, location: 'D102', name: 'ㅎㅇ', color: 'blue'},
+      {id: 2, start_date: {time: {hour: 17, minute: 30}, year: 2025, month: 4, date: 15}, end_date: {time: {hour: 18, minute: 30}, year: 2025, month: 4, date: 15}, name: '시험기간', color: 'green'}
     ]; // test data
     setEventList(data);
   }, [month, year]);

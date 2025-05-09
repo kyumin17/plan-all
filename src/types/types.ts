@@ -11,17 +11,19 @@ export interface DateProps {
 };
 
 export interface ScheduleProps {
-  id: string;
+  id: number;
   name: string;
   date: string;
-  start_at: TimeProps;
-  end_at: TimeProps;
+  start_hour: number;
+  start_minute: number;
+  end_hour: number;
+  end_minute: number;
   location?: string;
   color: string;
 };
 
 export interface TimeblockProps {
-  id: string;
+  id: number;
   name: string;
   day: number;
   start_at: TimeProps;
@@ -31,7 +33,7 @@ export interface TimeblockProps {
 };
 
 export interface CalendarProps {
-  id: string;
+  id: number;
   name: string;
   start_date: DateProps;
   end_date: DateProps;

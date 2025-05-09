@@ -9,14 +9,14 @@ const ScheduleBlock = ({ schedule, currentTime } : { schedule: ScheduleProps, cu
 
   const isFinished = () => {
     const curSum = getTimeSum(currentTime.hour, currentTime.minute);
-    const endSum = getTimeSum(schedule.end_at.hour, schedule.end_at.minute);
+    const endSum = getTimeSum(schedule.end_hour, schedule.end_minute);
 
     return endSum < curSum;
   };
 
-  const timeToString = (time: TimeProps) => {
-    const hourStr: string = time.hour <= 9 ? '0' + time.hour : '' + time.hour;
-    const minStr: string = time.minute <= 9 ? '0' + time.minute : '' + time.minute;
+  const timeToString = (hour: number, minute: number) => {
+    const hourStr: string = hour <= 9 ? '0' + hour : '' + hour;
+    const minStr: string = minute <= 9 ? '0' + minute : '' + minute;
     return hourStr + ':' + minStr;
   };
 
@@ -26,7 +26,7 @@ const ScheduleBlock = ({ schedule, currentTime } : { schedule: ScheduleProps, cu
       </View>
       <View>
         <Text style={[styles.time, isFinished() && styles.textInactive]}>
-          {timeToString(schedule.start_at)} - {timeToString(schedule.end_at)}
+          {timeToString(schedule.start_hour, schedule.start_minute)} - {timeToString(schedule.end_hour, schedule.end_minute)}
         </Text>
         <View style={styles.body}>
           <Text style={[styles.name, isFinished() && styles.textInactive]}>
