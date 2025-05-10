@@ -40,3 +40,14 @@ export interface CalendarProps {
   color: string;
   location?: string;
 };
+
+export interface TimeManageProps {
+  startHour: number;
+  startMinute: number;
+  endHour: number;
+  endMinute: number;
+  setStartHour: React.Dispatch<React.SetStateAction<number>>;
+  setStartMinute: React.Dispatch<React.SetStateAction<number>>;
+  setEndHour: React.Dispatch<React.SetStateAction<number>>;
+  setEndMinute: React.Dispatch<React.SetStateAction<number>>;
+};

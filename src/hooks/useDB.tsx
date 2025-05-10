@@ -17,7 +17,7 @@ const useDB = () => {
 
         setDb(res);
       } catch (error) {
-        console.error('Error opening database:', error);
+        console.error(error);
       }
     };
 
