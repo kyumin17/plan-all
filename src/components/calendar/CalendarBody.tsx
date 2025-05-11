@@ -6,7 +6,7 @@ const CalendarBody = ({ year, month, eventList }: { year: number, month: number,
   const startDay: number = (new Date(year, month - 1, 1).getDay() - 1) % 7; // mon: 0
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const dateNum: number = new Date(year, month - 1, 0).getDate();
-  const colNum: number = 6;
+  const rowNum: number = 6;
 
   return (
     <View>
@@ -18,9 +18,9 @@ const CalendarBody = ({ year, month, eventList }: { year: number, month: number,
       </View>
 
       {/* calendar body */}
-      {Array.from({ length: colNum }, (_, i) => i).map((week: number) => {
+      {Array.from({ length: rowNum }, (_, i) => i).map((week: number) => {
         return (
-          <View key={week} style={styles.col}>
+          <View key={week} style={styles.row}>
             {Array.from({ length: 7 }, (_, i) => i).map((day: number) => {
               const date: number = day - startDay + week * 7 + 1;
               const data = eventList.filter((event) => event.start_date.date === date);
@@ -31,6 +31,7 @@ const CalendarBody = ({ year, month, eventList }: { year: number, month: number,
                   date={0 < date && date <= dateNum ? date : null} 
                   day={day} 
                   data={data}
+                  isToday={date === new Date().getDate() && month === new Date().getMonth() + 1 && year === new Date().getFullYear()}
                 />
               );
             })}
@@ -51,18 +52,18 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#D8D8D8',
+    borderBottomColor: '#EFEFEF',
     height: 25,
   },
   th_cell: {
     flex: 1,
     textAlign: 'center',
   },
-  col: {
+  row: {
     display: 'flex',
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#D8D8D8',
+    borderBottomColor: '#EFEFEF',
     height: '15%',
   },
 });
