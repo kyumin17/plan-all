@@ -1,9 +1,12 @@
 import useDB from '../hooks/useDB';
-import { View, TextInput, Pressable, Text, StyleSheet } from 'react-native';
+import { View, Pressable, Text, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import LocationInput from '../components/create_form/LocationInput';
 import TimeInput from '../components/create_form/TimeInput';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import colors from '../styles/color';
+import { getRandom } from '../utils/random';
+import TitleInput from '../components/create_form/TitleInput';
 
 const ScheduleCreatePage = ({ navigation }: { navigation: any }) => {
   const db = useDB();
@@ -16,11 +19,13 @@ const ScheduleCreatePage = ({ navigation }: { navigation: any }) => {
   const [endMinute, setEndMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
   const [location, setLocation] = useState<string>('');
 
+  const [color, setColor] = useState<string>(colors[getRandom(0, colors.length)]);
+
   const saveSchedule = async () => {
     const dateStr = new Date().toISOString().split('T')[0];
     if (db && name) {
       const query = 'INSERT INTO schedule (name, date, start_hour, start_minute, end_hour, end_minute, location, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-      const params = [name, dateStr, startHour, startMinute, endHour, endMinute, location, 'red'];
+      const params = [name, dateStr, startHour, startMinute, endHour, endMinute, location, color];
 
       try {
         await db.executeSql(query, params);
@@ -35,13 +40,7 @@ const ScheduleCreatePage = ({ navigation }: { navigation: any }) => {
 
   return (
     <View style={styles.page}>
-      <TextInput
-        style={styles.name}
-        value={name}
-        onChangeText={text => setName(text)}
-        placeholder='제목' 
-        placeholderTextColor='#AAAAAA'
-      />
+      <TitleInput name={name} setName={setName} color={color} setColor={setColor} />
       <View style={styles.detail}>
         <TimeInput timeManage={{startHour, startMinute, endHour, endMinute, setStartHour, setStartMinute, setEndHour, setEndMinute}} />
         <LocationInput location={location} setLocation={setLocation} />
@@ -62,17 +61,6 @@ const styles = StyleSheet.create({
   page: {
     marginTop: '10%',
     height: '100%',
-  },
-  name: {
-    fontSize: 18,
-    backgroundColor: '#F8F8F8',
-    marginRight: '5%',
-    marginLeft: '5%',
-    marginBottom: 30,
-    paddingRight: 15,
-    paddingLeft: 15,
-    borderRadius: 5,
-    fontWeight: 'bold',
   },
   detail: {
     marginLeft: '10%',

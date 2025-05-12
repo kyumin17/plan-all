@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import SQLite from 'react-native-sqlite-storage';
 
-const useDB = () => {
-  SQLite.enablePromise(true);
+SQLite.enablePromise(true);
 
+const useDB = () => {
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
 
   useEffect(() => {

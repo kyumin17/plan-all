@@ -13,9 +13,8 @@ const SchedulePage = () => {
 
   const fetchSchedule = async () => {
     const dateStr = new Date().toISOString().split('T')[0];
-    if (!db) return;
 
-    db.transaction((tx) => {
+    db?.transaction((tx) => {
       tx.executeSql('SELECT * FROM schedule WHERE date = ?', [dateStr], (tx, results) => {
         const schedules: ScheduleProps[] = [];
         for (let i = 0; i < results.rows.length; i++) {
@@ -34,7 +33,9 @@ const SchedulePage = () => {
   });
 
   useEffect(() => {
-    fetchSchedule();
+    if (db) {
+      fetchSchedule();
+    }
   }, [db]);
 
   useEffect(() => {

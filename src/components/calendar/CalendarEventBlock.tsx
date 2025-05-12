@@ -1,13 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { CalendarProps } from '../../types/types';
-import color from '../../styles/color';
 
 const CalendarEventBlock = ({ event }: { event: CalendarProps }) => {
   const eventColor = event.color;
 
   return (
-    <View style={[styles.block, {backgroundColor: color[eventColor].background}]}>
-      <Text style={[styles.name, {color: color[eventColor].text}]}>
+    <View style={[styles.block]}>
+      <Text style={[styles.name]}>
         {event.name}
       </Text>
     </View>

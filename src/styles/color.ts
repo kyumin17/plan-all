@@ -1,12 +1,9 @@
-const color = {
-  blue: {
-    background: '#CEE6FF',
-    text: '#1770FF',
-  },
-  green: {
-    background: '#D6FFD1',
-    text: '#42C246',
-  },
-};
+const colors: string[] = [
+  '#F93827', // r
+  '#FF9D23', // o
+  '#FFD65A', // y
+  '#16C47F', // g
+  '#4076FF' // b
+];
 
-export default color;
+export default colors;
