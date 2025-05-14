@@ -26,10 +26,12 @@ export interface TimeblockProps {
   id: number;
   name: string;
   day: number;
-  start_at: TimeProps;
-  end_at: TimeProps;
-  color: string;
+  start_hour: number;
+  start_minute: number;
+  end_hour: number;
+  end_minute: number;
   location?: string;
+  color: string;
 };
 
 export interface CalendarProps {
@@ -46,8 +48,8 @@ export interface TimeManageProps {
   startMinute: number;
   endHour: number;
   endMinute: number;
-  setStartHour: React.Dispatch<React.SetStateAction<number>>;
-  setStartMinute: React.Dispatch<React.SetStateAction<number>>;
-  setEndHour: React.Dispatch<React.SetStateAction<number>>;
-  setEndMinute: React.Dispatch<React.SetStateAction<number>>;
+  setStartHour: any;
+  setStartMinute: any;
+  setEndHour: any;
+  setEndMinute: any;
 };

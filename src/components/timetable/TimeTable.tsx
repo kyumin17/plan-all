@@ -1,15 +1,36 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { TimeblockProps } from '../../types/types';
 import TimeTableBlock from './TimeTableBlock';
+import useDB from '../../hooks/useDB';
+import { useState, useEffect } from 'react';
 
 const TimeTable = () => {
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const timeList: number[] = Array.from({ length: 12 }, (_, i) => (i + 7) % 12 + 1);
 
-  const timeblockList: TimeblockProps[] = [
-    {id: '1', day: 0, start_at: {hour: 1, minute: 2}, end_at: {hour: 2, minute: 1}, location: 'D102', name: 'HELLO', color: '#53BF57'},
-    {id: '2', day: 2, start_at: {hour: 4, minute: 0}, end_at: {hour: 6, minute: 30}, location: 'D102', name: '컴프 시험', color: '#3AAAFF'}
-  ]; // test data
+  const db = useDB();
+  
+  const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
+
+  const fetchTimeTable = async () => {
+    db?.transaction((tx) => {
+      tx.executeSql('SELECT * FROM timetable', [], (tx, results) => {
+        const timetables: TimeblockProps[] = [];
+        for (let i = 0; i < results.rows.length; i++) {
+          timetables.push(results.rows.item(i));
+        }
+        setTimeblockList(timetables);
+      }, (error) => {
+        console.error('Error fetching timetables:', error);
+      });
+    });
+  }
+
+  useEffect(() => {
+    if (db) {
+      fetchTimeTable();
+    }
+  }, [db]);
 
   return (
     <View style={styles.table}>
@@ -35,7 +56,7 @@ const TimeTable = () => {
             const dayblockList = timeblockList.filter((block) => block.day === idx);
             
             return (
-              <View key={day} style={[styles.row, {backgroundColor: idx % 2 === 0 ? 'white' : '#FCFCFC'}]}>
+              <View key={day} style={styles.row}>
                 {dayblockList.map((block) => {
                   return <TimeTableBlock key={block.id} timeblock={block} />
                 })}
@@ -63,9 +84,8 @@ const styles = StyleSheet.create({
     height: 85,
     boxSizing: 'border-box',
     borderTopWidth: 1,
-    borderRightWidth: 1,
-    borderTopColor: '#D8D8D8',
-    borderRightColor: '#D8D8D8',
+    borderTopColor: '#EFEFEF',
+    borderRightColor: '#EFEFEF',
     textAlign: 'right',
     paddingRight: 6,
     paddingTop: 3,
@@ -92,7 +112,7 @@ const styles = StyleSheet.create({
   cell: {
     height: 85,
     borderTopWidth: 1,
-    borderTopColor: '#D8D8D8',
+    borderTopColor: '#EFEFEF',
   },
 });
 

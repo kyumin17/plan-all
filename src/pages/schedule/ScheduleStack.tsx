@@ -15,8 +15,7 @@ const ScheduleStack = () => {
       <Stack.Screen name='SchedulePage' component={SchedulePage} />
       <Stack.Screen name='ScheduleCreatePage' component={ScheduleCreatePage} />
     </Stack.Navigator>
-
-  )
+  );
 }
 
 export default ScheduleStack;

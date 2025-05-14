@@ -6,8 +6,8 @@ const TimeTableBlock = ({ timeblock }: { timeblock: TimeblockProps }) => {
     return hour * 60 + minute;
   };
 
-  const startSum = getTimeSum(timeblock.end_at.hour, timeblock.end_at.minute);
-  const height = 85 * (startSum - getTimeSum(timeblock.start_at.hour, timeblock.start_at.minute)) / 60;
+  const startSum = getTimeSum(timeblock.end_hour, timeblock.end_minute);
+  const height = 85 * (startSum - getTimeSum(timeblock.start_hour, timeblock.start_minute)) / 60;
   const top = 85 * startSum / 60;
 
   return (

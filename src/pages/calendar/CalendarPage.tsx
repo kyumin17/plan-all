@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { CalendarProps } from '../types/types';
-import CalendarHeader from '../components/calendar/CalendarHeader';
-import CalendarBody from '../components/calendar/CalendarBody';
+import { CalendarProps } from '../../types/types';
+import CalendarHeader from '../../components/calendar/CalendarHeader';
+import CalendarBody from '../../components/calendar/CalendarBody';
 import { View } from 'react-native';
 
 const CalendarPage = () => {

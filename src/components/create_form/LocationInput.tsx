@@ -1,7 +1,7 @@
 import LocationSvg from '../../assets/image/location.svg';
 import { View, TextInput, StyleSheet } from 'react-native';
 
-const LocationInput = ({ location, setLocation }: { location: string, setLocation: React.Dispatch<React.SetStateAction<string>>}) => {
+const LocationInput = ({ location, setLocation }: { location: string, setLocation: any}) => {
   return (
     <View style={styles.location}>
       <LocationSvg width={18} height={18} stroke='#5D5D5D' strokeWidth={2} />

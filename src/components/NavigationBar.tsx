@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ScheduleStack from '../pages/ScheduleStack';
-import TimeTablePage from '../pages/TimeTablePage';
-import CalendarPage from '../pages/CalendarPage';
+import ScheduleStack from '../pages/schedule/ScheduleStack';
+import TimeTableStack from '../pages/timetable/TimeTableStack';
+import CalendarPage from '../pages/calendar/CalendarPage';
 import SettingPage from '../pages/SettingPage';
 import CalendarSvg from '../assets/image/calendar.svg';
 import ClockSvg from '../assets/image/clock.svg';
@@ -33,7 +33,7 @@ const NavigationBar = () => {
       />
       <Tab.Screen 
         name='시간표' 
-        component={TimeTablePage} 
+        component={TimeTableStack} 
         options={{ 
           headerShown: false,
           tabBarIcon: ({ color }) => (

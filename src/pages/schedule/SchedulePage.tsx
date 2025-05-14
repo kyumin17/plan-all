@@ -1,9 +1,9 @@
 import { View, Button, StyleSheet } from 'react-native';
-import ScheduleBlock from '../components/schedule/ScheduleBlock';
-import { ScheduleProps, TimeProps } from '../types/types';
+import ScheduleBlock from '../../components/schedule/ScheduleBlock';
+import { ScheduleProps, TimeProps } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import useDB from '../hooks/useDB';
+import useDB from '../../hooks/useDB';
 
 const SchedulePage = () => {
   const navigation = useNavigation<any>();
