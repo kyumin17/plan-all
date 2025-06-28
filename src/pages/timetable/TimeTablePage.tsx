@@ -1,17 +1,20 @@
 import TimeTable from '../../components/timetable/TimeTable';
-import { View, ScrollView, Button } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/native';
+import CreateButton from '../../components/create_form/CreateButton';
 
 const TimeTablePage = () => {
-  const navigation = useNavigation<any>();
-
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: useBottomTabBarHeight() }}>
-      <View style={{height: '5%'}}></View>
-      <TimeTable />
-      <Button title='Create TimeBlock' onPress={() => navigation.navigate('TimeTableCreatePage')} />
-    </ScrollView>
+    <View style={{flex: 1}}>
+      <ScrollView 
+        contentContainerStyle={{ paddingBottom: useBottomTabBarHeight() }}
+        style={{flex: 1}}
+      >
+        <View style={{height: '5%'}}></View>
+        <TimeTable />
+      </ScrollView>
+      <CreateButton link='TimeTableCreatePage' />
+    </View>
   );
 };
 

@@ -1,31 +1,22 @@
-import { View, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ScheduleBlock from '../../components/schedule/ScheduleBlock';
 import { ScheduleProps, TimeProps } from '../../types/types';
 import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import useDB from '../../hooks/useDB';
+import CreateButton from '../../components/create_form/CreateButton';
+import useFetch from '../../hooks/useFetch';
+import { scheduleCreateCommand } from '../../assets/data/db_creation';
 
 const SchedulePage = () => {
-  const navigation = useNavigation<any>();
-  const db = useDB();
-  
   const [scheduleList, setScheduleList] = useState<ScheduleProps[]>([]);
 
-  const fetchSchedule = async () => {
-    const dateStr = new Date().toISOString().split('T')[0];
-
-    db?.transaction((tx) => {
-      tx.executeSql('SELECT * FROM schedule WHERE date = ?', [dateStr], (tx, results) => {
-        const schedules: ScheduleProps[] = [];
-        for (let i = 0; i < results.rows.length; i++) {
-          schedules.push(results.rows.item(i));
-        }
-        setScheduleList(schedules);
-      }, (error) => {
-        console.error('Error fetching schedules:', error);
-      });
-    });
-  }
+  const { result, error } = useFetch(
+    { 
+      createCommand: scheduleCreateCommand, 
+      dbName: 'schedule',
+      filter: 'date = ?',
+      params: [new Date().toISOString().split('T')[0]],
+    }
+  );
 
   const [currentTime, setCurrentTime] = useState<TimeProps>({
     hour: new Date().getHours(), 
@@ -33,10 +24,18 @@ const SchedulePage = () => {
   });
 
   useEffect(() => {
-    if (db) {
-      fetchSchedule();
+    if (error) {
+      console.error(error);
     }
-  }, [db]);
+
+    if (result) {
+      const schedules: ScheduleProps[] = [];
+      for (let i = 0; i < result.rows.length; i++) {
+        schedules.push(result.rows.item(i));
+      }
+      setScheduleList(schedules);
+    }
+  }, [result, error]);
 
   useEffect(() => {
     const getDate = setInterval(() => {
@@ -50,11 +49,13 @@ const SchedulePage = () => {
   }, []);
 
   return (
-    <View style={styles.page}>
-      {scheduleList.map((schedule) => {
-        return <ScheduleBlock schedule={schedule} currentTime={currentTime} key={schedule.id} />;
-      })}
-      <Button title='Create Schedule' onPress={() => navigation.navigate('ScheduleCreatePage')} />
+    <View style={{flex: 1}}>
+      <View style={styles.page}>
+        {scheduleList.map((schedule) => {
+          return <ScheduleBlock schedule={schedule} currentTime={currentTime} key={schedule.id} />;
+        })}
+      </View>
+      <CreateButton link='ScheduleCreatePage' />
     </View>
   );
 };

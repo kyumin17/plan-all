@@ -3,24 +3,45 @@ import { CalendarProps } from '../../types/types';
 import CalendarHeader from '../../components/calendar/CalendarHeader';
 import CalendarBody from '../../components/calendar/CalendarBody';
 import { View } from 'react-native';
+import CreateButton from '../../components/create_form/CreateButton';
+import useFetch from '../../hooks/useFetch';
+import { calendarCreateCommand } from '../../assets/data/db_creation';
 
 const CalendarPage = () => {
   const [month, setMonth] = useState<number>(new Date().getMonth() % 12 + 1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [eventList, setEventList] = useState<CalendarProps[]>([]);
 
+  const { result, error } = useFetch(
+    { 
+      createCommand: calendarCreateCommand, 
+      dbName: 'calendar',
+      filter: 'start_month = ?',
+      params: [month],
+    }
+  );
+
   useEffect(() => {
-    const data: CalendarProps[] = [
-      {id: 1, start_date: {time: {hour: 1, minute: 0}, year: 2025, month: 4, date: 30}, end_date: {time: {hour: 3, minute: 0}, year: 2025, month: 4, date: 30}, location: 'D102', name: 'ㅎㅇ', color: 'blue'},
-      {id: 2, start_date: {time: {hour: 17, minute: 30}, year: 2025, month: 4, date: 15}, end_date: {time: {hour: 18, minute: 30}, year: 2025, month: 4, date: 15}, name: '시험기간', color: 'green'}
-    ]; // test data
-    setEventList(data);
-  }, [month, year]);
+    if (error) {
+      console.error(error);
+    }
+
+    if (result) {
+      const events = [];
+      for (let i = 0; i < result.rows.length; i++) {
+        events.push(result.rows.item(i));
+      }
+      setEventList(events);
+    }
+  }, [result, error]);
 
   return (
-    <View>
-      <CalendarHeader year={year} setYear={setYear} month={month} setMonth={setMonth} />
-      <CalendarBody year={year} month={month} eventList={eventList} />
+    <View style={{flex: 1}}>
+      <View style={{flex: 1}}>
+        <CalendarHeader year={year} setYear={setYear} month={month} setMonth={setMonth} />
+        <CalendarBody year={year} month={month} eventList={eventList} />
+      </View>
+      <CreateButton link='CalendarCreatePage' />
     </View>
   );
 };

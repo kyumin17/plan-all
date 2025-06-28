@@ -2,35 +2,37 @@ import { StyleSheet, View, Text } from 'react-native';
 import { TimeblockProps } from '../../types/types';
 import TimeTableBlock from './TimeTableBlock';
 import useDB from '../../hooks/useDB';
+import { timetableCreateCommand } from '../../assets/data/db_creation';
 import { useState, useEffect } from 'react';
+import useFetch from '../../hooks/useFetch';
 
 const TimeTable = () => {
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const timeList: number[] = Array.from({ length: 12 }, (_, i) => (i + 7) % 12 + 1);
-
-  const db = useDB();
   
   const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
-
-  const fetchTimeTable = async () => {
-    db?.transaction((tx) => {
-      tx.executeSql('SELECT * FROM timetable', [], (tx, results) => {
-        const timetables: TimeblockProps[] = [];
-        for (let i = 0; i < results.rows.length; i++) {
-          timetables.push(results.rows.item(i));
-        }
-        setTimeblockList(timetables);
-      }, (error) => {
-        console.error('Error fetching timetables:', error);
-      });
-    });
-  }
+  const { result, error } = useFetch(
+    { 
+      createCommand: timetableCreateCommand, 
+      dbName: 'timetable',
+      filter: null,
+      params: [],
+    }
+  );
 
   useEffect(() => {
-    if (db) {
-      fetchTimeTable();
+    if (error) {
+      console.error(error);
     }
-  }, [db]);
+
+    if (result) {
+      const timetables: TimeblockProps[] = [];
+      for (let i = 0; i < result.rows.length; i++) {
+        timetables.push(result.rows.item(i));
+      }
+      setTimeblockList(timetables);
+    }
+  }, [result, error]);
 
   return (
     <View style={styles.table}>

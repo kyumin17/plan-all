@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ScheduleStack from '../pages/schedule/ScheduleStack';
 import TimeTableStack from '../pages/timetable/TimeTableStack';
-import CalendarPage from '../pages/calendar/CalendarPage';
 import SettingPage from '../pages/SettingPage';
 import CalendarSvg from '../assets/image/calendar.svg';
 import ClockSvg from '../assets/image/clock.svg';
 import TableSvg from '../assets/image/table.svg';
 import ToolSvg from '../assets/image/tool.svg';
+import CalendarStack from '../pages/calendar/CalendarStack';
 
 const NavigationBar = () => {
   const Tab = createBottomTabNavigator();
@@ -43,7 +43,7 @@ const NavigationBar = () => {
       />
       <Tab.Screen 
         name='달력' 
-        component={CalendarPage} 
+        component={CalendarStack} 
         options={{ 
           headerShown: false,
           tabBarIcon: ({ color }) => (

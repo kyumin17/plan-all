@@ -28,10 +28,10 @@ const TimeInput = ({ timeManage }: { timeManage: TimeManageProps }) => {
               {dateToString(startHour, startMinute)}
             </Text>
           </Pressable>
-          <ArrowRightSvg width={20} height={20} stroke='#5D5D5D' strokeWidth={2} />
+          <ArrowRightSvg style={styles.arrow} width={20} height={20} stroke='#5D5D5D' strokeWidth={2} />
           {/* end button */}
           <Pressable
-            style={[styles.timeSelectButton, isEndOpen ? styles.timeSelectActivate : {}]}
+            style={[styles.timeSelectButton, styles.timeSelectRightButton, isEndOpen ? styles.timeSelectActivate : {}]}
             onPress={() => {
               setIsEndOpen(!isEndOpen);
               setIsStartOpen(false);
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   timeBlock: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 42,
     alignItems: 'center',
   },
   timeSelectButton: {
@@ -76,6 +75,10 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 3,
     paddingBottom: 5,
+  },
+  timeSelectRightButton: {
+    position: 'absolute',
+    left: 190,
   },
   timeSelectActivate: {
     backgroundColor: '#E8E8E8',
@@ -88,6 +91,10 @@ const styles = StyleSheet.create({
     marginRight: '10%',
     marginLeft: '10%',
   },
+  arrow: {
+    position: 'absolute',
+    left: 135,
+  }
 });
 
 export default TimeInput;
