@@ -8,20 +8,21 @@ const CalendarHeader = (
     setMonth: React.Dispatch<React.SetStateAction<number>>
   }
 ) => {
+  const currentYear = new Date().getFullYear();
   return (
     <Text style={styles.title}>
-      {month}월
+      {year !== currentYear ? `${year}년 ` : ''}{month}월
     </Text>
   );
 };
 
 const styles = StyleSheet.create({
   title: {
-    paddingTop: 40,
-    paddingBottom: 20,
-    fontSize: 22,
-    marginLeft: '7%',
-    fontWeight: 600,
+    fontSize: 21,
+    fontWeight: 'bold',
+    marginBottom: 25,
+    textAlign: 'center',
+    marginTop: 30,
   },
 });
 

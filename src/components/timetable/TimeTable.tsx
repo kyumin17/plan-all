@@ -14,7 +14,7 @@ const TimeTable = () => {
   const { result, error } = useFetch(
     { 
       createCommand: timetableCreateCommand, 
-      dbName: 'timetable',
+      tableName: 'timetable',
       filter: null,
       params: [],
     }

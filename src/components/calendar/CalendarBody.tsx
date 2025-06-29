@@ -23,7 +23,7 @@ const CalendarBody = ({ year, month, eventList }: { year: number, month: number,
           <View key={week} style={styles.row}>
             {Array.from({ length: 7 }, (_, i) => i).map((day: number) => {
               const date: number = day - startDay + week * 7 + 1;
-              const data = eventList.filter((event) => event.start_date.date === date);
+              const data = eventList.filter((event) => event.start_date === date);
               
               return (
                 <CalendarCell 
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#EFEFEF',
-    height: 25,
+    height: '5%',
   },
   th_cell: {
     flex: 1,

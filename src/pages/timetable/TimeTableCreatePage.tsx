@@ -7,10 +7,10 @@ import { getRandom } from '../../utils/random';
 import DayTimeInput from '../../components/create_form/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
 import SaveButton from '../../components/create_form/SaveButton';
-import useDB from '../../hooks/useDB';
+import usePost from '../../hooks/usePost';
 
 const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
-  const db = useDB();
+  const insertData = usePost();
 
   const [name, setName] = useState<string>('');
   const [color, setColor] = useState<string>(colors[getRandom(1, colors.length)]);
@@ -24,21 +24,19 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   const [endTimes, setEndTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
 
   const save = async () => {
-    const query = 'INSERT INTO timetable (name, day, start_hour, start_minute, end_hour, end_minute, location, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    
-    if (db) {
-      try {
-        for (const i of selectDays) {
-          const params = [name, i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, locations[i], color];
-          await db.executeSql(query, params);
-        }
-        navigation.navigate('TimeTablePage');
-      } catch (error: any) {
-        console.error(error.message);
-      }
-    } else {
-      console.error('DB not initialized');
+    const fieldNames = ['name', 'day', 'start_hour', 'start_minute', 'end_hour', 'end_minute', 'location', 'color'];
+
+    for (const i of selectDays) {
+      const fieldValues = [name, i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, locations[i], color];
+      
+      await insertData({ 
+        tableName: 'timetable', 
+        fieldNames: fieldNames, 
+        fieldValues: fieldValues
+      });
     }
+
+    navigation.navigate('TimeTablePage');
   };
 
   return (

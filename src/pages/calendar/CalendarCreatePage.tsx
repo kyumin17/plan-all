@@ -2,41 +2,47 @@ import TitleInput from '../../components/create_form/TitleInput';
 import TimeInput from '../../components/create_form/TimeInput';
 import LocationInput from '../../components/create_form/LocationInput';
 import SaveButton from '../../components/create_form/SaveButton';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
-import useDB from '../../hooks/useDB';
 import DateInput from '../../components/create_form/DateInput';
 import { useNavigation } from '@react-navigation/native';
+import usePost from '../../hooks/usePost';
 
 const CalendarCreatePage = () => {
   const date = new Date();
-  const db = useDB();
   const navigation = useNavigation<any>();
 
   const [name, setName] = useState<string>('');
+
+  const [startYear, setStartYear] = useState<number>(date.getFullYear());
+  const [startMonth, setStartMonth] = useState<number>(date.getMonth());
+  const [startDate, setStartDate] = useState<number>(date.getDate());
   const [startHour, setStartHour] = useState<number>(date.getHours());
   const [startMinute, setStartMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
+
+  const [endYear, setEndYear] = useState<number>(date.getFullYear());
+  const [endMonth, setEndMonth] = useState<number>(date.getMonth());
+  const [endDate, setEndDate] = useState<number>(date.getDate());
   const [endHour, setEndHour] = useState<number>(date.getHours());
   const [endMinute, setEndMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
+
   const [location, setLocation] = useState<string>('');
   const [color, setColor] = useState<string>(colors[getRandom(0, colors.length)]);
 
-  const save = async () => {
-    const query = 'INSERT INTO calendar (name, date, start_hour, start_minute, end_hour, end_minute, location, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const params = [name, new Date().toISOString().split('T')[0], startHour, startMinute, endHour, endMinute, location, color];
+  const [isAllDay, setIsAllDay] = useState<boolean>(false);
 
-    if (db) {
-      try {
-        await db.executeSql(query, params);
-        navigation.navigate('CalendarPage');
-      } catch (error: any) {
-        console.error(error.message);
-      }
-    } else {
-      console.error('DB not initialized');
-    }
+  const insertData = usePost();
+
+  const save = async () => {
+    await insertData({ 
+      tableName: 'calendar', 
+      fieldNames: ['name', 'date', 'start_hour', 'start_minute', 'end_hour', 'end_minute', 'location', 'color', 'start_date', 'start_month', 'start_year', 'end_date', 'end_month', 'end_year', 'all_day'], 
+      fieldValues: [name, new Date().toISOString().split('T')[0], startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, isAllDay ? 1 : 0] }
+    );
+
+    navigation.navigate('CalendarPage');
   };
 
   return (
@@ -44,7 +50,7 @@ const CalendarCreatePage = () => {
       <TitleInput name={name} setName={setName} color={color} setColor={setColor} />
       <View style={styles.detail}>
         <DateInput />
-        <TimeInput timeManage={{startHour, startMinute, endHour, endMinute, setStartHour, setStartMinute, setEndHour, setEndMinute}} />
+        {!isAllDay && <TimeInput timeManage={{startHour, startMinute, endHour, endMinute, setStartHour, setStartMinute, setEndHour, setEndMinute}} />}
         <LocationInput location={location} setLocation={setLocation} />
       </View>
       <SaveButton 

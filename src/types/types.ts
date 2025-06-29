@@ -14,12 +14,15 @@ export interface ScheduleProps {
   id: number;
   name: string;
   date: string;
-  start_hour: number;
-  start_minute: number;
-  end_hour: number;
-  end_minute: number;
-  location?: string;
+  start_hour: null | number;
+  start_minute: null | number;
+  end_hour: null | number;
+  end_minute: null | number;
+  location: null | string;
   color: string;
+  month: number;
+  year: number;
+  all_day: 1 | 0;
 };
 
 export interface TimeblockProps {
@@ -30,17 +33,26 @@ export interface TimeblockProps {
   start_minute: number;
   end_hour: number;
   end_minute: number;
-  location?: string;
+  location: null | string;
   color: string;
 };
 
 export interface CalendarProps {
   id: number;
   name: string;
-  start_date: DateProps;
-  end_date: DateProps;
+  start_hour: null | number;
+  start_minute: null | number;
+  end_hour: null | number;
+  end_minute: null | number;
+  location: null | string;
   color: string;
-  location?: string;
+  start_date: number;
+  start_month: number;
+  start_year: number;
+  end_date: number;
+  end_month: number;
+  end_year: number;
+  all_day: 1 | 0;
 };
 
 export interface TimeManageProps {

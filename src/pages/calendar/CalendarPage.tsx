@@ -15,7 +15,7 @@ const CalendarPage = () => {
   const { result, error } = useFetch(
     { 
       createCommand: calendarCreateCommand, 
-      dbName: 'calendar',
+      tableName: 'calendar',
       filter: 'start_month = ?',
       params: [month],
     }

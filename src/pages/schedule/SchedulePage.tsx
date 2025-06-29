@@ -12,7 +12,7 @@ const SchedulePage = () => {
   const { result, error } = useFetch(
     { 
       createCommand: scheduleCreateCommand, 
-      dbName: 'schedule',
+      tableName: 'schedule',
       filter: 'date = ?',
       params: [new Date().toISOString().split('T')[0]],
     }

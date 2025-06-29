@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { SQLError } from 'react-native-sqlite-storage';
 
 const useFetch = (
-  { createCommand, dbName, filter, params }:
+  { createCommand, tableName, filter, params }:
   { 
     createCommand: string,
-    dbName: string,
+    tableName: string,
     filter: null | string,
     params: any[],
   }
@@ -15,27 +15,27 @@ const useFetch = (
   const [result, setResult] = useState<null | any>(null);
   const [error, setError] = useState<null | SQLError>(null);
 
-  // db?.transaction(tx => {
-  //   tx.executeSql(
-  //     createCommand,
-  //     [],
-  //     () => {
-  //       tx.executeSql(
-  //         `SELECT * FROM ${dbName} ${filter ? `WHERE ${filter}` : ''};`,
-  //         params,
-  //         (tx, res) => {
-  //           setResult(res);
-  //         },
-  //         (tx, error) => {
-  //           setError(error);
-  //         }
-  //       );
-  //     },
-  //     (tx, error) => {
-  //       setError(error);
-  //     }
-  //   );
-  // });
+  db?.transaction(tx => {
+    tx.executeSql(
+      createCommand,
+      [],
+      () => {
+        tx.executeSql(
+          `SELECT * FROM ${tableName} ${filter ? `WHERE ${filter}` : ''};`,
+          params,
+          (tx, res) => {
+            setResult(res);
+          },
+          (tx, error) => {
+            setError(error);
+          }
+        );
+      },
+      (tx, error) => {
+        setError(error);
+      }
+    );
+  });
 
   return { result, error };
 }
