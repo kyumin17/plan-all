@@ -1,6 +1,5 @@
 import { Text, Pressable, StyleSheet } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import useDB from '../../hooks/useDB';
 
 const SaveButton = ({ save }: { save: () => Promise<void> }) => {
   return (

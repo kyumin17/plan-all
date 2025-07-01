@@ -7,12 +7,12 @@ const ScheduleBlock = ({ schedule, currentTime } : { schedule: ScheduleProps, cu
     return hour * 60 + minute;
   };
 
-  const isFinished = () => {
-    const curSum = getTimeSum(currentTime.hour, currentTime.minute);
-    const endSum = getTimeSum(schedule.end_hour, schedule.end_minute);
+  // const isFinished = () => {
+  //   const curSum = getTimeSum(currentTime.hour, currentTime.minute);
+  //   const endSum = getTimeSum(schedule.end_hour, schedule.end_minute);
 
-    return endSum < curSum;
-  };
+  //   return endSum < curSum;
+  // };
 
   const timeToString = (hour: number, minute: number) => {
     const hourStr: string = hour <= 9 ? '0' + hour : '' + hour;
@@ -21,23 +21,9 @@ const ScheduleBlock = ({ schedule, currentTime } : { schedule: ScheduleProps, cu
   };
 
   return (
-    <View style={[styles.block, isFinished() && styles.blockInactive]}>
-      <View style={[styles.icon, {backgroundColor: isFinished() ? '#AAAAAA' : schedule.color}]}>
-      </View>
-      <View>
-        <Text style={[styles.time, isFinished() && styles.textInactive]}>
-          {timeToString(schedule.start_hour, schedule.start_minute)} - {timeToString(schedule.end_hour, schedule.end_minute)}
-        </Text>
-        <View style={styles.body}>
-          <Text style={[styles.name, isFinished() && styles.textInactive]}>
-            {schedule.name}
-          </Text>
-          <Text style={styles.location}>
-            {schedule.location}
-          </Text>
-        </View>
-      </View>
-    </View>
+    <Text>
+      {schedule.name}
+    </Text>
   );
 }
 

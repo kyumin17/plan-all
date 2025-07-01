@@ -8,7 +8,8 @@ import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
 import DateInput from '../../components/create_form/DateInput';
 import { useNavigation } from '@react-navigation/native';
-import usePost from '../../hooks/usePost';
+import execDB from '../../utils/db/execDB';
+import { useDB } from '../../components/common/DBProvider';
 
 const CalendarCreatePage = () => {
   const date = new Date();
@@ -32,15 +33,25 @@ const CalendarCreatePage = () => {
   const [color, setColor] = useState<string>(colors[getRandom(0, colors.length)]);
 
   const [isAllDay, setIsAllDay] = useState<boolean>(false);
-
-  const insertData = usePost();
+  
+  const db = useDB();
 
   const save = async () => {
-    await insertData({ 
-      tableName: 'calendar', 
-      fieldNames: ['name', 'date', 'start_hour', 'start_minute', 'end_hour', 'end_minute', 'location', 'color', 'start_date', 'start_month', 'start_year', 'end_date', 'end_month', 'end_year', 'all_day'], 
-      fieldValues: [name, new Date().toISOString().split('T')[0], startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, isAllDay ? 1 : 0] }
-    );
+    if (!db) {
+      console.error('Database connection failed');
+      return;
+    }
+
+    try {
+      await execDB({
+        db: db,
+        query: 'INSERT INTO calendar (name, date, start_hour, start_minute, end_hour, end_minute, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        params: [name, new Date().toISOString().split('T')[0], startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, isAllDay ? 1 : 0]
+      });
+    } catch (error) {
+      console.error('Error executing query:', error);
+      return;
+    }
 
     navigation.navigate('CalendarPage');
   };

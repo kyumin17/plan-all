@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#EFEFEF',
-    height: '5%',
+    height: 30,
   },
   th_cell: {
     flex: 1,
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#EFEFEF',
-    height: '15%',
+    height: '15.2%',
   },
 });
 

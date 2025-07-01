@@ -4,36 +4,48 @@ import CalendarHeader from '../../components/calendar/CalendarHeader';
 import CalendarBody from '../../components/calendar/CalendarBody';
 import { View } from 'react-native';
 import CreateButton from '../../components/create_form/CreateButton';
-import useFetch from '../../hooks/useFetch';
+import { useDB } from '../../components/common/DBProvider';
+import execDB from '../../utils/db/execDB';
 import { calendarCreateCommand } from '../../assets/data/db_creation';
+import SQLite from 'react-native-sqlite-storage';
 
 const CalendarPage = () => {
   const [month, setMonth] = useState<number>(new Date().getMonth() % 12 + 1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const [eventList, setEventList] = useState<CalendarProps[]>([]);
 
-  const { result, error } = useFetch(
-    { 
-      createCommand: calendarCreateCommand, 
-      tableName: 'calendar',
-      filter: 'start_month = ?',
-      params: [month],
-    }
-  );
+  const db = useDB();
 
   useEffect(() => {
-    if (error) {
-      console.error(error);
-    }
+    if (!db) return;
 
-    if (result) {
-      const events = [];
-      for (let i = 0; i < result.rows.length; i++) {
-        events.push(result.rows.item(i));
+    const fetchEvents = async () => {
+      try {
+        const { data, error } = await execDB({
+          db,
+          query: 'SELECT * FROM calendar WHERE start_month = ?',
+          params: [month],
+        });
+
+        if (error) {
+          console.error('Error fetching events:', error);
+          return;
+        }
+
+        if (!data) return;
+
+        const events = [];
+        for (let i = 0; i < data.rows.length; i++) {
+          events.push(data.rows.item(i));
+        }
+        setEventList(events);
+      } catch (err) {
+        console.error('Error executing query:', err);
       }
-      setEventList(events);
-    }
-  }, [result, error]);
+    };
+
+    fetchEvents();
+  }, [month]);
 
   return (
     <View style={{flex: 1}}>

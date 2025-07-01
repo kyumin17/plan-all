@@ -1,5 +1,6 @@
 import NavigationBar from './src/components/NavigationBar';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { DBProvider } from './src/components/common/DBProvider';
 
 const Theme = {
   ...DefaultTheme,
@@ -11,9 +12,11 @@ const Theme = {
 
 const App = () => {
   return (
-    <NavigationContainer theme={Theme}>
-      <NavigationBar />
-    </NavigationContainer>
+    <DBProvider>
+      <NavigationContainer theme={Theme}>
+        <NavigationBar />
+      </NavigationContainer>
+    </DBProvider>
   );
 };
 

@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ScheduleStack from '../pages/schedule/ScheduleStack';
+import SchedulePage from '../pages/schedule/SchedulePage';
 import TimeTableStack from '../pages/timetable/TimeTableStack';
 import SettingPage from '../pages/SettingPage';
 import CalendarSvg from '../assets/image/calendar.svg';
@@ -23,7 +23,7 @@ const NavigationBar = () => {
     >
       <Tab.Screen 
         name='일정' 
-        component={ScheduleStack} 
+        component={SchedulePage} 
         options={{ 
           headerShown: false,
           tabBarIcon: ({ color }) => (

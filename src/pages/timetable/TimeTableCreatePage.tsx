@@ -7,11 +7,11 @@ import { getRandom } from '../../utils/random';
 import DayTimeInput from '../../components/create_form/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
 import SaveButton from '../../components/create_form/SaveButton';
-import usePost from '../../hooks/usePost';
+import { useDB } from '../../components/common/DBProvider';
+import execDB from '../../utils/db/execDB';
 
 const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
-  const insertData = usePost();
-
+  // const insertData = usePost();
   const [name, setName] = useState<string>('');
   const [color, setColor] = useState<string>(colors[getRandom(1, colors.length)]);
   const [selectDays, setSelectDays] = useState<number[]>([]);
@@ -23,17 +23,27 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   const [startTimes, setStartTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
   const [endTimes, setEndTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
 
+  const db = useDB();
+
   const save = async () => {
-    const fieldNames = ['name', 'day', 'start_hour', 'start_minute', 'end_hour', 'end_minute', 'location', 'color'];
+    if (!db) {
+      console.error('Database connection failed');
+      return;
+    }
 
     for (const i of selectDays) {
-      const fieldValues = [name, i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, locations[i], color];
-      
-      await insertData({ 
-        tableName: 'timetable', 
-        fieldNames: fieldNames, 
-        fieldValues: fieldValues
-      });
+      const params = [name, i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, locations[i], color];
+
+      try {
+        await execDB({
+          db: db,
+          query: `INSERT INTO timetable (name, day, start_hour, start_minute, end_hour, end_minute, location, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+          params: params
+        });
+      } catch (error) {
+        console.error('Error inserting data:', error);
+        return;
+      }
     }
 
     navigation.navigate('TimeTablePage');

@@ -1,38 +1,51 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { TimeblockProps } from '../../types/types';
 import TimeTableBlock from './TimeTableBlock';
-import useDB from '../../hooks/useDB';
-import { timetableCreateCommand } from '../../assets/data/db_creation';
 import { useState, useEffect } from 'react';
-import useFetch from '../../hooks/useFetch';
+import { useDB } from '../common/DBProvider';
+import execDB from '../../utils/db/execDB';
 
 const TimeTable = () => {
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const timeList: number[] = Array.from({ length: 12 }, (_, i) => (i + 7) % 12 + 1);
   
   const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
-  const { result, error } = useFetch(
-    { 
-      createCommand: timetableCreateCommand, 
-      tableName: 'timetable',
-      filter: null,
-      params: [],
-    }
-  );
+
+  const db = useDB();
 
   useEffect(() => {
-    if (error) {
-      console.error(error);
+    const fetchTimeblocks = async () => {
+      if (!db) {
+        console.error('Database connection failed');
+        return;
+      }
+
+      try {
+        const { data, error } = await execDB({
+          db: db,
+          query: 'SELECT * FROM timetable ORDER BY day, start_hour, start_minute',
+          params: [],
+        });
+
+        if (error) {
+          console.error('Error fetching timeblocks:', error);
+          return;
+        }
+
+        if (!data) return;
+
+        const timetables: TimeblockProps[] = [];
+        for (let i = 0; i < data.rows.length; i++) {
+          timetables.push(data.rows.item(i));
+        }
+        setTimeblockList(timetables);
+      } catch (err) {
+        console.error('Error executing query:', err);
+      }
     }
 
-    if (result) {
-      const timetables: TimeblockProps[] = [];
-      for (let i = 0; i < result.rows.length; i++) {
-        timetables.push(result.rows.item(i));
-      }
-      setTimeblockList(timetables);
-    }
-  }, [result, error]);
+    fetchTimeblocks();
+  }, []);
 
   return (
     <View style={styles.table}>
