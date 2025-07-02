@@ -1,6 +1,6 @@
 import TitleInput from '../../components/create_form/TitleInput';
 import DayPicker from '../../components/create_form/DayPicker';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { useState } from 'react';
 import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
@@ -11,7 +11,6 @@ import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 
 const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
-  // const insertData = usePost();
   const [name, setName] = useState<string>('');
   const [color, setColor] = useState<string>(colors[getRandom(1, colors.length)]);
   const [selectDays, setSelectDays] = useState<number[]>([]);
@@ -25,7 +24,32 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
 
   const db = useDB();
 
+  function validateInputs() {
+    if (name.trim() === '') {
+      Alert.alert('오류', '시간표 이름을 입력해주세요.');
+      return false;
+    }
+
+    if (selectDays.length === 0) {
+      Alert.alert('오류', '시간표에 포함할 요일을 선택해주세요.');
+      return false;
+    }
+
+    for (let i = 0; i < selectDays.length; i++) {
+      const day = selectDays[i];
+      if (startTimes[day].hour > endTimes[day].hour || 
+          (startTimes[day].hour === endTimes[day].hour && startTimes[day].minute >= endTimes[day].minute)) {
+        Alert.alert('오류', `시작 시간은 종료 시간보다 빨라야 합니다. ${['월', '화', '수', '목', '금', '토', '일'][day]}요일을 확인해주세요.`);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   const save = async () => {
+    if (!validateInputs()) return;
+
     if (!db) {
       console.error('Database connection failed');
       return;

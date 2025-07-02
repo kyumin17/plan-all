@@ -1,24 +1,35 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
 import { TimeblockProps } from '../../types/types';
 
-const TimeTableBlock = ({ timeblock }: { timeblock: TimeblockProps }) => {
+const TimeTableBlock = (
+  { timeblock, startTime, setTimeblock }: 
+  { 
+    timeblock: TimeblockProps,
+    startTime: number,
+    setTimeblock: React.Dispatch<React.SetStateAction<TimeblockProps | null>>
+  }
+) => {
   const getTimeSum = (hour: number, minute: number) => {
     return hour * 60 + minute;
   };
 
-  const startSum = getTimeSum(timeblock.end_hour, timeblock.end_minute);
-  const height = 85 * (startSum - getTimeSum(timeblock.start_hour, timeblock.start_minute)) / 60;
-  const top = 85 * startSum / 60;
+  const startSum = getTimeSum(timeblock.start_hour, timeblock.start_minute);
+  const endSum = getTimeSum(timeblock.end_hour, timeblock.end_minute);
+  const height = 85 * (endSum - startSum) / 60;
+  const top = 85 * (startSum - startTime * 60) / 60;
 
   return (
-    <View style={[styles.block, {backgroundColor: timeblock.color, height: height, top: top}]}>
+    <Pressable 
+      style={[styles.block, {backgroundColor: timeblock.color, height: height, top: top}]}
+      onPress={() => setTimeblock(timeblock)}
+    >
       <Text style={styles.name}>
         {timeblock.name}
       </Text>
       <Text style={styles.location}>
         {timeblock.location}
       </Text>
-    </View>
+    </Pressable>
   );
 }
 

@@ -1,21 +1,26 @@
 import TimeTable from '../../components/timetable/TimeTable';
 import { View, ScrollView, Text, StyleSheet } from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import CreateButton from '../../components/create_form/CreateButton';
+import TimeTableModal from '../../components/timetable/TimeTableModal';
+import { useState } from 'react';
+import { TimeblockProps } from '../../types/types';
 
 const TimeTablePage = () => {
+  const [timeblock, setTimeblock] = useState<null | TimeblockProps>(null);
+
   return (
     <View style={{flex: 1}}>
       <ScrollView 
-        contentContainerStyle={{ paddingBottom: useBottomTabBarHeight() }}
         style={{flex: 1}}
       >
         <Text style={styles.title}>
           시간표
         </Text>
-        <TimeTable />
+        <TimeTable setTimeblock={setTimeblock} />
       </ScrollView>
       <CreateButton link='TimeTableCreatePage' />
+      {timeblock &&
+      <TimeTableModal timeblock={timeblock} setTimeblock={setTimeblock} />}
     </View>
   );
 };

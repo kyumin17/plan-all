@@ -5,9 +5,13 @@ import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import execDB from '../../utils/db/execDB';
 
-const TimeTable = () => {
+const TimeTable = ({ setTimeblock }: { setTimeblock: React.Dispatch<React.SetStateAction<TimeblockProps | null>> }) => {
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
-  const timeList: number[] = Array.from({ length: 12 }, (_, i) => (i + 7) % 12 + 1);
+  
+  const [startTime, setStartTime] = useState<number>(8);
+  const [endTime, setEndTime] = useState<number>(19);
+
+  const timeList: number[] = Array.from({ length: 12 }, (_, i) => (i + startTime - 1) % 12 + 1);
   
   const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
 
@@ -36,7 +40,11 @@ const TimeTable = () => {
 
         const timetables: TimeblockProps[] = [];
         for (let i = 0; i < data.rows.length; i++) {
-          timetables.push(data.rows.item(i));
+          const block: TimeblockProps = data.rows.item(i);
+          timetables.push(block);
+
+          if (block.start_hour < startTime) setStartTime(block.start_hour);
+          if (block.end_hour > endTime) setEndTime(block.end_hour);
         }
         setTimeblockList(timetables);
       } catch (err) {
@@ -73,7 +81,14 @@ const TimeTable = () => {
             return (
               <View key={day} style={styles.row}>
                 {dayblockList.map((block) => {
-                  return <TimeTableBlock key={block.id} timeblock={block} />
+                  return (
+                    <TimeTableBlock 
+                      key={block.id} 
+                      timeblock={block} 
+                      startTime={startTime} 
+                      setTimeblock={setTimeblock}
+                    />
+                  );
                 })}
                 {timeList.map((time: number) => {
                   return <Text key={time} style={styles.cell}></Text>;
