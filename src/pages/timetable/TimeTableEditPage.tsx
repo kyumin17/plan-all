@@ -1,29 +1,78 @@
 import TitleInput from '../../components/create_form/TitleInput';
 import DayPicker from '../../components/create_form/DayPicker';
 import { View, StyleSheet, Alert } from 'react-native';
-import { useState } from 'react';
-import colors from '../../styles/color';
-import { getRandom } from '../../utils/random';
+import { useEffect, useState } from 'react';
 import DayTimeInput from '../../components/create_form/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
 import SaveButton from '../../components/create_form/SaveButton';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import LocationInput from '../../components/create_form/LocationInput';
+import { TimeblockProps } from '../../types/types';
 
-const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
-  const [name, setName] = useState<string>('');
-  const [color, setColor] = useState<string>(colors[getRandom(1, colors.length)]);
+const TimeTableEditPage = ({ navigation, route }: 
+  { 
+    navigation: any, 
+    route: any 
+  }) => {
+  const { timeblock } = route.params;
+
+  const [name, setName] = useState<string>(timeblock.name);
+  const [color, setColor] = useState<string>(timeblock.color);
   const [selectDays, setSelectDays] = useState<number[]>([]);
 
-  const date = new Date();
-  const initTimes: TimeProps = {hour: date.getHours(), minute: 5 * Math.floor(date.getMinutes() / 5)};
+  const initTimes: TimeProps = {hour: 12, minute: 0};
 
-  const [location, setLocation] = useState<string>('');
+  const [location, setLocation] = useState<string>(timeblock.location ? timeblock.location : '');
   const [startTimes, setStartTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
   const [endTimes, setEndTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
 
   const db = useDB();
+
+  useEffect(() => {
+    const fetchTimeblocks = async () => {
+      if (!db) {
+        console.error('Database connection failed');
+        return;
+      }
+      
+      try {
+        const { data, error } = await execDB({
+          db: db,
+          query: 'SELECT * FROM timetable WHERE name = ?',
+          params: [timeblock.name]
+        });
+
+        if (error) {
+          console.error('Error fetching timetable:', error);
+          return;
+        }
+
+        if (!data) return;
+
+        const timetables: TimeblockProps[] = [];
+        for (let i = 0; i < data.rows.length; i++) {
+          const block: TimeblockProps = data.rows.item(i);
+          setSelectDays([...selectDays, block.day]);
+          setStartTimes(prev => {
+            const newStartTimes = [...prev];
+            newStartTimes[block.day] = {hour: block.start_hour, minute: block.start_minute};
+            return newStartTimes;
+          });
+          setEndTimes(prev => {
+            const newEndTimes = [...prev];
+            newEndTimes[block.day] = {hour: block.end_hour, minute: block.end_minute};
+            return newEndTimes;
+          });
+          timetables.push(block);
+        }
+      } catch (error) {
+        console.error('Error fetching timetable:', error);
+      }
+    };
+
+    fetchTimeblocks();
+  }, [timeblock]);
 
   function validateInputs() {
     if (name.trim() === '') {
@@ -126,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TimeTableCreatePage;
+export default TimeTableEditPage;

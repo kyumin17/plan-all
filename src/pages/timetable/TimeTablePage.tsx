@@ -5,7 +5,7 @@ import TimeTableModal from '../../components/timetable/TimeTableModal';
 import { useState } from 'react';
 import { TimeblockProps } from '../../types/types';
 
-const TimeTablePage = () => {
+const TimeTablePage = ({ navigation }: { navigation: any }) => {
   const [timeblock, setTimeblock] = useState<null | TimeblockProps>(null);
 
   return (
@@ -20,7 +20,7 @@ const TimeTablePage = () => {
       </ScrollView>
       <CreateButton link='TimeTableCreatePage' />
       {timeblock &&
-      <TimeTableModal timeblock={timeblock} setTimeblock={setTimeblock} />}
+      <TimeTableModal timeblock={timeblock} setTimeblock={setTimeblock} navigation={navigation} />}
     </View>
   );
 };

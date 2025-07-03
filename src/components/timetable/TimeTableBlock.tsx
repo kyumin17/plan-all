@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     zIndex: 1,
+    borderColor: 'white',
+    borderWidth: 0.5,
   },
   name: {
     color: 'white',

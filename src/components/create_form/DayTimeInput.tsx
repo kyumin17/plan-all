@@ -3,8 +3,8 @@ import LocationInput from './LocationInput';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimeManageProps } from '../../types/types';
 
-const DayTimeInput = ({ day, timeManage, location, setLocation }
-  : { day: number, timeManage: TimeManageProps, location: string, setLocation: any }) => {
+const DayTimeInput = ({ day, timeManage }
+  : { day: number, timeManage: TimeManageProps }) => {
   const dayList = ['월', '화', '수', '목', '금', '토', '일'];
 
   return (
@@ -13,7 +13,6 @@ const DayTimeInput = ({ day, timeManage, location, setLocation }
         {`${dayList[day]}요일`}
       </Text>
       <TimeInput timeManage={timeManage} />
-      <LocationInput location={location} setLocation={setLocation} />
     </View>
   );
 };
