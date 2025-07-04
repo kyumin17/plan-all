@@ -8,7 +8,11 @@ import SaveButton from '../../components/create_form/SaveButton';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import LocationInput from '../../components/create_form/LocationInput';
-import { TimeblockProps } from '../../types/types';
+import selectDB from '../../utils/db/selectDB';
+
+interface FindFilter {
+  name: string;
+}
 
 const TimeTableEditPage = ({ navigation, route }: 
   { 
@@ -30,49 +34,21 @@ const TimeTableEditPage = ({ navigation, route }:
   const db = useDB();
 
   useEffect(() => {
-    const fetchTimeblocks = async () => {
-      if (!db) {
-        console.error('Database connection failed');
-        return;
+    selectDB<FindFilter>({
+      db: db,
+      tableName: 'timetable',
+      filter: {
+        findFilter: { name: timeblock.name },
+        orderFilter: ['day', 'start_hour', 'start_minute'],
+      },
+    }).then((res) => {
+      if (res) {
+        setSelectDays(res.map(block => block.day));
+        setStartTimes(res.map(block => ({hour: block.start_hour, minute: block.start_minute})));
+        setEndTimes(res.map(block => ({hour: block.end_hour, minute: block.end_minute})));
       }
-      
-      try {
-        const { data, error } = await execDB({
-          db: db,
-          query: 'SELECT * FROM timetable WHERE name = ?',
-          params: [timeblock.name]
-        });
-
-        if (error) {
-          console.error('Error fetching timetable:', error);
-          return;
-        }
-
-        if (!data) return;
-
-        const timetables: TimeblockProps[] = [];
-        for (let i = 0; i < data.rows.length; i++) {
-          const block: TimeblockProps = data.rows.item(i);
-          setSelectDays([...selectDays, block.day]);
-          setStartTimes(prev => {
-            const newStartTimes = [...prev];
-            newStartTimes[block.day] = {hour: block.start_hour, minute: block.start_minute};
-            return newStartTimes;
-          });
-          setEndTimes(prev => {
-            const newEndTimes = [...prev];
-            newEndTimes[block.day] = {hour: block.end_hour, minute: block.end_minute};
-            return newEndTimes;
-          });
-          timetables.push(block);
-        }
-      } catch (error) {
-        console.error('Error fetching timetable:', error);
-      }
-    };
-
-    fetchTimeblocks();
-  }, [timeblock]);
+    });
+  }, [db, timeblock]);
 
   function validateInputs() {
     if (name.trim() === '') {

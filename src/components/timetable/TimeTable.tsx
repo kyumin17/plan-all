@@ -3,57 +3,46 @@ import { TimeblockProps } from '../../types/types';
 import TimeTableBlock from './TimeTableBlock';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
-import execDB from '../../utils/db/execDB';
+import selectDB from '../../utils/db/selectDB';
+import TimeTableRow from './TimeTableRow';
 
-const TimeTable = ({ setTimeblock }: { setTimeblock: React.Dispatch<React.SetStateAction<TimeblockProps | null>> }) => {
+const TimeTable = (
+  { setTimeblock }: 
+  { setTimeblock: React.Dispatch<React.SetStateAction<null | TimeblockProps>>}
+) => {
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   
-  const [startTime, setStartTime] = useState<number>(8);
-  const [endTime, setEndTime] = useState<number>(19);
+  const [startTime, setStartTime] = useState<number>(10);
+  const [endTime, setEndTime] = useState<number>(18);
 
-  const timeList: number[] = Array.from({ length: 12 }, (_, i) => (i + startTime - 1) % 12 + 1);
+  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime - 1) % 12 + 1);
   
   const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
 
   const db = useDB();
 
+  const setTimeRange = () => {
+    const newStartTime = Math.min(...timeblockList.map(block => block.start_hour));
+    const newEndTime = Math.max(...timeblockList.map(block => block.end_hour));
+    
+    setStartTime(Math.min(startTime, newStartTime));
+    setEndTime(Math.max(endTime, newEndTime));
+  }
+
   useEffect(() => {
-    const fetchTimeblocks = async () => {
-      if (!db) {
-        console.error('Database connection failed');
-        return;
-      }
-
-      try {
-        const { data, error } = await execDB({
-          db: db,
-          query: 'SELECT * FROM timetable ORDER BY day, start_hour, start_minute',
-          params: [],
-        });
-
-        if (error) {
-          console.error('Error fetching timeblocks:', error);
-          return;
+    selectDB<null>({
+        db: db,
+        tableName: 'timetable',
+        filter: {
+          orderFilter: ['day', 'start_hour', 'start_minute'],
+        },
+      }).then((res) => {
+        if (res) {
+          setTimeblockList(res);
+          setTimeRange();
         }
-
-        if (!data) return;
-
-        const timetables: TimeblockProps[] = [];
-        for (let i = 0; i < data.rows.length; i++) {
-          const block: TimeblockProps = data.rows.item(i);
-          timetables.push(block);
-
-          if (block.start_hour < startTime) setStartTime(block.start_hour);
-          if (block.end_hour > endTime) setEndTime(block.end_hour);
-        }
-        setTimeblockList(timetables);
-      } catch (err) {
-        console.error('Error executing query:', err);
-      }
-    }
-
-    fetchTimeblocks();
-  }, []);
+      });
+  }, [db]);
 
   return (
     <View style={styles.table}>
@@ -66,6 +55,7 @@ const TimeTable = ({ setTimeblock }: { setTimeblock: React.Dispatch<React.SetSta
           );
         })}
       </View>
+
       <View style={{flex: 1}}>
         {/* timetable header (day) */}
         <View style={styles.th}>
@@ -73,27 +63,20 @@ const TimeTable = ({ setTimeblock }: { setTimeblock: React.Dispatch<React.SetSta
             return <Text style={styles.th_cell} key={day}>{day}</Text>;
           })}
         </View>
+
         {/* timetable body */}
         <View style={styles.body}>
           {dayNameList.map((day: string, idx: number) => {
-            const dayblockList = timeblockList.filter((block) => block.day === idx);
-            
+            const dayblockList: TimeblockProps[] = timeblockList.filter((block) => block.day === idx);
+
             return (
-              <View key={day} style={styles.row}>
-                {dayblockList.map((block) => {
-                  return (
-                    <TimeTableBlock 
-                      key={block.id} 
-                      timeblock={block} 
-                      startTime={startTime} 
-                      setTimeblock={setTimeblock}
-                    />
-                  );
-                })}
-                {timeList.map((time: number) => {
-                  return <Text key={time} style={styles.cell}></Text>;
-                })}
-              </View>
+              <TimeTableRow 
+                key={day}
+                dayblockList={dayblockList} 
+                startTime={startTime} 
+                setTimeblock={setTimeblock} 
+                timeList={timeList} 
+              />
             );
           })}
         </View>
@@ -134,15 +117,6 @@ const styles = StyleSheet.create({
   body: {
     display: 'flex',
     flexDirection: 'row'
-  },
-  row: {
-    position: 'relative',
-    flex: 1,
-  },
-  cell: {
-    height: 85,
-    borderTopWidth: 1,
-    borderTopColor: '#EFEFEF',
   },
 });
 

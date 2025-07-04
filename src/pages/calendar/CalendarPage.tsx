@@ -6,8 +6,12 @@ import { View } from 'react-native';
 import CreateButton from '../../components/create_form/CreateButton';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
-import { calendarCreateCommand } from '../../assets/data/db_creation';
-import SQLite from 'react-native-sqlite-storage';
+import selectDB from '../../utils/db/selectDB';
+
+interface FindFilter {
+  start_year: number;
+  start_month: number;
+}
 
 const CalendarPage = () => {
   const [month, setMonth] = useState<number>(new Date().getMonth() % 12 + 1);
@@ -17,35 +21,17 @@ const CalendarPage = () => {
   const db = useDB();
 
   useEffect(() => {
-    if (!db) return;
-
-    const fetchEvents = async () => {
-      try {
-        const { data, error } = await execDB({
-          db,
-          query: 'SELECT * FROM calendar WHERE start_month = ?',
-          params: [month],
-        });
-
-        if (error) {
-          console.error('Error fetching events:', error);
-          return;
-        }
-
-        if (!data) return;
-
-        const events = [];
-        for (let i = 0; i < data.rows.length; i++) {
-          events.push(data.rows.item(i));
-        }
-        setEventList(events);
-      } catch (err) {
-        console.error('Error executing query:', err);
-      }
-    };
-
-    fetchEvents();
-  }, [month]);
+    selectDB<FindFilter>({
+      db: db,
+      tableName: 'calendar',
+      filter: {
+        findFilter: { start_year: year, start_month: month },
+        orderFilter: ['start_date'],
+      },
+    }).then((res) => {
+      if (res) setEventList(res);
+    });
+  }, [db, year, month]);
 
   return (
     <View style={{flex: 1}}>

@@ -100,4 +100,5 @@ const styles = StyleSheet.create({
     left: 135,
   }
 });
+
 export default DateInput;

@@ -1,10 +1,15 @@
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, Text, Pressable } from 'react-native';
 import { TimeblockProps } from '../../types/types';
 import { useEffect, useState } from 'react';
 import { useDB } from '../common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import TrashSvg from '../../assets/image/trash.svg';
 import EditSvg from '../../assets/image/edit.svg';
+import selectDB from '../../utils/db/selectDB';
+
+interface FindFilter {
+  name: string;
+}
 
 const TimeTableModal = (
   { timeblock, setTimeblock, navigation }:
@@ -20,39 +25,17 @@ const TimeTableModal = (
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
 
   useEffect(() => {
-    const fetchTimeblocks = async () => {
-      if (!db) {
-        console.error('Database connection failed');
-        return;
-      }
-      
-      try {
-        const { data, error } = await execDB({
-          db: db,
-          query: 'SELECT * FROM timetable WHERE name = ?',
-          params: [timeblock.name]
-        });
-
-        if (error) {
-          console.error('Error fetching timetable:', error);
-          return;
-        }
-
-        if (!data) return;
-
-        const timetables: TimeblockProps[] = [];
-        for (let i = 0; i < data.rows.length; i++) {
-          const block: TimeblockProps = data.rows.item(i);
-          timetables.push(block);
-        }
-        setTimeblockList(timetables);
-      } catch (error) {
-        console.error('Error fetching timetable:', error);
-      }
-    };
-
-    fetchTimeblocks();
-  }, [timeblock]);
+    selectDB<FindFilter>({
+      db: db,
+      tableName: 'timetable',
+      filter: {
+        findFilter: { name: timeblock.name },
+        orderFilter: ['day', 'start_hour', 'start_minute'],
+      },
+    }).then((res) => {
+      if (res) setTimeblockList(res);
+    });
+  }, [db, timeblock]);
 
   const handleDelete = async () => {
     if (!db) {
@@ -85,6 +68,7 @@ const TimeTableModal = (
         <Text style={styles.name}>
           {timeblock.name}
         </Text>
+
         <Text>
           {timeblockList && timeblockList.map((block, index) => {
             return (
@@ -98,10 +82,12 @@ const TimeTableModal = (
             )
           })}
         </Text>
+
         {timeblock.location && 
         <Text style={styles.location}>
           {timeblock.location}
         </Text>}
+
         <Pressable 
           style={[styles.modal_button, {marginBottom: 15, marginTop: 15}]}
           onPress={() => {navigation.navigate('TimeTableEditPage', { timeblock: timeblock })}}

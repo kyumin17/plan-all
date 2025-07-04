@@ -65,3 +65,8 @@ export interface TimeManageProps {
   setEndHour: any;
   setEndMinute: any;
 };
+
+export interface Filter<T> {
+  orderFilter?: string[],
+  findFilter?: T,
+}

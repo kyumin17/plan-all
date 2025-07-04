@@ -6,7 +6,7 @@ const TimeTableBlock = (
   { 
     timeblock: TimeblockProps,
     startTime: number,
-    setTimeblock: React.Dispatch<React.SetStateAction<TimeblockProps | null>>
+    setTimeblock: React.Dispatch<React.SetStateAction<null | TimeblockProps>>
   }
 ) => {
   const getTimeSum = (hour: number, minute: number) => {
