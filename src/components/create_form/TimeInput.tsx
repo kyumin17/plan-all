@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import ClockSvg from '../../assets/image/clock.svg';
 import ArrowRightSvg from '../../assets/image/arrow-right.svg';
-import { dateToString } from '../../utils/date';
+import { timeToString } from '../../utils/time';
 import { TimeManageProps } from '../../types/types';
 import TimePicker from './TimePicker';
 import { useState } from 'react';
@@ -25,7 +25,7 @@ const TimeInput = ({ timeManage }: { timeManage: TimeManageProps }) => {
             }}
           >
             <Text style={styles.time}>
-              {dateToString(startHour, startMinute)}
+              {timeToString(startHour, startMinute)}
             </Text>
           </Pressable>
           <ArrowRightSvg style={styles.arrow} width={20} height={20} stroke='#5D5D5D' strokeWidth={2} />
@@ -38,7 +38,7 @@ const TimeInput = ({ timeManage }: { timeManage: TimeManageProps }) => {
             }}
           >
             <Text style={styles.time}>
-              {dateToString(endHour, endMinute)}
+              {timeToString(endHour, endMinute)}
             </Text>
           </Pressable>
         </View>

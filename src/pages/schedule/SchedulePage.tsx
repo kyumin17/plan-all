@@ -1,61 +1,29 @@
-import { View, StyleSheet } from 'react-native';
-import ScheduleBlock from '../../components/schedule/ScheduleBlock';
-import { ScheduleProps, TimeProps } from '../../types/types';
-import { useState, useEffect } from 'react';
-import { useDB } from '../../components/common/DBProvider';
-import selectDB from '../../utils/db/selectDB';
+import { ScrollView } from 'react-native';
+import { useState } from 'react';
+import ScheduleBody from '../../components/schedule/ScheduleBody';
+import ScheduleHeader from '../../components/schedule/ScheduleHeader';
 
 const SchedulePage = () => {
-  const [scheduleList, setScheduleList] = useState<ScheduleProps[]>([]);
-
-  const [currentTime, setCurrentTime] = useState<TimeProps>({
-    hour: new Date().getHours(), 
-    minute: new Date().getMinutes()
-  });
-
-  const db = useDB();
-
-  useEffect(() => {
-    // selectDB<null>({
-    //   db: db,
-    //   tableName: 'schedule',
-    //   filter: {
-    //     orderFilter: ['start_hour', 'start_minute'],
-    //   },
-    // }).then((res) => {
-    //   if (res) {
-    //     setScheduleList(res);
-    //   }
-    // }
-    // );
-  }, []);
-
-  useEffect(() => {
-    const getDate = setInterval(() => {
-      setCurrentTime({
-        hour: new Date().getHours(), 
-        minute: new Date().getMinutes()
-      });
-    }, 2000);
-
-    return () => clearInterval(getDate);
-  }, []);
+  const [year, setYear] = useState<number>(new Date().getFullYear());
+  const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
+  const [date, setDate] = useState<number>(new Date().getDate());
 
   return (
-    <View style={styles.page}>
-      {scheduleList.map((schedule) => {
-        return <ScheduleBlock schedule={schedule} currentTime={currentTime} key={schedule.id} />;
-      })}
-    </View>
+    <ScrollView 
+      style={{flex: 1}}
+    >
+      <ScheduleHeader 
+        year={year} 
+        month={month} 
+        date={date}
+      />
+      <ScheduleBody 
+        year={year} 
+        month={month} 
+        date={date}
+      />
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  page: {
-    paddingTop: '10%',
-    paddingLeft: 16,
-    paddingRight: 16,
-  }
-});
 
 export default SchedulePage;

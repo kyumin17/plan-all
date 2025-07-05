@@ -10,20 +10,31 @@ export interface DateProps {
   time: TimeProps;
 };
 
-export interface ScheduleProps {
+export interface SchedulePropsA {
   id: number;
   name: string;
-  date: string;
-  start_hour: null | number;
-  start_minute: null | number;
-  end_hour: null | number;
-  end_minute: null | number;
+  start_hour: number;
+  start_minute: number;
+  end_hour: number;
+  end_minute: number;
   location: null | string;
   color: string;
-  month: number;
-  year: number;
-  all_day: 1 | 0;
+  all_day: 0;
 };
+
+export interface SchedulePropsB {
+  id: number;
+  name: string;
+  start_hour: null;
+  start_minute: null;
+  end_hour: null;
+  end_minute: null;
+  location: null | string;
+  color: string;
+  all_day: 1;
+};
+
+export type ScheduleProps = SchedulePropsA | SchedulePropsB;
 
 export interface TimeblockProps {
   id: number;

@@ -11,12 +11,10 @@ export const DBProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const open = async () => {
       try {
-        console.log('DB 연결 시도');
         const res = await SQLite.openDatabase({
           name: 'plan.db',
           location: 'default',
         });
-        console.log('DB 연결 성공');
         setDb(res);
       } catch (err) {
         console.error('DB 연결 실패', err);

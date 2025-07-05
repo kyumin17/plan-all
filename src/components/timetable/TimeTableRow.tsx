@@ -25,7 +25,7 @@ const TimeTableRow = (
       })}
       
       {timeList.map((time: number) => {
-        return <Text key={time} style={styles.cell}></Text>;
+        return <View key={time} style={styles.cell}></View>;
       })}
     </View>
   );

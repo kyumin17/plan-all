@@ -21,12 +21,12 @@ const TimeTable = (
 
   const db = useDB();
 
-  const setTimeRange = () => {
+  const setTimeRange = (timeblockList: TimeblockProps[]) => {
     const newStartTime = Math.min(...timeblockList.map(block => block.start_hour));
     const newEndTime = Math.max(...timeblockList.map(block => block.end_hour));
     
     setStartTime(Math.min(startTime, newStartTime));
-    setEndTime(Math.max(endTime, newEndTime));
+    setEndTime(Math.max(endTime, newEndTime + 1));
   }
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const TimeTable = (
       }).then((res) => {
         if (res) {
           setTimeblockList(res);
-          setTimeRange();
+          setTimeRange(res);
         }
       });
   }, [db]);

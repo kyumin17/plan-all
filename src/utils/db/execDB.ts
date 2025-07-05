@@ -18,7 +18,6 @@ const execDB = (
           query,
           params,
           (_tx, res) => {
-            console.log('success');
             resolve({ data: res, error: null });
           },
           (_tx, err) => {

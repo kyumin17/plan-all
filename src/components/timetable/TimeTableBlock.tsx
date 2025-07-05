@@ -1,5 +1,6 @@
 import { Text, StyleSheet, Pressable } from 'react-native';
 import { TimeblockProps } from '../../types/types';
+import { getTimeSum } from '../../utils/time';
 
 const TimeTableBlock = (
   { timeblock, startTime, setTimeblock }: 
@@ -9,10 +10,6 @@ const TimeTableBlock = (
     setTimeblock: React.Dispatch<React.SetStateAction<null | TimeblockProps>>
   }
 ) => {
-  const getTimeSum = (hour: number, minute: number) => {
-    return hour * 60 + minute;
-  };
-
   const startSum = getTimeSum(timeblock.start_hour, timeblock.start_minute);
   const endSum = getTimeSum(timeblock.end_hour, timeblock.end_minute);
   const height = 85 * (endSum - startSum) / 60;

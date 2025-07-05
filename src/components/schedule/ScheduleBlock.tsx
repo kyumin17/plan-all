@@ -1,76 +1,66 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { ScheduleProps, TimeProps } from '../../types/types';
-import theme from '../../styles/theme';
+import { View, StyleSheet, Text } from 'react-native';
+import { ScheduleProps } from '../../types/types';
+import { getTimeSum, timeToString } from '../../utils/time';
 
-const ScheduleBlock = ({ schedule, currentTime } : { schedule: ScheduleProps, currentTime: TimeProps }) => {
-  const getTimeSum = (hour: number, minute: number) => {
-    return hour * 60 + minute;
-  };
+const ScheduleBlock = (
+  { schedule, startTime }:
+  { 
+    schedule: ScheduleProps,
+    startTime: number,
+  }
+) => {
+  if (schedule.all_day) {
+    return <></>;
+  }
 
-  // const isFinished = () => {
-  //   const curSum = getTimeSum(currentTime.hour, currentTime.minute);
-  //   const endSum = getTimeSum(schedule.end_hour, schedule.end_minute);
-
-  //   return endSum < curSum;
-  // };
-
-  const timeToString = (hour: number, minute: number) => {
-    const hourStr: string = hour <= 9 ? '0' + hour : '' + hour;
-    const minStr: string = minute <= 9 ? '0' + minute : '' + minute;
-    return hourStr + ':' + minStr;
-  };
+  const startSum = getTimeSum(schedule.start_hour, schedule.start_minute);
+  const endSum = getTimeSum(schedule.end_hour, schedule.end_minute);
+  const height = 70 * (endSum - startSum) / 60;
+  const top = 70 * (startSum - startTime * 60) / 60;
 
   return (
-    <Text>
-      {schedule.name}
-    </Text>
+    <View 
+      style={[
+        styles.block, 
+        { backgroundColor: schedule.color, height: height, top: top }
+      ]}>
+        <Text style={styles.name}>
+          {schedule.name}
+        </Text>
+        <Text style={styles.detail}>
+          {timeToString(schedule.start_hour, schedule.start_minute)}
+          {' - '}
+          {timeToString(schedule.end_hour, schedule.end_minute)}
+        </Text>
+        <Text style={styles.detail}>
+          {schedule.location}
+        </Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
+    position: 'absolute',
+    boxSizing: 'border-box',
     width: '100%',
-    position: 'relative',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E6E6E6',
-    paddingTop: 18,
-    paddingBottom: 24,
-    paddingLeft: 12,
-    paddingRight: 12,
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 16,
-  },
-  blockInactive: {
-    backgroundColor: '#EFEFEF',
-  },
-  icon: {
-    height: 8,
-    width: 8,
+    height: 70,
     borderRadius: 4,
-    marginTop: 6,
-  },
-  time: {
-    marginBottom: 10,
-    color: '#686C76',
-    fontSize: theme.fontSize.sm,
-  },
-  body: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
+    zIndex: 1,
+    paddingTop: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderColor: 'white',
+    borderWidth: 0.5,
   },
   name: {
-    fontSize: theme.fontSize.md,
+    color: 'white',
+    fontWeight: 500,
   },
-  textInactive: {
-    color: '#8E8E8E',
-  },
-  location: {
-    fontSize: theme.fontSize.md,
-    color: '#A9A9A9',
-  },
+  detail: {
+    color: 'white',
+    fontSize: 13,
+  }
 });
 
 export default ScheduleBlock;
