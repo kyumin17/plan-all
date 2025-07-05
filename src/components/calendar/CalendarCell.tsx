@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import CalendarEventBlock from './CalendarEventBlock';
+import CalendarBlock from './CalendarBlock';
 import { CalendarProps } from '../../types/types';
 
 const CalendarCell = ({ date, day, data, isToday }
@@ -16,7 +16,7 @@ const CalendarCell = ({ date, day, data, isToday }
       </Text>
       <View>
         {data.map((event) => {
-          return <CalendarEventBlock event={event} key={event.id} />;
+          return <CalendarBlock event={event} key={event.id} />;
         })}
       </View>
     </View>
@@ -34,11 +34,12 @@ const styles = StyleSheet.create({
     right: 7,
     top: 5,
     fontSize: 13,
-    height: 25,
-    width: 25,
+    height: 20,
+    width: 20,
     textAlign: 'center',
-    lineHeight: 25,
+    lineHeight: 20,
     fontWeight: 400,
+    marginRight: 6,
   },
   today: {
     backgroundColor: '#F93827',

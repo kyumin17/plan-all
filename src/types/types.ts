@@ -3,13 +3,6 @@ export interface TimeProps {
   minute: number;
 }
 
-export interface DateProps {
-  year: number;
-  month: number;
-  date: number;
-  time: TimeProps;
-};
-
 export interface SchedulePropsA {
   id: number;
   name: string;
@@ -80,4 +73,10 @@ export interface TimeManageProps {
 export interface Filter<T> {
   orderFilter?: string[],
   findFilter?: T,
+}
+
+export interface DateProps {
+  year: number;
+  month: number;
+  date: number;
 }

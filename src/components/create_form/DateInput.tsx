@@ -3,11 +3,18 @@ import ArrowRightSvg from '../../assets/image/arrow-right.svg';
 import CalendarSvg from '../../assets/image/calendar.svg';
 import { useState } from 'react';
 import DatePicker from 'react-native-date-picker';
+import { DateProps } from '../../types/types';
 
-const DateInput = () => {
+const DateInput = (
+  { startDate, endDate }:
+  {
+    startDate: DateProps,
+    endDate: DateProps,
+  }
+) => {
   const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
   const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
-  const [isAllDay, setIsAllDay] = useState<boolean>(false);
+  const [isAllDay, setIsAllDay] = useState<boolean>(true);
 
   return (
     <View>
@@ -23,7 +30,7 @@ const DateInput = () => {
             }}
           >
             <Text style={styles.date}>
-              05월 01일
+              {String(startDate.month).padStart(2, '0')}월 {String(startDate.date).padStart(2, '0')}일
             </Text>
           </Pressable>
           <ArrowRightSvg 
@@ -33,6 +40,7 @@ const DateInput = () => {
             stroke='#5D5D5D' 
             strokeWidth={2} 
           />
+          
           {/* end button */}
           <Pressable
             style={[
@@ -47,7 +55,7 @@ const DateInput = () => {
             }}
           >
             <Text style={[styles.date]}>
-              05월 01일
+              {String(endDate.month).padStart(2, '0')}월 {String(endDate.date).padStart(2, '0')}일
             </Text>
           </Pressable>
         </View>

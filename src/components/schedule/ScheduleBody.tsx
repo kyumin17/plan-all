@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import selectDB from '../../utils/db/selectDB';
 import { useDB } from '../common/DBProvider';
-import { CalendarProps, ScheduleProps, TimeblockProps } from '../../types/types';
+import { ScheduleProps } from '../../types/types';
 import { View, StyleSheet, Text } from 'react-native';
 import selectSchedule from '../../utils/selectSchedule';
 import ScheduleBlock from './ScheduleBlock';
@@ -23,7 +22,7 @@ const ScheduleBody = (
   const [startTime, setStartTime] = useState<number>(12);
   const [endTime, setEndTime] = useState<number>(18);
 
-  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime - 1) % 12 + 1);
+  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime));
 
   const setTimeRange = (scheduleList: ScheduleProps[]) => {
     const newStartTime = Math.min(...scheduleList.map(block => block.start_hour ?? 24));
@@ -45,7 +44,7 @@ const ScheduleBody = (
         setTimeRange(res);
       }
     })
-  }, [year, month, date, day]);
+  }, [db, year, month, date, day]);
 
   return (
     <View style={styles.body}>

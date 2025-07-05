@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { TimeblockProps } from '../../types/types';
-import TimeTableBlock from './TimeTableBlock';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
@@ -15,7 +14,7 @@ const TimeTable = (
   const [startTime, setStartTime] = useState<number>(10);
   const [endTime, setEndTime] = useState<number>(18);
 
-  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime - 1) % 12 + 1);
+  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime));
   
   const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
 

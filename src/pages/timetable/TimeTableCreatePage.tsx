@@ -25,7 +25,7 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
 
   const db = useDB();
 
-  function validateInputs() {
+  const validateInputs = () => {
     if (name.trim() === '') {
       Alert.alert('오류', '시간표 이름을 입력해주세요.');
       return false;
