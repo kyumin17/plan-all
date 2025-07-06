@@ -1,12 +1,37 @@
 import { View, Text, StyleSheet } from 'react-native';
 import CalendarCell from './CalendarCell';
 import { CalendarProps } from '../../types/types';
+import { useState, useEffect } from 'react';
+import { useDB } from '../common/DBProvider';
+import selectDB from '../../utils/db/selectDB';
 
-const CalendarBody = ({ year, month, eventList }: { year: number, month: number, eventList: CalendarProps[] }) => {
+interface FindFilter {
+  start_year: number;
+  start_month: number;
+}
+
+const CalendarBody = ({ year, month }: { year: number, month: number }) => {
   const startDay: number = (new Date(year, month - 1, 1).getDay() - 1) % 7; // mon: 0
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const dateNum: number = new Date(year, month - 1, 0).getDate();
   const rowNum: number = 6;
+
+  const [eventList, setEventList] = useState<CalendarProps[]>([]);
+
+  const db = useDB();
+
+  useEffect(() => {
+    selectDB<FindFilter>({
+      db: db,
+      tableName: 'calendar',
+      filter: {
+        findFilter: { start_year: year, start_month: month },
+        orderFilter: ['start_date'],
+      },
+    }).then((res) => {
+      if (res) setEventList(res);
+    });
+  }, [db, year, month]);
 
   return (
     <View>
