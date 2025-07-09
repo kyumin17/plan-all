@@ -4,7 +4,9 @@ import { View, StyleSheet, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import DayTimeInput from '../../components/create_form/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
-import SaveButton from '../../components/create_form/SaveButton';
+import EditButton from '../../components/create_form/EditButton';
+import CancelButton from '../../components/create_form/CancelButton';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import LocationInput from '../../components/create_form/LocationInput';
@@ -44,8 +46,14 @@ const TimeTableEditPage = ({ navigation, route }:
     }).then((res) => {
       if (res) {
         setSelectDays(res.map(block => block.day));
-        setStartTimes(res.map(block => ({hour: block.start_hour, minute: block.start_minute})));
-        setEndTimes(res.map(block => ({hour: block.end_hour, minute: block.end_minute})));
+        let newStartTimes = startTimes;
+        let newEndTimes = endTimes;
+        for (const block of res) {
+          newStartTimes[block.day] = {hour: block.start_hour, minute: block.start_minute};
+          newEndTimes[block.day] = {hour: block.end_hour, minute: block.end_minute}
+        }
+        setStartTimes(newStartTimes);
+        setEndTimes(newEndTimes);
       }
     });
   }, [db, timeblock]);
@@ -73,12 +81,22 @@ const TimeTableEditPage = ({ navigation, route }:
     return true;
   }
 
-  const save = async () => {
+  const edit = async () => {
     if (!validateInputs()) return;
 
     if (!db) {
       console.error('Database connection failed');
       return;
+    }
+
+    try {
+      await execDB({
+        db: db,
+        query: 'DELETE FROM timetable WHERE name = ?',
+        params: [timeblock.name]
+      });
+    } catch (error) {
+      console.error('Error deleting timetable:', error);
     }
 
     for (const i of selectDays) {
@@ -127,9 +145,10 @@ const TimeTableEditPage = ({ navigation, route }:
         </View>
         {selectDays.length !== 0 && <LocationInput location={location} setLocation={setLocation} />}
       </View>
-      <SaveButton 
-        save={save}
-      />
+      <View style={[styles.button_wrapper, { marginBottom: useBottomTabBarHeight() }]}> 
+        <CancelButton link='TimeTablePage' />
+        <EditButton edit={edit} />
+      </View>
     </View>
   );
 };
@@ -149,6 +168,16 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 25,
   },
+  button_wrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '4%',
+    position: 'absolute',
+    width: '92%',
+    marginLeft: '4%',
+    marginRight: '4%',
+    bottom: -15,
+  }
 });
 
 export default TimeTableEditPage;
