@@ -1,15 +1,15 @@
-import TitleInput from '../../components/create_form/TitleInput';
-import DayPicker from '../../components/create_form/DayPicker';
+import TitleInput from '../../components/create_form/input/TitleInput';
+import DayPicker from '../../components/create_form/picker/DayPicker';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
-import DayTimeInput from '../../components/create_form/DayTimeInput';
+import DayTimeInput from '../../components/create_form/input/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
-import EditButton from '../../components/create_form/EditButton';
-import CancelButton from '../../components/create_form/CancelButton';
+import EditButton from '../../components/create_form/button/EditButton';
+import CancelButton from '../../components/create_form/button/CancelButton';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
-import LocationInput from '../../components/create_form/LocationInput';
+import LocationInput from '../../components/create_form/input/LocationInput';
 import selectDB from '../../utils/db/selectDB';
 
 interface FindFilter {

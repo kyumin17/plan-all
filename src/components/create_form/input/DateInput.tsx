@@ -1,9 +1,9 @@
 import { View, Pressable, Text, StyleSheet } from 'react-native';
-import ArrowRightSvg from '../../assets/image/arrow-right.svg';
-import CalendarSvg from '../../assets/image/calendar.svg';
+import ArrowRightSvg from '../../../assets/image/arrow-right.svg';
+import CalendarSvg from '../../../assets/image/calendar.svg';
 import { useState } from 'react';
 import DatePicker from 'react-native-date-picker';
-import { DateProps } from '../../types/types';
+import { DateProps } from '../../../types/types';
 
 const DateInput = (
   { startDate, endDate }:

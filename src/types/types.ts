@@ -41,13 +41,13 @@ export interface TimeblockProps {
   color: string;
 };
 
-export interface CalendarProps {
+export interface CalendarPropsA {
   id: number;
   name: string;
-  start_hour: null | number;
-  start_minute: null | number;
-  end_hour: null | number;
-  end_minute: null | number;
+  start_hour: number;
+  start_minute: number;
+  end_hour: number;
+  end_minute: number;
   location: null | string;
   color: string;
   start_date: number;
@@ -56,8 +56,28 @@ export interface CalendarProps {
   end_date: number;
   end_month: number;
   end_year: number;
-  all_day: 1 | 0;
+  all_day: 0;
 };
+
+export interface CalendarPropsB {
+  id: number;
+  name: string;
+  start_hour: null;
+  start_minute: null;
+  end_hour: null;
+  end_minute: null;
+  location: null | string;
+  color: string;
+  start_date: number;
+  start_month: number;
+  start_year: number;
+  end_date: number;
+  end_month: number;
+  end_year: number;
+  all_day: 1;
+};
+
+export type CalendarProps = CalendarPropsA | CalendarPropsB;
 
 export interface TimeManageProps {
   startHour: number;

@@ -1,6 +1,6 @@
 import { View, TextInput, Pressable, StyleSheet } from 'react-native';
 import { useState } from 'react';
-import colors from '../../styles/color';
+import colors from '../../../styles/color';
 
 const TitleInput = ({ name, setName, color, setColor }
   : { name: string, setName: React.Dispatch<React.SetStateAction<string>>, color: string, setColor: React.Dispatch<React.SetStateAction<string>> }

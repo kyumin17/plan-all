@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import CreateButton from '../../components/create_form/CreateButton';
+import CreateButton from '../../components/create_form/button/CreateButton';
 import Carousel from '../../components/calendar/Carousel';
 
 const CalendarPage = () => {

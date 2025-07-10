@@ -1,7 +1,7 @@
-import TimeInput from './TimeInput';
-import LocationInput from './LocationInput';
+import TimeInput from '../input/TimeInput';
+import LocationInput from '../input/LocationInput';
 import { View, Text, StyleSheet } from 'react-native';
-import { TimeManageProps } from '../../types/types';
+import { TimeManageProps } from '../../../types/types';
 
 const DayTimeInput = ({ day, timeManage }
   : { day: number, timeManage: TimeManageProps }) => {

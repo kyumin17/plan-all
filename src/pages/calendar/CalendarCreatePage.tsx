@@ -1,12 +1,12 @@
-import TitleInput from '../../components/create_form/TitleInput';
-import TimeInput from '../../components/create_form/TimeInput';
-import LocationInput from '../../components/create_form/LocationInput';
-import SaveButton from '../../components/create_form/SaveButton';
+import TitleInput from '../../components/create_form/input/TitleInput';
+import TimeInput from '../../components/create_form/input/TimeInput';
+import LocationInput from '../../components/create_form/input/LocationInput';
+import SaveButton from '../../components/create_form/button/SaveButton';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useState } from 'react';
 import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
-import DateInput from '../../components/create_form/DateInput';
+import DateInput from '../../components/create_form/input/DateInput';
 import { useNavigation } from '@react-navigation/native';
 import execDB from '../../utils/db/execDB';
 import { useDB } from '../../components/common/DBProvider';

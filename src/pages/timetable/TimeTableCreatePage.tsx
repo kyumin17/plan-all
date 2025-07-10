@@ -1,15 +1,15 @@
-import TitleInput from '../../components/create_form/TitleInput';
-import DayPicker from '../../components/create_form/DayPicker';
+import TitleInput from '../../components/create_form/input/TitleInput';
+import DayPicker from '../../components/create_form/picker/DayPicker';
 import { View, StyleSheet, Alert } from 'react-native';
 import { useState } from 'react';
 import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
-import DayTimeInput from '../../components/create_form/DayTimeInput';
+import DayTimeInput from '../../components/create_form/input/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
-import SaveButton from '../../components/create_form/SaveButton';
+import SaveButton from '../../components/create_form/button/SaveButton';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
-import LocationInput from '../../components/create_form/LocationInput';
+import LocationInput from '../../components/create_form/input/LocationInput';
 
 const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   const [name, setName] = useState<string>('');

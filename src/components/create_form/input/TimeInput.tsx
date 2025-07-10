@@ -1,9 +1,9 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import ClockSvg from '../../assets/image/clock.svg';
-import ArrowRightSvg from '../../assets/image/arrow-right.svg';
-import { timeToString } from '../../utils/time';
-import { TimeManageProps } from '../../types/types';
-import TimePicker from './TimePicker';
+import ClockSvg from '../../../assets/image/clock.svg';
+import ArrowRightSvg from '../../../assets/image/arrow-right.svg';
+import { timeToString } from '../../../utils/time';
+import { TimeManageProps } from '../../../types/types';
+import TimePicker from '../picker/TimePicker';
 import { useState } from 'react';
 
 const TimeInput = ({ timeManage }: { timeManage: TimeManageProps }) => {

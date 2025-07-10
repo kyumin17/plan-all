@@ -1,25 +1,38 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CalendarBlock from './CalendarBlock';
 import { CalendarProps } from '../../types/types';
+import CalendarModal from './CalendarModal';
 
-const CalendarCell = ({ date, day, data, isToday }
-  : { date: number | null, day: number, data: CalendarProps[], isToday: boolean }
+const CalendarCell = (
+  { date, day, eventList, isToday, setSelectDate, setEventModalList }: 
+  { 
+    date: number | null;
+    day: number;
+    eventList: CalendarProps[];
+    isToday: boolean; 
+    setSelectDate: React.Dispatch<React.SetStateAction<number>>;
+    setEventModalList: React.Dispatch<React.SetStateAction<CalendarProps[]>>;
+  }
 ) => {
   const isWeekend: boolean = day === 5 || day === 6;
 
   return (
-    <View 
+    <Pressable 
       style={styles.cell}
+      onPress={()=>{
+        date && setSelectDate(date);
+        setEventModalList(eventList);
+      }}
     >
       <Text style={[styles.date, {color: isWeekend ? '#FF2A00' : '#3B3B3B'}, isToday ? styles.today : {}]}>
         {date}
       </Text>
       <View>
-        {data.map((event) => {
+        {eventList.map((event: CalendarProps) => {
           return <CalendarBlock event={event} key={event.id} />;
         })}
       </View>
-    </View>
+    </Pressable>
   );
 };
 

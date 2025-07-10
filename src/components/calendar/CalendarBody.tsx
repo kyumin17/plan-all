@@ -4,13 +4,22 @@ import { CalendarProps } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
+import CalendarModal from './CalendarModal';
 
 interface FindFilter {
   start_year: number;
   start_month: number;
 }
 
-const CalendarBody = ({ year, month }: { year: number, month: number }) => {
+const CalendarBody = (
+  { year, month, setSelectDate, setEventModalList }: 
+  { 
+    year: number;
+    month: number;
+    setSelectDate: React.Dispatch<React.SetStateAction<number>>;
+    setEventModalList: React.Dispatch<React.SetStateAction<CalendarProps[]>>;
+  }
+) => {
   const startDay: number = (new Date(year, month - 1, 1).getDay() - 1) % 7; // mon: 0
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const dateNum: number = new Date(year, month - 1, 0).getDate();
@@ -55,8 +64,10 @@ const CalendarBody = ({ year, month }: { year: number, month: number }) => {
                   key={date}
                   date={0 < date && date <= dateNum ? date : null} 
                   day={day} 
-                  data={data}
+                  eventList={data}
                   isToday={date === new Date().getDate() && month === new Date().getMonth() + 1 && year === new Date().getFullYear()}
+                  setSelectDate={setSelectDate}
+                  setEventModalList={setEventModalList}
                 />
               );
             })}

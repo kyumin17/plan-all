@@ -1,6 +1,6 @@
 import TimeTable from '../../components/timetable/TimeTable';
 import { View, ScrollView, Text, StyleSheet } from 'react-native';
-import CreateButton from '../../components/create_form/CreateButton';
+import CreateButton from '../../components/create_form/button/CreateButton';
 import TimeTableModal from '../../components/timetable/TimeTableModal';
 import { useState } from 'react';
 import { TimeblockProps } from '../../types/types';

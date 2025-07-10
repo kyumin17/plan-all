@@ -1,4 +1,4 @@
-import CalendarSvg from '../../assets/image/calendar.svg';
+import CalendarSvg from '../../../assets/image/calendar.svg';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 const DayPicker = ({ selectDays, setSelectDays }: { selectDays: number[], setSelectDays: React.Dispatch<React.SetStateAction<number[]>>}) => {

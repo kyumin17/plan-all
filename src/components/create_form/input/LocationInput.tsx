@@ -1,4 +1,4 @@
-import LocationSvg from '../../assets/image/location.svg';
+import LocationSvg from '../../../assets/image/location.svg';
 import { View, TextInput, StyleSheet } from 'react-native';
 
 const LocationInput = ({ location, setLocation }: { location: string, setLocation: any}) => {

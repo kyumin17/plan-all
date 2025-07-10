@@ -1,5 +1,6 @@
-import { Image, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import PlusSvg from '../../../assets/image/plus.svg';
 
 const CreateButton = ({ link }: { link : string }) => {
   const navigation = useNavigation<any>();
@@ -9,10 +10,7 @@ const CreateButton = ({ link }: { link : string }) => {
       style={styles.button}
       onPress={() => navigation.navigate(link)}
     >
-      <Image
-        style={styles.img}
-        source={require('../../assets/image/plus.png')}
-      />
+      <PlusSvg width={60} height={60} />
     </Pressable>
   );
 }
@@ -23,10 +21,6 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
     zIndex: 1,
-  },
-  img: {
-    height: 60,
-    width: 60,
   }
 });
 

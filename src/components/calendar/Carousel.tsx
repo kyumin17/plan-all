@@ -2,12 +2,17 @@ import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View, StyleSheet, 
 import CalendarHeader from './CalendarHeader';
 import CalendarBody from './CalendarBody';
 import { useRef, useState } from 'react';
+import CalendarModal from './CalendarModal';
+import { CalendarProps } from '../../types/types';
 
 const { width } = Dimensions.get('window');
 
 const Carousel = () => {
   const [month, setMonth] = useState<number>(new Date().getMonth() % 12 + 1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
+
+  const [eventModalList, setEventModalList] = useState<CalendarProps[]>([]);
+  const [selectDate, setSelectDate] = useState<number>(1);
 
   const scrollRef = useRef<ScrollView>(null);
   const loopRef = useRef<boolean>(false);
@@ -75,8 +80,22 @@ const Carousel = () => {
           >
             <View style={{flex: 1}}>
               <CalendarHeader year={pageYear} setYear={setYear} month={pageMonth} setMonth={setMonth} />
-              <CalendarBody year={pageYear} month={pageMonth} />
+              <CalendarBody 
+                year={pageYear} 
+                month={pageMonth} 
+                setSelectDate={setSelectDate}
+                setEventModalList={setEventModalList}
+              />
             </View>
+
+            {eventModalList.length !== 0 && 
+            <CalendarModal 
+              month={month} 
+              date={selectDate} 
+              day={new Date(year, month, selectDate).getDay()} 
+              eventList={eventModalList} 
+              setEventList={setEventModalList}
+            />}
           </View>
         );
       })}
