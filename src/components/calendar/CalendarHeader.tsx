@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
+
+const Title = styled.Text`
+  font-size: 21px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-align: center;
+  margin-top: 30px;
+`;
 
 const CalendarHeader = (
   { year, setYear, month, setMonth }: 
@@ -10,20 +18,10 @@ const CalendarHeader = (
 ) => {
   const currentYear = new Date().getFullYear();
   return (
-    <Text style={styles.title}>
+    <Title>
       {year !== currentYear ? `${year}년 ` : ''}{month}월
-    </Text>
+    </Title>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 21,
-    fontWeight: 'bold',
-    marginBottom: 25,
-    textAlign: 'center',
-    marginTop: 30,
-  },
-});
 
 export default CalendarHeader;

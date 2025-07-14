@@ -1,25 +1,55 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import CalendarCell from './CalendarCell';
 import { CalendarProps } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
+import styled from 'styled-components/native';
 import CalendarModal from './CalendarModal';
+import Modal from '../common/Modal';
+
+const TableHeader = styled.View`
+  display: flex;
+  flex-direction: row;
+  border-bottom-width: 1px;
+  border-bottom-color: #EFEFEF;
+  height: 30px;
+`;
+
+const DayText = styled.Text`
+  flex: 1;
+  text-align: center;
+`;
+
+const Row = styled.View`
+  display: flex;
+  flex-direction: row;
+  border-bottom-width: 1px;
+  border-bottom-color: #EFEFEF;
+  height: 15.3%;
+`;
 
 interface FindFilter {
   start_year: number;
   start_month: number;
 }
 
+interface ModalItem {
+  date: number;
+  day: number;
+  events: CalendarProps[];
+}
+
 const CalendarBody = (
-  { year, month, setSelectDate, setEventModalList }: 
+  { year, month }: 
   { 
-    year: number;
-    month: number;
-    setSelectDate: React.Dispatch<React.SetStateAction<number>>;
-    setEventModalList: React.Dispatch<React.SetStateAction<CalendarProps[]>>;
+    year: number,
+    month: number,
   }
 ) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [modalItem, setModalItem] = useState<null | ModalItem>(null);
+
   const startDay: number = (new Date(year, month - 1, 1).getDay() - 1) % 7; // mon: 0
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const dateNum: number = new Date(year, month - 1, 0).getDate();
@@ -42,19 +72,32 @@ const CalendarBody = (
     });
   }, [db, year, month]);
 
+  const openModal = (date: number, day: number, eventList: CalendarProps[]) => {
+    if (eventList.length !== 0) {
+      setModalItem({
+        date: date,
+        day: day,
+        events: eventList,
+      }); 
+      setIsOpen(true);
+    } else {
+      setModalItem(null);
+    }
+  }
+
   return (
     <View>
-      {/* calendar header */}
-      <View style={styles.th}>
-        {dayNameList.map((day: string) => {
-          return <Text key={day} style={styles.th_cell}>{day}</Text>;
-        })}
-      </View>
+      <TableHeader>
+        {dayNameList.map((day: string) => (
+          <DayText key={day}>
+            {day}
+          </DayText>
+        ))}
+      </TableHeader>
 
-      {/* calendar body */}
       {Array.from({ length: rowNum }, (_, i) => i).map((week: number) => {
         return (
-          <View key={week} style={styles.row}>
+          <Row key={week}>
             {Array.from({ length: 7 }, (_, i) => i).map((day: number) => {
               const date: number = day - startDay + week * 7 + 1;
               const data = eventList.filter((event) => event.start_date === date);
@@ -66,42 +109,27 @@ const CalendarBody = (
                   day={day} 
                   eventList={data}
                   isToday={date === new Date().getDate() && month === new Date().getMonth() + 1 && year === new Date().getFullYear()}
-                  setSelectDate={setSelectDate}
-                  setEventModalList={setEventModalList}
+                  openModal={openModal}
                 />
               );
             })}
-          </View>
+          </Row>
         );
       })}
+
+      {modalItem && <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      >
+        <CalendarModal 
+          month={month}
+          date={modalItem.date}
+          day={modalItem.day}
+          eventList={modalItem.events}
+        />
+      </Modal>}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  body: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  th: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#EFEFEF',
-    height: 30,
-  },
-  th_cell: {
-    flex: 1,
-    textAlign: 'center',
-  },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#EFEFEF',
-    height: '15.2%',
-  },
-});
 
 export default CalendarBody;

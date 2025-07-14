@@ -1,28 +1,54 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { View } from 'react-native';
 import { TimeblockProps } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
-import TimeTableRow from './TimeTableRow';
+import TimeTableBlock from './TimeTableBlock';
+import TimeAxis from '../common/TimeAxis';
+import styled from 'styled-components/native';
+import { FlexCol, FlexRow } from '../../styles/style';
+import Modal from '../common/Modal';
+import TimeTableModal from './TimeTableModal';
 
-const TimeTable = (
-  { setTimeblock }: 
-  { setTimeblock: React.Dispatch<React.SetStateAction<null | TimeblockProps>>}
-) => {
-  const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
-  
-  const [startTime, setStartTime] = useState<number>(10);
-  const [endTime, setEndTime] = useState<number>(18);
+const TableHeader = styled.View`
+  height: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
 
-  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime));
-  
-  const [timeblockList, setTimeblockList] = useState<TimeblockProps[]>([]);
+const DayText = styled.Text`
+  flex: 1;
+  text-align: center;
+`;
 
+const EventWrapper = styled(FlexRow)`
+  position: absolute;
+  left: 7%;
+  width: 93%;
+`;
+
+const EventCol = styled.View`
+  position: relative;
+  flex: 1;
+`;
+
+const TimeTable = () => {
   const db = useDB();
 
-  const setTimeRange = (timeblockList: TimeblockProps[]) => {
-    const newStartTime = Math.min(...timeblockList.map(block => block.start_hour));
-    const newEndTime = Math.max(...timeblockList.map(block => block.end_hour));
+  const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  
+  const [startTime, setStartTime] = useState<number>(10);
+  const [endTime, setEndTime] = useState<number>(20);
+  
+  const [eventList, setEventList] = useState<TimeblockProps[]>([]);
+
+  const [modalName, setModalName] = useState<null | string>(null);
+
+  const setTimeRange = (eventList: TimeblockProps[]) => {
+    const newStartTime = Math.min(...eventList.map(block => block.start_hour));
+    const newEndTime = Math.max(...eventList.map(block => block.end_hour));
     
     setStartTime(Math.min(startTime, newStartTime));
     setEndTime(Math.max(endTime, newEndTime + 1));
@@ -37,86 +63,66 @@ const TimeTable = (
         },
       }).then((res) => {
         if (res) {
-          setTimeblockList(res);
+          setEventList(res);
           setTimeRange(res);
         }
       });
   }, [db]);
 
+  const openModal = (name: string) => {
+    setModalName(name);
+    setIsOpen(true);
+  }
+
   return (
-    <View style={styles.table}>
-      {/* time column */}
-      <View style={styles.time_col}>
-        <View style={{height: 25}}></View>
-        {timeList.map((time: number) => {
+    <FlexCol>
+      <TableHeader>
+        <View style={{ width: '7%' }}></View>
+        {dayNameList.map((day: string) => (
+          <DayText key={day}>
+            {day}
+          </DayText>
+        ))}
+      </TableHeader>
+
+      <TimeAxis 
+        startTime={startTime}
+        endTime={endTime}
+        gap={75}
+      />
+
+      <EventWrapper>
+        {dayNameList.map((day: string, idx: number) => {
+          const dayEventList: TimeblockProps[] = eventList.filter((event) => event.day === idx);
+
           return (
-            <Text key={time} style={styles.time_cell}>{time}</Text>
+            <EventCol key={day}>
+              {dayEventList.map((event) => {
+                return (
+                  <TimeTableBlock 
+                    key={event.id} 
+                    event={event} 
+                    startTime={startTime} 
+                    openModal={openModal}
+                    gap={75}
+                  />
+                );
+              })}
+            </EventCol>
           );
         })}
-      </View>
+      </EventWrapper>
 
-      <View style={{flex: 1}}>
-        {/* timetable header (day) */}
-        <View style={styles.th}>
-          {dayNameList.map((day: string) => {
-            return <Text style={styles.th_cell} key={day}>{day}</Text>;
-          })}
-        </View>
-
-        {/* timetable body */}
-        <View style={styles.body}>
-          {dayNameList.map((day: string, idx: number) => {
-            const dayblockList: TimeblockProps[] = timeblockList.filter((block) => block.day === idx);
-
-            return (
-              <TimeTableRow 
-                key={day}
-                dayblockList={dayblockList} 
-                startTime={startTime} 
-                setTimeblock={setTimeblock} 
-                timeList={timeList} 
-              />
-            );
-          })}
-        </View>
-      </View>
-    </View>
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      >
+        <TimeTableModal
+          timeblockList={eventList.filter((event) => event.name === modalName)}
+        />
+      </Modal>
+    </FlexCol>
   );
 };
-
-const styles = StyleSheet.create({
-  table: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  time_col: {
-    width: '7%',
-  },
-  time_cell: {
-    height: 85,
-    boxSizing: 'border-box',
-    borderTopWidth: 1,
-    borderTopColor: '#EFEFEF',
-    borderRightColor: '#EFEFEF',
-    textAlign: 'right',
-    paddingRight: 6,
-    paddingTop: 3,
-    color: '#767676',
-  },
-  th: {
-    height: 25,
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-  },
-  th_cell: {
-    flex: 1,
-    textAlign: 'center',
-  },
-  body: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-});
 
 export default TimeTable;

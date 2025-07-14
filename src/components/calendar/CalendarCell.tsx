@@ -1,64 +1,67 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CalendarBlock from './CalendarBlock';
-import { CalendarProps } from '../../types/types';
-import CalendarModal from './CalendarModal';
+import { CalendarProps, Style } from '../../types/types';
+import styled from 'styled-components/native';
+import { View } from 'react-native';
+
+const Cell = styled.Pressable`
+  position: relative;
+  flex: 1;
+  padding-top: 32px;
+`;
+
+const DateText = styled.Text<Style & { is_today: boolean }>`
+  position: absolute;
+  right: 7px;
+  top: 5px;
+  font-size: 13px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-weight: 400;
+  margin-right: 6px;
+  color: ${(props) => props.color};
+
+  ${(props) => 
+    props.is_today &&
+    {
+      backgroundColor: '#F93827',
+      color: 'white',
+      borderRadius: 20,
+    }
+  }
+`
 
 const CalendarCell = (
-  { date, day, eventList, isToday, setSelectDate, setEventModalList }: 
+  { date, day, eventList, isToday, openModal }: 
   { 
-    date: number | null;
-    day: number;
-    eventList: CalendarProps[];
-    isToday: boolean; 
-    setSelectDate: React.Dispatch<React.SetStateAction<number>>;
-    setEventModalList: React.Dispatch<React.SetStateAction<CalendarProps[]>>;
+    date: number | null,
+    day: number,
+    eventList: CalendarProps[],
+    isToday: boolean,
+    openModal: (date: number, day: number, eventList: CalendarProps[]) => void,
   }
 ) => {
   const isWeekend: boolean = day === 5 || day === 6;
 
   return (
-    <Pressable 
-      style={styles.cell}
-      onPress={()=>{
-        date && setSelectDate(date);
-        setEventModalList(eventList);
-      }}
+    <Cell 
+      onPress={()=>{date && openModal(date, day, eventList)}}
     >
-      <Text style={[styles.date, {color: isWeekend ? '#FF2A00' : '#3B3B3B'}, isToday ? styles.today : {}]}>
+      <DateText 
+        color={isWeekend ? '#FF2A00' : '#3B3B3B'}
+        is_today={isToday}
+      >
         {date}
-      </Text>
+      </DateText>
+
       <View>
         {eventList.map((event: CalendarProps) => {
           return <CalendarBlock event={event} key={event.id} />;
         })}
       </View>
-    </Pressable>
+    </Cell>
   );
 };
-
-const styles = StyleSheet.create({
-  cell: {
-    position: 'relative',
-    flex: 1,
-    paddingTop: 32,
-  },
-  date: {
-    position: 'absolute',
-    right: 7,
-    top: 5,
-    fontSize: 13,
-    height: 20,
-    width: 20,
-    textAlign: 'center',
-    lineHeight: 20,
-    fontWeight: 400,
-    marginRight: 6,
-  },
-  today: {
-    backgroundColor: '#F93827',
-    color: 'white',
-    borderRadius: 20,
-  },
-});
 
 export default CalendarCell;

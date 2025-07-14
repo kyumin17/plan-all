@@ -2,17 +2,20 @@ import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View, StyleSheet, 
 import CalendarHeader from './CalendarHeader';
 import CalendarBody from './CalendarBody';
 import { useRef, useState } from 'react';
-import CalendarModal from './CalendarModal';
-import { CalendarProps } from '../../types/types';
+import styled from 'styled-components/native';
+import { Style } from '../../types/types';
 
 const { width } = Dimensions.get('window');
+
+const Page = styled.View<Style>`
+  flex: 1;
+  width: ${(props) => props.width};
+  height: 100%;
+`;
 
 const Carousel = () => {
   const [month, setMonth] = useState<number>(new Date().getMonth() % 12 + 1);
   const [year, setYear] = useState<number>(new Date().getFullYear());
-
-  const [eventModalList, setEventModalList] = useState<CalendarProps[]>([]);
-  const [selectDate, setSelectDate] = useState<number>(1);
 
   const scrollRef = useRef<ScrollView>(null);
   const loopRef = useRef<boolean>(false);
@@ -74,8 +77,8 @@ const Carousel = () => {
         }
 
         return (
-          <View 
-            style={styles.page}
+          <Page
+            width={width}
             key={item}
           >
             <View style={{flex: 1}}>
@@ -83,32 +86,13 @@ const Carousel = () => {
               <CalendarBody 
                 year={pageYear} 
                 month={pageMonth} 
-                setSelectDate={setSelectDate}
-                setEventModalList={setEventModalList}
               />
             </View>
-
-            {eventModalList.length !== 0 && 
-            <CalendarModal 
-              month={month} 
-              date={selectDate} 
-              day={new Date(year, month, selectDate).getDay()} 
-              eventList={eventModalList} 
-              setEventList={setEventModalList}
-            />}
-          </View>
+          </Page>
         );
       })}
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    width: width,
-    height: '100%',
-  }
-});
 
 export default Carousel;

@@ -3,7 +3,7 @@ export interface TimeProps {
   minute: number;
 }
 
-export interface SchedulePropsA {
+export interface ScheduleDTO_A {
   id: number;
   name: string;
   start_hour: number;
@@ -15,7 +15,7 @@ export interface SchedulePropsA {
   all_day: 0;
 };
 
-export interface SchedulePropsB {
+export interface ScheduleDTO_B {
   id: number;
   name: string;
   start_hour: null;
@@ -27,7 +27,7 @@ export interface SchedulePropsB {
   all_day: 1;
 };
 
-export type ScheduleProps = SchedulePropsA | SchedulePropsB;
+export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
 
 export interface TimeblockProps {
   id: number;
@@ -99,4 +99,12 @@ export interface DateProps {
   year: number;
   month: number;
   date: number;
+}
+
+export interface Style {
+  color?: string;
+  bg_color?: string;
+  height?: number;
+  width?: number;
+  top?: number;
 }

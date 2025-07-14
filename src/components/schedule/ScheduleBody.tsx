@@ -1,9 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useDB } from '../common/DBProvider';
-import { ScheduleProps } from '../../types/types';
-import { View, StyleSheet, Text } from 'react-native';
+import { ScheduleDTO } from '../../types/types';
 import selectSchedule from '../../utils/selectSchedule';
 import ScheduleBlock from './ScheduleBlock';
+import styled from 'styled-components/native';
+import TimeAxis from '../common/TimeAxis';
+import { FlexRow } from '../../styles/style';
+
+const EventWrapper = styled.View`
+  left: 7%;
+  width: 93%;
+  position: absolute;
+  flex: 1;
+`;
 
 const ScheduleBody = (
   { year, month, date }: 
@@ -15,21 +24,17 @@ const ScheduleBody = (
 ) => {
   const db = useDB();
 
-  const day = (new Date(year, month - 1, date).getDay() + 6) % 7;
+  const [eventList, setEventList] = useState<ScheduleDTO[]>([]);
 
-  const [scheduleList, setScheduleList] = useState<ScheduleProps[]>([]);
+  const [startTime, setStartTime] = useState<number>(10);
+  const [endTime, setEndTime] = useState<number>(20);
 
-  const [startTime, setStartTime] = useState<number>(12);
-  const [endTime, setEndTime] = useState<number>(18);
-
-  const timeList: number[] = Array.from({ length: endTime - startTime }, (_, i) => (i + startTime));
-
-  const setTimeRange = (scheduleList: ScheduleProps[]) => {
-    const newStartTime = Math.min(...scheduleList.map(block => block.start_hour ?? 24));
-    const newEndTime = Math.max(...scheduleList.map(block => block.end_hour ?? 0));
+  const setTimeRange = (eventList: ScheduleDTO[]) => {
+    const newStartTime = Math.min(...eventList.map(block => block.start_hour ?? 24));
+    const newEndTime = Math.max(...eventList.map(block => block.end_hour ?? 0)) + 1;
     
     setStartTime(Math.min(startTime, newStartTime));
-    setEndTime(Math.max(endTime, newEndTime + 1));
+    setEndTime(Math.max(endTime, newEndTime));
   }
 
   useEffect(() => {
@@ -40,70 +45,34 @@ const ScheduleBody = (
       date: date,
     }).then((res) => {
       if (res) {
-        setScheduleList(res);
+        setEventList(res);
         setTimeRange(res);
       }
     })
-  }, [db, year, month, date, day]);
+  }, [db, year, month, date]);
 
   return (
-    <View style={styles.body}>
-      {/* time column */}
-      <View style={styles.time_col}>
-        {timeList.map((time: number) => {
-          return (
-            <Text key={time} style={styles.time_cell}>{time}</Text>
-          );
-        })}
-      </View>
+    <FlexRow>
+      <TimeAxis 
+        startTime={startTime}
+        endTime={endTime}
+        gap={75}
+      />
 
-      <View style={styles.row}>
-        {scheduleList.map((schedule: ScheduleProps) => {
+      <EventWrapper>
+        {eventList.map((schedule: ScheduleDTO) => {
           return (
             <ScheduleBlock 
               key={schedule.id} 
-              schedule={schedule}
+              event={schedule}
               startTime={startTime}
+              gap={75}
             />
           );
         })}
-        
-        {timeList.map((time: number) => {
-          return <View key={time} style={styles.cell}></View>;
-        })}
-      </View>
-    </View>
+      </EventWrapper>
+    </FlexRow>
   );
 }
-
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  time_col: {
-    width: '7%',
-  },
-  time_cell: {
-    height: 70,
-    boxSizing: 'border-box',
-    borderTopWidth: 1,
-    borderTopColor: '#EFEFEF',
-    borderRightColor: '#EFEFEF',
-    textAlign: 'right',
-    paddingRight: 6,
-    paddingTop: 3,
-    color: '#767676',
-  },
-  row: {
-    position: 'relative',
-    flex: 1,
-  },
-  cell: {
-    height: 70,
-    borderTopWidth: 1,
-    borderTopColor: '#EFEFEF',
-  },
-});
 
 export default ScheduleBody;

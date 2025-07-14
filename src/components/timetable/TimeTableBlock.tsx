@@ -1,56 +1,62 @@
-import { Text, StyleSheet, Pressable } from 'react-native';
 import { TimeblockProps } from '../../types/types';
-import { getTimeSum } from '../../utils/time';
+import styled from 'styled-components/native';
+import { Style } from '../../types/types';
+
+const Block = styled.Pressable<Style>`
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 2px;
+  z-index: 1;
+  padding-top: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+  border: 0.5px solid white;
+  height: ${(props) => props.height};
+  top: ${(props) => props.top};
+  background-color: ${(props) => props.bg_color};
+`;
+
+const Name = styled.Text`
+  color: white;
+  font-weight: 500;
+  font-size: 13px;
+`;
+
+const Detail = styled.Text`
+  font-size: 12px;
+  color: white;
+`;
 
 const TimeTableBlock = (
-  { timeblock, startTime, setTimeblock }: 
+  { event, startTime, openModal, gap }: 
   { 
-    timeblock: TimeblockProps,
+    event: TimeblockProps,
     startTime: number,
-    setTimeblock: React.Dispatch<React.SetStateAction<null | TimeblockProps>>
+    openModal: (name: string) => void,
+    gap: number,
   }
 ) => {
-  const startSum = getTimeSum(timeblock.start_hour, timeblock.start_minute);
-  const endSum = getTimeSum(timeblock.end_hour, timeblock.end_minute);
-  const height = 85 * (endSum - startSum) / 60;
-  const top = 85 * (startSum - startTime * 60) / 60;
+  const startSum = 60 * event.start_hour + event.start_minute;
+  const endSum = 60 * event.end_hour + event.end_minute;
+  const height = gap * (endSum - startSum) / 60;
+  const top = gap * (startSum - startTime * 60) / 60;
 
   return (
-    <Pressable 
-      style={[styles.block, {backgroundColor: timeblock.color, height: height, top: top}]}
-      onPress={() => setTimeblock(timeblock)}
+    <Block 
+      bg_color={event.color}
+      height={height}
+      top={top}
+      onPress={() => {openModal(event.name)}}
     >
-      <Text style={styles.name}>
-        {timeblock.name}
-      </Text>
-      <Text style={styles.location}>
-        {timeblock.location}
-      </Text>
-    </Pressable>
+      <Name>
+        {event.name}
+      </Name>
+      <Detail>
+        {event.location}
+      </Detail>
+    </Block>
   );
 }
-
-const styles = StyleSheet.create({
-  block: {
-    boxSizing: 'border-box',
-    position: 'absolute',
-    padding: 4,
-    left: 0,
-    width: '100%',
-    zIndex: 1,
-    borderColor: 'white',
-    borderWidth: 0.5,
-  },
-  name: {
-    color: 'white',
-    fontWeight: 500,
-    fontSize: 12,
-  },
-  location: {
-    fontSize: 12,
-    color: '#ECECEC',
-    fontWeight: 500,
-  },
-});
 
 export default TimeTableBlock;

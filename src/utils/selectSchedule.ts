@@ -1,5 +1,5 @@
 import selectDB from './db/selectDB';
-import { TimeblockProps, CalendarProps, ScheduleProps } from '../types/types';
+import { TimeblockProps, CalendarProps, ScheduleDTO } from '../types/types';
 import SQLite from 'react-native-sqlite-storage';
 
 interface TimeTableFilter {
@@ -37,7 +37,7 @@ const selectSchedule = async (
 ) => {
   if (!db) return null;
 
-  const scheduleList: ScheduleProps[] = [];
+  const scheduleList: ScheduleDTO[] = [];
 
   await selectDB<TimeTableFilter>({
     db: db,
