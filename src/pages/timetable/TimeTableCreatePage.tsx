@@ -10,6 +10,7 @@ import SaveButton from '../../components/create_form/button/SaveButton';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import LocationInput from '../../components/create_form/input/LocationInput';
+import DescriptionInput from '../../components/create_form/input/DescriptionInput';
 
 const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   const [name, setName] = useState<string>('');
@@ -22,6 +23,7 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   const [location, setLocation] = useState<string>('');
   const [startTimes, setStartTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
   const [endTimes, setEndTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
+  const [description, setDescription] = useState<string>('');
 
   const db = useDB();
 
@@ -101,6 +103,10 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
           })}
         </View>
         {selectDays.length !== 0 && <LocationInput location={location} setLocation={setLocation} />}
+        {selectDays.length !== 0 && <DescriptionInput 
+          description={description}
+          setDescription={setDescription}
+        />}
       </View>
       <SaveButton 
         save={save}

@@ -1,100 +1,95 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import ClockSvg from '../../../assets/image/clock.svg';
+import { View } from 'react-native';
 import ArrowRightSvg from '../../../assets/image/arrow-right.svg';
 import { timeToStr } from '../../../utils/time';
 import { TimeManageProps } from '../../../types/types';
 import TimePicker from '../picker/TimePicker';
 import { useState } from 'react';
+import InputForm from './InputForm';
+import PickerButton from '../button/PickerButton';
+import styled from 'styled-components/native';
+import AllDayInput from './AllDayInput';
 
-const TimeInput = ({ timeManage }: { timeManage: TimeManageProps }) => {
+const Input = styled.View`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const Arrow = styled(ArrowRightSvg)`
+  position: absolute;
+  left: 50%;
+`;
+
+const PickerWrapper = styled.View`
+  margin-right: 10%;
+`;
+
+const TimeInput = (
+  { timeManage, isAllDay, setIsAllDay }: 
+  { 
+    timeManage: TimeManageProps,
+    isAllDay?: boolean,
+    setIsAllDay?: React.Dispatch<React.SetStateAction<boolean>>,
+  }
+) => {
   const { startHour, startMinute, endHour, endMinute, setStartHour, setStartMinute, setEndHour, setEndMinute } = timeManage;
   const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
   const [isEndOpen, setIsEndOpen] = useState<boolean>(false);
 
   return (
     <View>
-      <View style={styles.timeInput}>
-        <ClockSvg width={18} height={18} stroke='#5D5D5D' strokeWidth={2} />
-        <View style={styles.timeBlock}>
-          {/* start button */}
-          <Pressable
-            style={[styles.timeSelectButton, isStartOpen ? styles.timeSelectActivate : {}]}
+      <InputForm
+        iconName='clock'
+      >
+        {!isAllDay && <Input>
+          <PickerButton
+            label={timeToStr(startHour, startMinute)}
             onPress={() => {
-              setIsStartOpen(!isStartOpen)
+              setIsStartOpen(!isStartOpen);
               setIsEndOpen(false);
             }}
-          >
-            <Text style={styles.time}>
-              {timeToStr(startHour, startMinute)}
-            </Text>
-          </Pressable>
-          <ArrowRightSvg style={styles.arrow} width={20} height={20} stroke='#5D5D5D' strokeWidth={2} />
-          {/* end button */}
-          <Pressable
-            style={[styles.timeSelectButton, styles.timeSelectRightButton, isEndOpen ? styles.timeSelectActivate : {}]}
+            isOpen={isStartOpen}
+            position='left'
+          />
+
+          <Arrow 
+            width={20} 
+            height={20} 
+            stroke='#5D5D5D' 
+            strokeWidth={2} 
+          />
+
+          <PickerButton
+            label={timeToStr(endHour, endMinute)}
             onPress={() => {
               setIsEndOpen(!isEndOpen);
               setIsStartOpen(false);
             }}
-          >
-            <Text style={styles.time}>
-              {timeToStr(endHour, endMinute)}
-            </Text>
-          </Pressable>
-        </View>
-      </View>
+            isOpen={isEndOpen}
+            position='right'
+          />
+        </Input>}
+        
+        {isAllDay !== undefined && setIsAllDay !== undefined && 
+          <AllDayInput 
+            isAllDay={isAllDay}
+            setIsAllDay={setIsAllDay}
+          />
+        }
+      </InputForm>
+
       {/* time picker */}
-      <View style={[styles.timePickerWrapper, { display: !isStartOpen && !isEndOpen ? 'none' : 'flex' }]}>
+      <PickerWrapper style={{ display: !isStartOpen && !isEndOpen ? 'none' : 'flex' }}>
         <TimePicker 
           hour={isStartOpen ? startHour : endHour} 
           minute={isStartOpen ? startMinute : endMinute}
           setHour={isStartOpen ? setStartHour : setEndHour}
           setMinute={isStartOpen ? setStartMinute : setEndMinute}
         />
-      </View>
+      </PickerWrapper>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  timeInput: {
-    display: 'flex',
-    position: 'relative',
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  timeBlock: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  timeSelectButton: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 3,
-    paddingBottom: 5,
-  },
-  timeSelectRightButton: {
-    position: 'absolute',
-    left: 190,
-  },
-  timeSelectActivate: {
-    backgroundColor: '#E8E8E8',
-    borderRadius: 20,
-  },
-  time: {
-    fontSize: 16,
-  },
-  timePickerWrapper: {
-    marginRight: '10%',
-    marginLeft: '10%',
-  },
-  arrow: {
-    position: 'absolute',
-    left: 135,
-  }
-});
 
 export default TimeInput;

@@ -1,5 +1,4 @@
 import TimeInput from '../input/TimeInput';
-import LocationInput from '../input/LocationInput';
 import { View, Text, StyleSheet } from 'react-native';
 import { TimeManageProps } from '../../../types/types';
 

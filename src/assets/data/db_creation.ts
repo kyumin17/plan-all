@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS "schedule" (
   "color" TEXT NOT NULL, 
   "month" INTEGER NOT NULL, 
   "year" INTEGER NOT NULL, 
-  "all_day" INTEGER NOT NULL
+  "all_day" INTEGER NOT NULL,
+  "description" TEXT
 );
 `;
 
@@ -25,7 +26,8 @@ CREATE TABLE IF NOT EXISTS "timetable" (
   "end_hour" INTEGER NOT NULL, 
   "end_minute" INTEGER NOT NULL, 
   "location" TEXT, 
-  "color" TEXT NOT NULL
+  "color" TEXT NOT NULL,
+  "description" TEXT
 );
 `;
 
@@ -45,6 +47,7 @@ CREATE TABLE IF NOT EXISTS "calendar" (
   "end_date" INTEGER NOT NULL, 
   "start_year" INTEGER NOT NULL, 
   "end_year" INTEGER NOT NULL, 
-  "all_day" INTEGER NOT NULL
+  "all_day" INTEGER NOT NULL,
+  "description" TEXT
 );
 `;

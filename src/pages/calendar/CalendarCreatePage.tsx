@@ -12,6 +12,8 @@ import execDB from '../../utils/db/execDB';
 import { useDB } from '../../components/common/DBProvider';
 import { getTimeSum } from '../../utils/time';
 import { DateProps } from '../../types/types';
+import DescriptionInput from '../../components/create_form/input/DescriptionInput';
+import Gap from '../../components/common/Gap';
 
 const CalendarCreatePage = () => {
   const date = new Date();
@@ -32,6 +34,7 @@ const CalendarCreatePage = () => {
   const [endMinute, setEndMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
 
   const [location, setLocation] = useState<string>('');
+  const [description, setDescription] = useState<string>('')
   const [color, setColor] = useState<string>(colors[getRandom(0, colors.length)]);
 
   const [isAllDay, setIsAllDay] = useState<boolean>(false);
@@ -47,11 +50,19 @@ const CalendarCreatePage = () => {
     if (!validateInputs()) return;
 
     try {
-      await execDB({
-        db: db,
-        query: 'INSERT INTO calendar (name, start_hour, start_minute, end_hour, end_minute, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        params: [name.trim(), startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, isAllDay ? 1 : 0]
-      });
+      if (isAllDay) {
+        await execDB({
+          db: db,
+          query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          params: [name.trim(), location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 1]
+        });
+      } else {
+        await execDB({
+          db: db,
+          query: 'INSERT INTO calendar (name, start_hour, start_minute, end_hour, end_minute, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          params: [name.trim(), startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 0]
+        });
+      }
     } catch (error) {
       console.error('Error executing query:', error);
       return;
@@ -66,7 +77,7 @@ const CalendarCreatePage = () => {
       return false;
     }
 
-    if (getTimeSum(startHour, startMinute) >= getTimeSum(endHour, endMinute)) {
+    if (!isAllDay && getTimeSum(startHour, startMinute) >= getTimeSum(endHour, endMinute)) {
       Alert.alert('오류', '시작 시간은 종료 시간보다 빨라야 합니다.');
       return false;
     }
@@ -91,8 +102,25 @@ const CalendarCreatePage = () => {
       <TitleInput name={name} setName={setName} color={color} setColor={setColor} />
       <View style={styles.detail}>
         <DateInput startDate={startYMD} endDate={endYMD} />
-        {!isAllDay && <TimeInput timeManage={{startHour, startMinute, endHour, endMinute, setStartHour, setStartMinute, setEndHour, setEndMinute}} />}
-        <LocationInput location={location} setLocation={setLocation} />
+        <Gap height={30} />
+
+        <TimeInput 
+          timeManage={{startHour, startMinute, endHour, endMinute, setStartHour, setStartMinute, setEndHour, setEndMinute}} 
+          isAllDay={isAllDay}
+          setIsAllDay={setIsAllDay}
+        />
+        <Gap height={20} />
+
+        <LocationInput 
+          location={location} 
+          setLocation={setLocation} 
+        />
+        <Gap height={10} />
+
+        <DescriptionInput 
+          description={description}
+          setDescription={setDescription}
+        />
       </View>
       <SaveButton 
         save={save}

@@ -1,0 +1,48 @@
+import { View } from 'react-native';
+import styled from 'styled-components/native';
+import CalendarSvg from '../../../assets/image/calendar.svg';
+import ClockSvg from '../../../assets/image/clock.svg';
+import LocationSvg from '../../../assets/image/location.svg';
+import WriteSvg from '../../../assets/image/write.svg';
+import { SvgProps } from 'react-native-svg';
+
+const Form = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const IconWrapper = styled.View`
+  margin-right: 15;
+`;
+
+const ICON = {
+  calendar: CalendarSvg,
+  clock: ClockSvg,
+  location: LocationSvg,
+  write: WriteSvg,
+}
+
+type IconNameProps = 'calendar' | 'clock' | 'location' | 'write';
+
+const InputForm = ({ children, iconName }: { children: React.ReactNode, iconName: IconNameProps }) => {
+  const Icon: React.FC<SvgProps> = ICON[iconName];
+
+  return (
+    <Form>
+      <IconWrapper>
+        <Icon 
+          width={18}
+          height={18}
+          stroke='#5D5D5D' 
+          strokeWidth={2}
+        />
+      </IconWrapper>
+      <View style={{ flex: 1 }}>
+        {children}
+      </View>
+    </Form>
+  );
+}
+
+export default InputForm;
