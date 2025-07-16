@@ -3,7 +3,7 @@ import { Style } from '../../types/types';
 
 const Wrapper = styled.View<Style>`
   width: 100%;
-  height: ${(props) => props.height};
+  height: ${(props) => `${props.height}px`};
 `;
 
 const Gap = ({ height }: { height: number }) => {

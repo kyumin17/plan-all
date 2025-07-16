@@ -8,6 +8,7 @@ import InputForm from './InputForm';
 import PickerButton from '../button/PickerButton';
 import styled from 'styled-components/native';
 import AllDayInput from './AllDayInput';
+import Gap from '../../common/Gap';
 
 const Input = styled.View`
   position: relative;
@@ -22,7 +23,7 @@ const Arrow = styled(ArrowRightSvg)`
 `;
 
 const PickerWrapper = styled.View`
-  margin-right: 10%;
+  margin-left: 10%;
 `;
 
 const TimeInput = (
@@ -71,7 +72,7 @@ const TimeInput = (
           />
         </Input>}
         
-        {isAllDay !== undefined && setIsAllDay !== undefined && 
+        {isAllDay !== undefined && setIsAllDay !== undefined && isAllDay &&
           <AllDayInput 
             isAllDay={isAllDay}
             setIsAllDay={setIsAllDay}
@@ -88,6 +89,17 @@ const TimeInput = (
           setMinute={isStartOpen ? setStartMinute : setEndMinute}
         />
       </PickerWrapper>
+
+      {isAllDay !== undefined && setIsAllDay !== undefined && !isAllDay &&
+        <View>
+          <Gap height={20} />
+          <AllDayInput 
+            isAllDay={isAllDay}
+            setIsAllDay={setIsAllDay}
+            left={17}
+          />
+        </View>
+      }
     </View>
   );
 }

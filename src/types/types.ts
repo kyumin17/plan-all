@@ -13,6 +13,7 @@ export interface ScheduleDTO_A {
   location: null | string;
   color: string;
   all_day: 0;
+  description: string;
 };
 
 export interface ScheduleDTO_B {
@@ -25,6 +26,7 @@ export interface ScheduleDTO_B {
   location: null | string;
   color: string;
   all_day: 1;
+  description: string;
 };
 
 export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
@@ -39,6 +41,7 @@ export interface TimeblockProps {
   end_minute: number;
   location: null | string;
   color: string;
+  description: string;
 };
 
 export interface CalendarPropsA {
@@ -57,6 +60,7 @@ export interface CalendarPropsA {
   end_month: number;
   end_year: number;
   all_day: 0;
+  description: string;
 };
 
 export interface CalendarPropsB {
@@ -75,6 +79,7 @@ export interface CalendarPropsB {
   end_month: number;
   end_year: number;
   all_day: 1;
+  description: string;
 };
 
 export type CalendarProps = CalendarPropsA | CalendarPropsB;
@@ -107,4 +112,6 @@ export interface Style {
   height?: number;
   width?: number;
   top?: number;
+  left?: number;
+  right?: number;
 }

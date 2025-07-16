@@ -9,7 +9,7 @@ const { width } = Dimensions.get('window');
 
 const Page = styled.View<Style>`
   flex: 1;
-  width: ${(props) => props.width};
+  width: ${(props) => `${props.width}px`};
   height: 100%;
 `;
 

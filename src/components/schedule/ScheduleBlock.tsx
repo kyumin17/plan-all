@@ -13,8 +13,8 @@ const Block = styled.View<Style>`
   padding-left: 16px;
   padding-right: 16px;
   border: 0.5px solid white;
-  height: ${(props) => props.height};
-  top: ${(props) => props.top};
+  height: ${(props) => `${props.height}px`};
+  top: ${(props) => `${props.top}px`};
   background-color: ${(props) => props.bg_color};
 `;
 

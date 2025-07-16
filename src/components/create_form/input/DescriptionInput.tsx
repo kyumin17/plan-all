@@ -7,7 +7,7 @@ const DescriptionInput = ({ description, setDescription }: { description: string
       iconName='write'
     >
       <TextInput
-        style={{ fontSize: 16 }}
+        style={{ fontSize: 16, marginLeft: 6 }}
         value={description}
         onChangeText={text => setDescription(text)}
         placeholder='설명' 

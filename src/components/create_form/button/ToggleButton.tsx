@@ -42,7 +42,7 @@ const ToggleButton = (
     outputRange: [1, 17],
   });
 
-  const color = isOn ? 'green' : 'gray';
+  const color = isOn ? '#13d62d' : '#808080';
 
   return (
     <ToggleContainer onPress={() => {setIsOn(!isOn)}} color={color}>

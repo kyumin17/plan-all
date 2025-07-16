@@ -53,14 +53,14 @@ const CalendarCreatePage = () => {
       if (isAllDay) {
         await execDB({
           db: db,
-          query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          params: [name.trim(), location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 1]
+          query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          params: [name.trim(), location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 1, description]
         });
       } else {
         await execDB({
           db: db,
-          query: 'INSERT INTO calendar (name, start_hour, start_minute, end_hour, end_minute, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          params: [name.trim(), startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 0]
+          query: 'INSERT INTO calendar (name, start_hour, start_minute, end_hour, end_minute, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          params: [name.trim(), startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 0, description]
         });
       }
     } catch (error) {

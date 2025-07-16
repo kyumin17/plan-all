@@ -13,7 +13,7 @@ const Form = styled.View`
 `;
 
 const IconWrapper = styled.View`
-  margin-right: 15;
+  margin-right: 15px;
 `;
 
 const ICON = {

@@ -7,7 +7,7 @@ const TimeLabel = styled.View`
 `;
 
 const TimeText = styled.Text<{ gap: number }>`
-  height: ${(props) => props.gap};
+  height: ${(props) => `${props.gap}px`};
   box-sizing: border-box;
   border-top-width: 1px;
   border-top-color: #EFEFEF;
@@ -18,7 +18,7 @@ const TimeText = styled.Text<{ gap: number }>`
 `;
 
 const TimeRow = styled.View<{ gap: number }>`
-  height: ${(props) => props.gap};
+  height: ${(props) => `${props.gap}px`};
   border-top-width: 1px;
   border-top-color: #EFEFEF;
   flex: 1;

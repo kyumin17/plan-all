@@ -11,6 +11,7 @@ import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import LocationInput from '../../components/create_form/input/LocationInput';
 import DescriptionInput from '../../components/create_form/input/DescriptionInput';
+import Gap from '../../components/common/Gap';
 
 const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   const [name, setName] = useState<string>('');
@@ -59,12 +60,12 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
     }
 
     for (const i of selectDays) {
-      const params = [name.trim(), i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, location, color];
+      const params = [name.trim(), i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, location, color, description];
 
       try {
         await execDB({
           db: db,
-          query: `INSERT INTO timetable (name, day, start_hour, start_minute, end_hour, end_minute, location, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+          query: `INSERT INTO timetable (name, day, start_hour, start_minute, end_hour, end_minute, location, color, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
           params: params
         });
       } catch (error) {
@@ -102,7 +103,9 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
             );
           })}
         </View>
+        
         {selectDays.length !== 0 && <LocationInput location={location} setLocation={setLocation} />}
+        <Gap height={10} />
         {selectDays.length !== 0 && <DescriptionInput 
           description={description}
           setDescription={setDescription}

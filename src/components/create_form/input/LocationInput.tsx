@@ -7,7 +7,7 @@ const LocationInput = ({ location, setLocation }: { location: string, setLocatio
       iconName='location'
     >
       <TextInput
-        style={{ fontSize: 16 }}
+        style={{ fontSize: 16, marginLeft: 6 }}
         value={location}
         onChangeText={text => setLocation(text)}
         placeholder='장소' 
