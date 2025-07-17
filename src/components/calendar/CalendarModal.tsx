@@ -8,17 +8,21 @@ import { FlexCol } from '../../styles/style';
 const Title = styled.Text`
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 `;
 
 const Body = styled(FlexCol)`
-  gap: 15px;
+  gap: 3px;
 `;
 
-const EventWrapper = styled.Pressable`
+const EventWrapper = styled.Pressable<Style & { allDay: 0 | 1 }>`
   display: flex;
   flex-direction: row;
   gap: 15px;
+  background-color: ${(props) => props.bg_color};
+  padding-top: ${(props) => props.allDay ? '7px' : 0};
+  padding-bottom: 11px;
+  border-radius: 3px;
 `;
 
 const Marker = styled.View<Style>`
@@ -59,8 +63,10 @@ const CalendarModal = (
             <EventWrapper
               key={event.id}
               onPress={() => navigation.navigate('CalendarCreatePage')}
+              bg_color={event.all_day ? `${event.color}25` : 'white'}
+              allDay={event.all_day}
             >
-              <Marker bg_color={event.color}>
+              <Marker bg_color={event.all_day ? '' : event.color}>
               </Marker>
               <View>
                 <Name color={event.color}>
@@ -68,9 +74,9 @@ const CalendarModal = (
                 </Name>
                 <Time>
                   {event.all_day ? 
-                    '하루종일' : 
+                    `${event.start_month}.${event.start_date}` : 
                     `${timeToStr(event.start_hour, event.start_minute)} - ${timeToStr(event.end_hour, event.end_minute)}`}
-                  {event.location ?? `, ${event.location}`}
+                  {event.location && `, ${event.location}`}
                 </Time>
               </View>
             </EventWrapper>

@@ -24,10 +24,12 @@ const PickerWrapper = styled.View`
 `;
 
 const DateInput = (
-  { startDate, endDate }:
+  { startDate, endDate, setStartDate, setEndDate }:
   {
     startDate: DateProps,
     endDate: DateProps,
+    setStartDate: React.Dispatch<React.SetStateAction<DateProps>>,
+    setEndDate: React.Dispatch<React.SetStateAction<DateProps>>,
   }
 ) => {
   const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
@@ -70,7 +72,12 @@ const DateInput = (
 
       {/* date picker */}
       <PickerWrapper style={{ display: !isStartOpen && !isEndOpen ? 'none' : 'flex' }}>
-        <DatePicker date={new Date()} />
+        <DatePicker 
+          date={isStartOpen ? new Date(startDate.year, startDate.month, startDate.date) : new Date(endDate.year, endDate.month, endDate.date)} 
+          onDateChange={(date) => {
+            isStartOpen ? setStartDate({ year: date.getFullYear(), month: date.getMonth(), date: date.getDate()}) : setEndDate({ year: date.getFullYear(), month: date.getMonth(), date: date.getDate()});
+          }}
+        />
       </PickerWrapper>
     </View>
   );

@@ -114,4 +114,5 @@ export interface Style {
   top?: number;
   left?: number;
   right?: number;
+  min_height?: number;
 }

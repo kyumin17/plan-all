@@ -100,7 +100,7 @@ const CalendarBody = (
           <Row key={week}>
             {Array.from({ length: 7 }, (_, i) => i).map((day: number) => {
               const date: number = day - startDay + week * 7 + 1;
-              const data = eventList.filter((event) => event.start_date === date);
+              const data = eventList.filter((event) => event.start_date <= date && date <= event.end_date);
               
               return (
                 <CalendarCell 
@@ -120,6 +120,7 @@ const CalendarBody = (
       {modalItem && <Modal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        minHeight={27}
       >
         <CalendarModal 
           month={month}

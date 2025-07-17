@@ -57,7 +57,7 @@ const CalendarCell = (
 
       <View>
         {eventList.map((event: CalendarProps) => {
-          return <CalendarBlock event={event} key={event.id} />;
+          return <CalendarBlock event={event} date={date} key={event.id} />;
         })}
       </View>
     </Cell>

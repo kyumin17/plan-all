@@ -1,5 +1,6 @@
 import { Modal as RNModal } from 'react-native';
 import styled from 'styled-components/native';
+import { Style } from '../../types/types';
 
 const Overlay = styled.Pressable`
   position: absolute;
@@ -12,7 +13,7 @@ const Overlay = styled.Pressable`
   align-items: center;
 `;
 
-const Body = styled.Pressable`
+const Body = styled.Pressable<Style>`
   position: absolute;
   z-index: 10;
   background-color: white;
@@ -22,14 +23,16 @@ const Body = styled.Pressable`
   padding-bottom: 30px;
   padding-right: 30px;
   padding-left: 30px;
+  min-height: ${(props) => `${props.min_height}%`};
 `;
 
 const Modal = (
-  { children, isOpen, setIsOpen }: 
+  { children, isOpen, setIsOpen, minHeight }: 
   { 
     children: React.ReactNode,
     isOpen: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    minHeight?: number,
   }
 ) => {
   return (
@@ -43,6 +46,7 @@ const Modal = (
       >
         <Body
           onPress={(e) => e.stopPropagation()}
+          min_height={minHeight ?? 0}
         >
           {children}
         </Body>

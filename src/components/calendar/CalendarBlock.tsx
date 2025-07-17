@@ -15,14 +15,16 @@ const Marker = styled.View<Style>`
 `;
 
 const Name = styled.Text<Style>`
-  font-size: 10px;
+  flex: 1;
+  font-size: 11px;
   padding-left: 6px;
   padding-right: 6px;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bg_color};
+  padding-bottom: 2px;
 `;
 
-const CalendarBlock = ({ event }: { event: CalendarProps }) => {
+const CalendarBlock = ({ event, date }: { event: CalendarProps, date: number | null }) => {
   return (
     <Block>
       <Marker
@@ -34,7 +36,7 @@ const CalendarBlock = ({ event }: { event: CalendarProps }) => {
         bg_color={event.all_day ? `${event.color}25` : 'white'}
         numberOfLines={1}
       >
-        {event.name}
+        {event.start_date === date ? event.name : ''}
       </Name>
     </Block>
   );

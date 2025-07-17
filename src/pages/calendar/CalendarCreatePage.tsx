@@ -21,21 +21,27 @@ const CalendarCreatePage = () => {
 
   const [name, setName] = useState<string>('');
 
-  const [startYear, setStartYear] = useState<number>(date.getFullYear());
-  const [startMonth, setStartMonth] = useState<number>(date.getMonth() + 1);
-  const [startDate, setStartDate] = useState<number>(date.getDate());
+  const [startDate, setStartDate] = useState<DateProps>({
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    date: date.getDate(),
+  });
+
+  const [endDate, setEndDate] = useState<DateProps>({
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    date: date.getDate(),
+  });
+
   const [startHour, setStartHour] = useState<number>(date.getHours());
   const [startMinute, setStartMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
 
-  const [endYear, setEndYear] = useState<number>(date.getFullYear());
-  const [endMonth, setEndMonth] = useState<number>(date.getMonth() + 1);
-  const [endDate, setEndDate] = useState<number>(date.getDate());
   const [endHour, setEndHour] = useState<number>(date.getHours());
   const [endMinute, setEndMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
 
   const [location, setLocation] = useState<string>('');
   const [description, setDescription] = useState<string>('')
-  const [color, setColor] = useState<string>(colors[getRandom(0, colors.length)]);
+  const [color, setColor] = useState<string>(colors[4]);
 
   const [isAllDay, setIsAllDay] = useState<boolean>(false);
   
@@ -53,14 +59,14 @@ const CalendarCreatePage = () => {
       if (isAllDay) {
         await execDB({
           db: db,
-          query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          params: [name.trim(), location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 1, description]
+          query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          params: [name.trim(), location, color, startDate.date, startDate.month, startDate.year, endDate.date, endDate.month, endDate.year, 1, description]
         });
       } else {
         await execDB({
           db: db,
           query: 'INSERT INTO calendar (name, start_hour, start_minute, end_hour, end_minute, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          params: [name.trim(), startHour, startMinute, endHour, endMinute, location, color, startDate, startMonth, startYear, endDate, endMonth, endYear, 0, description]
+          params: [name.trim(), startHour, startMinute, endHour, endMinute, location, color, startDate.date, startDate.month, startDate.year, endDate.date, endDate.month, endDate.year, 0, description]
         });
       }
     } catch (error) {
@@ -85,23 +91,16 @@ const CalendarCreatePage = () => {
     return true;
   }
 
-  const startYMD: DateProps = {
-    year: startYear,
-    month: startMonth,
-    date: startDate
-  }
-
-  const endYMD: DateProps = {
-    year: endYear,
-    month: endMonth,
-    date: endDate
-  }
-
   return (
     <View style={styles.page}>
       <TitleInput name={name} setName={setName} color={color} setColor={setColor} />
       <View style={styles.detail}>
-        <DateInput startDate={startYMD} endDate={endYMD} />
+        <DateInput 
+          startDate={startDate} 
+          endDate={endDate} 
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+        />
         <Gap height={30} />
 
         <TimeInput 
