@@ -2,24 +2,24 @@ import CalendarBlock from './CalendarBlock';
 import { CalendarProps, Style } from '../../types/types';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Cell = styled.Pressable`
   position: relative;
   flex: 1;
-  padding-top: 32px;
+  padding-top: 7px;
 `;
 
 const DateText = styled.Text<Style & { is_today: boolean }>`
-  position: absolute;
-  right: 7px;
-  top: 5px;
+  margin: 0 auto;
+  width: 20px;
+  display: block;
   font-size: 13px;
   height: 20px;
-  width: 20px;
   text-align: center;
   line-height: 20px;
   font-weight: 400;
-  margin-right: 6px;
+  margin-bottom: 6px;
   color: ${(props) => props.color};
 
   ${(props) => 
@@ -42,14 +42,25 @@ const CalendarCell = (
     openModal: (date: number, day: number, eventList: CalendarProps[]) => void,
   }
 ) => {
-  const isWeekend: boolean = day === 5 || day === 6;
+  const navigation = useNavigation<any>();
+
+  const getDateColor = () => {
+    if (day === 5) return '#1753b4';
+    else if (day === 6) return '#db300e';
+    else return '#3B3B3B';
+  }
+
+  const handlePress = () => {
+    if (date && eventList.length !== 0) openModal(date, day, eventList);
+    else navigation.navigate('CalendarCreatePage');
+  }
 
   return (
     <Cell 
-      onPress={()=>{date && openModal(date, day, eventList)}}
+      onPress={handlePress}
     >
       <DateText 
-        color={isWeekend ? '#FF2A00' : '#3B3B3B'}
+        color={getDateColor()}
         is_today={isToday}
       >
         {date}

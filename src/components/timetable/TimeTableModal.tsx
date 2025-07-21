@@ -53,6 +53,11 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockProps[] }) 
     }
   }
 
+  const handleEdit = () => {
+    navigation.replace('TimeTablePage');
+    navigation.navigate('TimeTableEditPage', { timeblockList: timeblockList});
+  }
+
   return (
     <View>
       <Name>
@@ -79,7 +84,7 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockProps[] }) 
 
       <Button 
         style={{marginBottom: 15, marginTop: 15}}
-        onPress={() => {}}
+        onPress={handleEdit}
       >
         <EditSvg width={20} height={20} />
         <Text style={{color: '#5D5D5D'}}>

@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import execDB from '../../utils/db/execDB';
 import { useDB } from '../../components/common/DBProvider';
 import { getTimeSum } from '../../utils/time';
-import { DateProps } from '../../types/types';
+import { CalendarProps, DateProps } from '../../types/types';
 import DescriptionInput from '../../components/create_form/input/DescriptionInput';
 import Gap from '../../components/common/Gap';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -38,45 +38,56 @@ const ButtonWrapper = styled.View`
   padding-right: 5%;
 `;
 
-const CalendarCreatePage = () => {
-  const date = new Date();
+const CalendarEditPage = ({ route }: { route: any }) => {
+  const { event }: { event: CalendarProps } = route.params;
+
   const navigation = useNavigation<any>();
 
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>(event.name);
 
   const [startDate, setStartDate] = useState<DateProps>({
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    date: date.getDate(),
+    year: event.start_year,
+    month: event.start_month,
+    date: event.start_date,
   });
 
   const [endDate, setEndDate] = useState<DateProps>({
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    date: date.getDate(),
+    year: event.end_year,
+    month: event.end_month,
+    date: event.end_date,
   });
 
-  const [startHour, setStartHour] = useState<number>(date.getHours());
-  const [startMinute, setStartMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
+  const [startHour, setStartHour] = useState<number>(event.start_hour ?? 12);
+  const [startMinute, setStartMinute] = useState<number>(event.start_minute ?? 0);
 
-  const [endHour, setEndHour] = useState<number>(date.getHours());
-  const [endMinute, setEndMinute] = useState<number>(5 * Math.floor(date.getMinutes() / 5));
+  const [endHour, setEndHour] = useState<number>(event.end_hour ?? 12);
+  const [endMinute, setEndMinute] = useState<number>(event.end_minute ?? 0);
 
-  const [location, setLocation] = useState<string>('');
-  const [description, setDescription] = useState<string>('')
+  const [location, setLocation] = useState<string>(event.location ?? '');
+  const [description, setDescription] = useState<string>(event.description);
   const [color, setColor] = useState<string>(colors[4]);
 
-  const [isAllDay, setIsAllDay] = useState<boolean>(false);
+  const [isAllDay, setIsAllDay] = useState<boolean>(event.all_day ? true : false);
   
   const db = useDB();
 
-  const save = async () => {
+  const edit = async () => {
+    if (!validateInputs()) return;
+
     if (!db) {
       console.error('Database connection failed');
       return;
     }
 
-    if (!validateInputs()) return;
+    try {
+      await execDB({
+        db: db,
+        query: 'DELETE FROM calendar WHERE name = ?',
+        params: [event.name]
+      });
+    } catch (error) {
+      console.error('Error deleting calendar:', error);
+    }
 
     try {
       if (isAllDay) {
@@ -149,13 +160,13 @@ const CalendarCreatePage = () => {
       <ButtonWrapper style={{ marginBottom: useBottomTabBarHeight() - 12 }}> 
         <CancelButton />
         <Button
-          label='저장하기'
+          label='수정하기'
           color='black'
-          handlePress={save}
+          handlePress={edit}
         />
       </ButtonWrapper>
     </Page>
   );
 };
 
-export default CalendarCreatePage;
+export default CalendarEditPage;

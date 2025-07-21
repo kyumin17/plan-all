@@ -1,25 +1,58 @@
 import TitleInput from '../../components/create_form/input/TitleInput';
 import DayPicker from '../../components/create_form/picker/DayPicker';
-import { View, StyleSheet, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { useState } from 'react';
 import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
 import DayTimeInput from '../../components/create_form/input/DayTimeInput';
 import { TimeManageProps, TimeProps } from '../../types/types';
-import SaveButton from '../../components/create_form/button/SaveButton';
+import Button from '../../components/create_form/button/Button';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import LocationInput from '../../components/create_form/input/LocationInput';
 import DescriptionInput from '../../components/create_form/input/DescriptionInput';
 import Gap from '../../components/common/Gap';
+import styled from 'styled-components/native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import CancelButton from '../../components/create_form/button/CancelButton';
+import { useNavigation } from '@react-navigation/native';
 
-const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
+const Page = styled.View`
+  margin-top: 10%;
+  height: 100%;
+`;
+
+const Content = styled.View`
+  margin-left: 10%;
+  margin-right: 10%;
+`;
+
+const ButtonWrapper = styled.View`
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  flex-direction: row;
+  gap: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+`;
+
+const DayTimeWrapper = styled.View`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 25px;
+`;
+
+const TimeTableCreatePage = () => {
+  const navigation = useNavigation<any>();
+
   const [name, setName] = useState<string>('');
   const [color, setColor] = useState<string>(colors[getRandom(1, colors.length)]);
   const [selectDays, setSelectDays] = useState<number[]>([]);
 
-  const date = new Date();
-  const initTimes: TimeProps = {hour: date.getHours(), minute: 5 * Math.floor(date.getMinutes() / 5)};
+  const initTimes: TimeProps = {hour: 12, minute: 0};
 
   const [location, setLocation] = useState<string>('');
   const [startTimes, setStartTimes] = useState<TimeProps[]>(Array.from({length: 7}, () => initTimes));
@@ -78,11 +111,12 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <View style={styles.page}>
+    <Page>
       <TitleInput name={name} setName={setName} color={color} setColor={setColor} />
-      <View style={styles.detail}>
+
+      <Content>
         <DayPicker selectDays={selectDays} setSelectDays={setSelectDays} />
-        <View style={styles.dayTimeWrapper}>
+        <DayTimeWrapper>
           {selectDays.map((day) => {
             const timeManage: TimeManageProps = {
               startHour: startTimes[day].hour,
@@ -102,7 +136,7 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
               />
             );
           })}
-        </View>
+        </DayTimeWrapper>
         
         {selectDays.length !== 0 && <LocationInput location={location} setLocation={setLocation} />}
         <Gap height={10} />
@@ -110,29 +144,18 @@ const TimeTableCreatePage = ({ navigation }: { navigation: any }) => {
           description={description}
           setDescription={setDescription}
         />}
-      </View>
-      <SaveButton 
-        save={save}
-      />
-    </View>
+      </Content>
+      
+      <ButtonWrapper style={{ marginBottom: useBottomTabBarHeight() - 12 }}>
+        <CancelButton />
+        <Button
+          label='저장하기'
+          color='black'
+          handlePress={save}
+        />
+      </ButtonWrapper>
+    </Page>
   );
 };
-
-const styles = StyleSheet.create({
-  page: {
-    marginTop: '10%',
-    height: '100%',
-  },
-  detail: {
-    marginLeft: '10%',
-    marginRight: '10%',
-  },
-  dayTimeWrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 10,
-    marginTop: 25,
-  },
-});
 
 export default TimeTableCreatePage;

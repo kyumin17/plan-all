@@ -1,9 +1,9 @@
 import { View } from 'react-native';
 import { CalendarProps, Style } from '../../types/types';
-import { timeToStr } from '../../utils/time';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { FlexCol } from '../../styles/style';
+import { timeRangeToStr } from '../../utils/time';
 
 const Title = styled.Text`
   font-size: 20px;
@@ -62,7 +62,7 @@ const CalendarModal = (
           return (
             <EventWrapper
               key={event.id}
-              onPress={() => navigation.navigate('CalendarCreatePage')}
+              onPress={() => navigation.navigate('CalendarEditPage', { event: event })}
               bg_color={event.all_day ? `${event.color}25` : 'white'}
               allDay={event.all_day}
             >
@@ -75,7 +75,7 @@ const CalendarModal = (
                 <Time>
                   {event.all_day ? 
                     `${event.start_month}.${event.start_date}` : 
-                    `${timeToStr(event.start_hour, event.start_minute)} - ${timeToStr(event.end_hour, event.end_minute)}`}
+                    `${timeRangeToStr(event.start_hour, event.start_minute, event.end_hour, event.end_minute)}`}
                   {event.location && `, ${event.location}`}
                 </Time>
               </View>

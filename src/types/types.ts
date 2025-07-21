@@ -3,7 +3,7 @@ export interface TimeProps {
   minute: number;
 }
 
-export interface ScheduleDTO_A {
+interface ScheduleDTO_A {
   id: number;
   name: string;
   start_hour: number;
@@ -16,7 +16,7 @@ export interface ScheduleDTO_A {
   description: string;
 };
 
-export interface ScheduleDTO_B {
+interface ScheduleDTO_B {
   id: number;
   name: string;
   start_hour: null;
@@ -44,7 +44,7 @@ export interface TimeblockProps {
   description: string;
 };
 
-export interface CalendarPropsA {
+interface CalendarPropsA {
   id: number;
   name: string;
   start_hour: number;
@@ -63,7 +63,7 @@ export interface CalendarPropsA {
   description: string;
 };
 
-export interface CalendarPropsB {
+interface CalendarPropsB {
   id: number;
   name: string;
   start_hour: null;
