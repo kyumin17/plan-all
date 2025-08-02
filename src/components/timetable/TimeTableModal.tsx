@@ -87,18 +87,12 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockProps[] }) 
         onPress={handleEdit}
       >
         <EditSvg width={20} height={20} />
-        <Text style={{color: '#5D5D5D'}}>
-          수정하기
-        </Text>
       </Button>
 
       <Button 
         onPress={handleDelete}
       >
         <TrashSvg width={22} height={22} />
-        <Text style={{color: '#FF2A00'}}>
-          삭제하기
-        </Text>
       </Button>
     </View>
   )

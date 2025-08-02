@@ -8,8 +8,8 @@ import TimeAxis from '../common/TimeAxis';
 import { FlexRow } from '../../styles/style';
 
 const EventWrapper = styled.View`
-  left: 7%;
-  width: 93%;
+  left: 8%;
+  width: 91%;
   position: absolute;
   flex: 1;
 `;

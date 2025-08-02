@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { FlexRow } from '../../styles/style';
 
 const TimeLabel = styled.View`
-  width: 7%;
+  width: 8%;
 `;
 
 const TimeText = styled.Text<{ gap: number }>`
@@ -11,8 +11,7 @@ const TimeText = styled.Text<{ gap: number }>`
   box-sizing: border-box;
   border-top-width: 1px;
   border-top-color: #EFEFEF;
-  text-align: right;
-  padding-right: 6px;
+  text-align: center;
   padding-top: 3px;
   color: #767676;
 `;

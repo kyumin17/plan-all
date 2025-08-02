@@ -1,11 +1,9 @@
 import styled from 'styled-components/native';
+import Header from '../common/Header';
 
 const Title = styled.Text`
-  font-size: 21px;
-  font-weight: 700;
-  margin-bottom: 25px;
-  text-align: center;
-  margin-top: 30px;
+  font-size: 22px;
+  font-weight: bold;
 `;
 
 const CalendarHeader = (
@@ -18,9 +16,11 @@ const CalendarHeader = (
 ) => {
   const currentYear = new Date().getFullYear();
   return (
-    <Title>
-      {year !== currentYear ? `${year}년 ` : ''}{month}월
-    </Title>
+    <Header>
+      <Title>
+        {year !== currentYear ? `${year}년 ` : ''}{month}월
+      </Title>
+    </Header>
   );
 };
 

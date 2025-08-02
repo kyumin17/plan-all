@@ -1,5 +1,6 @@
 import TimeTable from '../../components/timetable/TimeTable';
-import { View, ScrollView, Text, StyleSheet } from 'react-native';
+import { View, ScrollView } from 'react-native';
+import TimeTableHeader from '../../components/timetable/TimeTableHeader';
 import CreateButton from '../../components/create_form/button/CreateButton';
 import styled from 'styled-components/native';
 
@@ -17,9 +18,7 @@ const TimeTablePage = () => {
       <ScrollView 
         style={{flex: 1}}
       >
-        <Title>
-          시간표
-        </Title>
+        <TimeTableHeader />
         <TimeTable />
       </ScrollView>
       <CreateButton link='TimeTableCreatePage' />

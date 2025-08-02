@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import CalendarCell from './CalendarCell';
-import { CalendarProps } from '../../types/types';
+import { CalendarProps, Style } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
@@ -16,9 +16,10 @@ const TableHeader = styled.View`
   height: 30px;
 `;
 
-const DayText = styled.Text`
+const DayText = styled.Text<Style>`
   flex: 1;
   text-align: center;
+  color: ${(props) => props.color};
 `;
 
 const Row = styled.View`
@@ -89,7 +90,7 @@ const CalendarBody = (
     <View>
       <TableHeader>
         {dayNameList.map((day: string) => (
-          <DayText key={day}>
+          <DayText key={day} color={day === '일' ? '#db300e' : day === '토' ? '#1753b4' : '#3B3B3B'}>
             {day}
           </DayText>
         ))}

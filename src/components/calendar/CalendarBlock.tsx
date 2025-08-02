@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { Style } from '../../types/types';
 
 const Block = styled.View`
-  width: 100%;
+  width: 101%;
   margin-bottom: 5px;
   display: flex;
   flex-direction: row;
@@ -28,12 +28,12 @@ const CalendarBlock = ({ event, date }: { event: CalendarProps, date: number | n
   return (
     <Block>
       <Marker
-        bg_color={event.all_day ? `${event.color}25` : event.color}
+        bg_color={event.color}
       >
       </Marker>
       <Name 
-        color={event.color}
-        bg_color={event.all_day ? `${event.color}25` : 'white'}
+        color={event.all_day ? 'white' : event.color}
+        bg_color={event.all_day ? event.color : 'white'}
         numberOfLines={1}
       >
         {event.start_date === date ? event.name : ''}

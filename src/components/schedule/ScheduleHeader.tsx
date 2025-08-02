@@ -1,17 +1,14 @@
 import { View, Pressable } from 'react-native';
 import styled from 'styled-components/native';
+import Header from '../common/Header';
 
 const Title = styled.Text`
-  font-size: 19px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  text-align: center;
-  margin-top: 30px;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
 `;
 
 const Subtitle = styled.Text`
-  text-align: center;
-  margin-bottom: 25px;
   color: #5D5D5D;
 `;
 
@@ -24,7 +21,7 @@ const ScheduleHeader = (
   }
 ) => {
   return (
-    <View>
+    <Header>
       <Title>
         일정
       </Title>
@@ -33,7 +30,7 @@ const ScheduleHeader = (
           {year}년 {month}월 {date}일
         </Subtitle>
       </Pressable>
-    </View>
+    </Header>
   )
 }
 

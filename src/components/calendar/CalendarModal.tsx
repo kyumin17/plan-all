@@ -12,7 +12,7 @@ const Title = styled.Text`
 `;
 
 const Body = styled(FlexCol)`
-  gap: 3px;
+  gap: 12px;
 `;
 
 const EventWrapper = styled.Pressable<Style & { allDay: 0 | 1 }>`

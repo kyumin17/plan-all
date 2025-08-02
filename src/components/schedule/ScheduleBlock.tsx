@@ -8,7 +8,7 @@ const Block = styled.View<Style>`
   box-sizing: border-box;
   width: 100%;
   border-radius: 4px;
-  z-index: 1;
+  z-index: 2;
   padding-top: 12px;
   padding-left: 16px;
   padding-right: 16px;

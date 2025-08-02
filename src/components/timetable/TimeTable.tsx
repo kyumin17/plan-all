@@ -24,8 +24,8 @@ const DayText = styled.Text`
 
 const EventWrapper = styled(FlexRow)`
   position: absolute;
-  left: 7%;
-  width: 93%;
+  left: 8%;
+  width: 91%;
 `;
 
 const EventCol = styled.View`
@@ -84,34 +84,36 @@ const TimeTable = () => {
           </DayText>
         ))}
       </TableHeader>
+      
+      <View>
+        <TimeAxis 
+          startTime={startTime}
+          endTime={endTime}
+          gap={75}
+        />
 
-      <TimeAxis 
-        startTime={startTime}
-        endTime={endTime}
-        gap={75}
-      />
+        <EventWrapper>
+          {dayNameList.map((day: string, idx: number) => {
+            const dayEventList: TimeblockProps[] = eventList.filter((event) => event.day === idx);
 
-      <EventWrapper>
-        {dayNameList.map((day: string, idx: number) => {
-          const dayEventList: TimeblockProps[] = eventList.filter((event) => event.day === idx);
-
-          return (
-            <EventCol key={day}>
-              {dayEventList.map((event) => {
-                return (
-                  <TimeTableBlock 
-                    key={event.id} 
-                    event={event} 
-                    startTime={startTime} 
-                    openModal={openModal}
-                    gap={75}
-                  />
-                );
-              })}
-            </EventCol>
-          );
-        })}
-      </EventWrapper>
+            return (
+              <EventCol key={day}>
+                {dayEventList.map((event) => {
+                  return (
+                    <TimeTableBlock 
+                      key={event.id} 
+                      event={event} 
+                      startTime={startTime} 
+                      openModal={openModal}
+                      gap={75}
+                    />
+                  );
+                })}
+              </EventCol>
+            );
+          })}
+        </EventWrapper>
+      </View>
 
       <Modal
         isOpen={isOpen}
