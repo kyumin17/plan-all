@@ -1,5 +1,5 @@
 import CalendarBlock from './CalendarBlock';
-import { CalendarProps, Style } from '../../types/types';
+import { CalendarDTO, Style } from '../../types/types';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -10,7 +10,7 @@ const Cell = styled.Pressable`
   padding-top: 7px;
 `;
 
-const DateText = styled.Text<Style & { is_today: boolean }>`
+const DateText = styled.Text<Style & { isToday: boolean }>`
   margin: 0 auto;
   width: 20px;
   display: block;
@@ -23,23 +23,23 @@ const DateText = styled.Text<Style & { is_today: boolean }>`
   color: ${(props) => props.color};
 
   ${(props) => 
-    props.is_today &&
+    props.isToday &&
     {
       backgroundColor: '#F93827',
       color: 'white',
       borderRadius: 20,
     }
   }
-`
+`;
 
 const CalendarCell = (
   { date, day, eventList, isToday, openModal }: 
   { 
     date: number | null,
     day: number,
-    eventList: CalendarProps[],
+    eventList: CalendarDTO[],
     isToday: boolean,
-    openModal: (date: number, day: number, eventList: CalendarProps[]) => void,
+    openModal: (date: number, day: number, eventList: CalendarDTO[]) => void,
   }
 ) => {
   const navigation = useNavigation<any>();
@@ -61,13 +61,13 @@ const CalendarCell = (
     >
       <DateText 
         color={getDateColor()}
-        is_today={isToday}
+        isToday={isToday}
       >
         {date}
       </DateText>
 
       <View>
-        {eventList.map((event: CalendarProps) => {
+        {eventList.map((event: CalendarDTO) => {
           return <CalendarBlock event={event} date={date} key={event.id} />;
         })}
       </View>

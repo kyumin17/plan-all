@@ -1,8 +1,3 @@
-export interface TimeProps {
-  hour: number;
-  minute: number;
-}
-
 interface ScheduleDTO_A {
   id: number;
   name: string;
@@ -29,22 +24,7 @@ interface ScheduleDTO_B {
   description: string;
 };
 
-export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
-
-export interface TimeblockProps {
-  id: number;
-  name: string;
-  day: number;
-  start_hour: number;
-  start_minute: number;
-  end_hour: number;
-  end_minute: number;
-  location: null | string;
-  color: string;
-  description: string;
-};
-
-interface CalendarPropsA {
+interface CalendarDTO_A {
   id: number;
   name: string;
   start_hour: number;
@@ -63,7 +43,7 @@ interface CalendarPropsA {
   description: string;
 };
 
-interface CalendarPropsB {
+interface CalendarDTO_B {
   id: number;
   name: string;
   start_hour: null;
@@ -82,7 +62,40 @@ interface CalendarPropsB {
   description: string;
 };
 
-export type CalendarProps = CalendarPropsA | CalendarPropsB;
+export interface TodoDTO {
+  id: number;
+  name: string;
+  year: number | null;
+  month: number | null;
+  date: number | null;
+  hour: number | null;
+  minute: number | null;
+  color: string;
+  description: string;
+  is_done: 0 | 1;
+}
+
+export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
+
+export interface TimeblockDTO {
+  id: number;
+  name: string;
+  day: number;
+  start_hour: number;
+  start_minute: number;
+  end_hour: number;
+  end_minute: number;
+  location: null | string;
+  color: string;
+  description: string;
+};
+
+export type CalendarDTO = CalendarDTO_A | CalendarDTO_B;
+
+export interface TimeProps {
+  hour: number;
+  minute: number;
+}
 
 export interface TimeManageProps {
   startHour: number;

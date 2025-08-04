@@ -3,7 +3,7 @@ import DayPicker from '../../components/create_form/picker/DayPicker';
 import { Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import DayTimeInput from '../../components/create_form/input/DayTimeInput';
-import { TimeblockProps, TimeManageProps, TimeProps } from '../../types/types';
+import { TimeblockDTO, TimeManageProps, TimeProps } from '../../types/types';
 import Button from '../../components/create_form/button/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -44,7 +44,7 @@ const DayTimeWrapper = styled.View`
 `;
 
 const TimeTableEditPage = ({ route }: { route: any }) => {
-  const { eventList }: { eventList: TimeblockProps[] } = route.params;
+  const { eventList }: { eventList: TimeblockDTO[] } = route.params;
   const event = eventList[0];
 
   const navigation = useNavigation<any>();

@@ -15,9 +15,9 @@ const Subtitle = styled.Text`
 const ScheduleHeader = (
   { year, month, date }: 
   { 
-    year: number; 
-    month: number; 
-    date: number;
+    year: number, 
+    month: number, 
+    date: number,
   }
 ) => {
   return (

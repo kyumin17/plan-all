@@ -22,7 +22,7 @@ const TimeTableHeader = () => {
         <Title>
           시간표
         </Title>
-        <WriteSvg width={22} height={22} style={{ marginTop: 8 }} />
+        <WriteSvg width={22} height={22} strokeWidth={1} style={{ marginTop: 8 }} />
         <Menu width={22} height={22} style={{ marginTop: 8 }} />
       </FlexRow>
     </Header>

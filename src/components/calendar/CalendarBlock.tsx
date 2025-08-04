@@ -1,4 +1,4 @@
-import { CalendarProps } from '../../types/types';
+import { CalendarDTO } from '../../types/types';
 import styled from 'styled-components/native';
 import { Style } from '../../types/types';
 
@@ -24,7 +24,7 @@ const Name = styled.Text<Style>`
   padding-bottom: 2px;
 `;
 
-const CalendarBlock = ({ event, date }: { event: CalendarProps, date: number | null }) => {
+const CalendarBlock = ({ event, date }: { event: CalendarDTO, date: number | null }) => {
   return (
     <Block>
       <Marker

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { TimeblockProps } from '../../types/types';
+import { TimeblockDTO } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
@@ -42,11 +42,11 @@ const TimeTable = () => {
   const [startTime, setStartTime] = useState<number>(10);
   const [endTime, setEndTime] = useState<number>(20);
   
-  const [eventList, setEventList] = useState<TimeblockProps[]>([]);
+  const [eventList, setEventList] = useState<TimeblockDTO[]>([]);
 
   const [modalName, setModalName] = useState<null | string>(null);
 
-  const setTimeRange = (eventList: TimeblockProps[]) => {
+  const setTimeRange = (eventList: TimeblockDTO[]) => {
     const newStartTime = Math.min(...eventList.map(block => block.start_hour));
     const newEndTime = Math.max(...eventList.map(block => block.end_hour));
     
@@ -94,7 +94,7 @@ const TimeTable = () => {
 
         <EventWrapper>
           {dayNameList.map((day: string, idx: number) => {
-            const dayEventList: TimeblockProps[] = eventList.filter((event) => event.day === idx);
+            const dayEventList: TimeblockDTO[] = eventList.filter((event) => event.day === idx);
 
             return (
               <EventCol key={day}>

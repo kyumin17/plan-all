@@ -1,4 +1,4 @@
-import { TimeblockProps } from '../../types/types';
+import { TimeblockDTO } from '../../types/types';
 import styled from 'styled-components/native';
 import { Style } from '../../types/types';
 
@@ -31,7 +31,7 @@ const Detail = styled.Text`
 const TimeTableBlock = (
   { event, startTime, openModal, gap }: 
   { 
-    event: TimeblockProps,
+    event: TimeblockDTO,
     startTime: number,
     openModal: (name: string) => void,
     gap: number,

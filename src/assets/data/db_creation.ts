@@ -1,21 +1,3 @@
-export const scheduleCreateCommand = `
-CREATE TABLE IF NOT EXISTS "schedule" ( 
-  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-  "name" TEXT NOT NULL, 
-  "date" TEXT NOT NULL, 
-  "start_hour" INTEGER, 
-  "start_minute" INTEGER, 
-  "end_hour" INTEGER, 
-  "end_minute" INTEGER, 
-  "location" TEXT, 
-  "color" TEXT NOT NULL, 
-  "month" INTEGER NOT NULL, 
-  "year" INTEGER NOT NULL, 
-  "all_day" INTEGER NOT NULL,
-  "description" TEXT
-);
-`;
-
 export const timetableCreateCommand = `
 CREATE TABLE IF NOT EXISTS "timetable" ( 
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,5 +31,20 @@ CREATE TABLE IF NOT EXISTS "calendar" (
   "end_year" INTEGER NOT NULL, 
   "all_day" INTEGER NOT NULL,
   "description" TEXT
+);
+`;
+
+export const todoCreateCommand = `
+CREATE TABLE IF NOT EXISTS "todo" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "name" TEXT NOT NULL, 
+  "color" TEXT NOT NULL,
+  "year" INTEGER, 
+  "month" INTEGER 
+  "date" INTEGER, 
+  "hour" INTEGER, 
+  "minute" INTEGER, 
+  "description" TEXT,
+  "is_done" INTEGER
 );
 `;

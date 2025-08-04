@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import execDB from '../../utils/db/execDB';
 import { useDB } from '../../components/common/DBProvider';
 import { getTimeSum } from '../../utils/time';
-import { CalendarProps, DateProps } from '../../types/types';
+import { CalendarDTO, DateProps } from '../../types/types';
 import DescriptionInput from '../../components/create_form/input/DescriptionInput';
 import Gap from '../../components/common/Gap';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -39,7 +39,7 @@ const ButtonWrapper = styled.View`
 `;
 
 const CalendarEditPage = ({ route }: { route: any }) => {
-  const { event }: { event: CalendarProps } = route.params;
+  const { event }: { event: CalendarDTO } = route.params;
 
   const navigation = useNavigation<any>();
 

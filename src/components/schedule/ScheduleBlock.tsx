@@ -21,7 +21,7 @@ const Block = styled.View<Style>`
 const Name = styled.Text`
   color: white;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
 `;
 
 const Detail = styled.Text`

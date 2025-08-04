@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SchedulePage from '../pages/schedule/SchedulePage';
 import TimeTableStack from '../pages/timetable/TimeTableStack';
-import TodoPage from '../pages/todo/TodoPage';
+import TodoStack from '../pages/todo/TodoStack';
 import CalendarSvg from '../assets/image/calendar.svg';
 import ClockSvg from '../assets/image/clock.svg';
 import TableSvg from '../assets/image/table.svg';
@@ -53,7 +53,7 @@ const NavigationBar = () => {
       />
       <Tab.Screen 
         name='할 일' 
-        component={TodoPage} 
+        component={TodoStack} 
         options={{ 
           headerShown: false,
           tabBarIcon: ({ color }) => (

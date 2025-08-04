@@ -1,5 +1,5 @@
 import selectDB from './db/selectDB';
-import { TimeblockProps, CalendarProps, ScheduleDTO } from '../types/types';
+import { TimeblockDTO, CalendarDTO, ScheduleDTO } from '../types/types';
 import SQLite from 'react-native-sqlite-storage';
 
 interface TimeTableFilter {
@@ -12,7 +12,7 @@ interface CalendarFilter {
   start_date: number;
 }
 
-const changeScheduleFormat = (schedule: TimeblockProps | CalendarProps) => {
+const changeScheduleFormat = (schedule: TimeblockDTO | CalendarDTO) => {
   return {
     id: schedule.id,
     name: schedule.name,

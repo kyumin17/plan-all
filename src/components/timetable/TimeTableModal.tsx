@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import { TimeblockProps } from '../../types/types';
+import { TimeblockDTO } from '../../types/types';
 import { useDB } from '../common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import TrashSvg from '../../assets/image/trash.svg';
@@ -26,7 +26,7 @@ const Button = styled.Pressable`
   align-items: center;
 `;
 
-const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockProps[] }) => {
+const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockDTO[] }) => {
   const navigation = useNavigation<any>();
 
   const db = useDB();

@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import CalendarCell from './CalendarCell';
-import { CalendarProps, Style } from '../../types/types';
+import { CalendarDTO, Style } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
@@ -38,7 +38,7 @@ interface FindFilter {
 interface ModalItem {
   date: number;
   day: number;
-  events: CalendarProps[];
+  events: CalendarDTO[];
 }
 
 const CalendarBody = (
@@ -56,7 +56,7 @@ const CalendarBody = (
   const dateNum: number = new Date(year, month - 1, 0).getDate();
   const rowNum: number = 6;
 
-  const [eventList, setEventList] = useState<CalendarProps[]>([]);
+  const [eventList, setEventList] = useState<CalendarDTO[]>([]);
 
   const db = useDB();
 
@@ -73,7 +73,7 @@ const CalendarBody = (
     });
   }, [db, year, month]);
 
-  const openModal = (date: number, day: number, eventList: CalendarProps[]) => {
+  const openModal = (date: number, day: number, eventList: CalendarDTO[]) => {
     if (eventList.length !== 0) {
       setModalItem({
         date: date,

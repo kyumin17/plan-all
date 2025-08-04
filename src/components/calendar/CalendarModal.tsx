@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { CalendarProps, Style } from '../../types/types';
+import { CalendarDTO, Style } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { FlexCol } from '../../styles/style';
@@ -46,7 +46,7 @@ const CalendarModal = (
     month: number;
     date: number;
     day: number;
-    eventList: CalendarProps[];
+    eventList: CalendarDTO[];
   }
 ) => {
   const dayNameList = ['월', '화', '수', '목', '금', '토', '일'];
