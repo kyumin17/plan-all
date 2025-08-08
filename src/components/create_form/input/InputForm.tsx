@@ -4,6 +4,7 @@ import CalendarSvg from '../../../assets/image/calendar.svg';
 import ClockSvg from '../../../assets/image/clock.svg';
 import LocationSvg from '../../../assets/image/location.svg';
 import WriteSvg from '../../../assets/image/write.svg';
+import ColorSvg from '../../../assets/image/color.svg';
 import { SvgProps } from 'react-native-svg';
 
 const Form = styled.View`
@@ -21,9 +22,10 @@ const ICON = {
   clock: ClockSvg,
   location: LocationSvg,
   write: WriteSvg,
+  color: ColorSvg,
 }
 
-type IconNameProps = 'calendar' | 'clock' | 'location' | 'write';
+type IconNameProps = 'calendar' | 'clock' | 'location' | 'write' | 'color';
 
 const InputForm = ({ children, iconName }: { children: React.ReactNode, iconName: IconNameProps }) => {
   const Icon: React.FC<SvgProps> = ICON[iconName];
@@ -32,10 +34,10 @@ const InputForm = ({ children, iconName }: { children: React.ReactNode, iconName
     <Form>
       <IconWrapper>
         <Icon 
-          width={18}
-          height={18}
-          stroke='#5D5D5D' 
-          strokeWidth={2}
+          width={iconName === 'color' ? 20: 18}
+          height={iconName === 'color' ? 20: 18}
+          strokeWidth={1.2}
+          stroke='black'
         />
       </IconWrapper>
       <View style={{ flex: 1 }}>

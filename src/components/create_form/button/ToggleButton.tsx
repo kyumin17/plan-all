@@ -5,16 +5,16 @@ import { useState } from 'react';
 import { Style } from '../../../types/types';
 
 const ToggleContainer = styled.TouchableOpacity<Style>`
-  width: 36px;
-  height: 20px;
+  width: 34px;
+  height: 18px;
   border-radius: 10px;
   justify-content: center;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
 `;
 
 const ToggleWheel = styled(Animated.View)`
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   background-color: white;
   border-radius: 99px;
 `;

@@ -16,7 +16,7 @@ const DayPicker = ({ selectDays, setSelectDays }: { selectDays: number[], setSel
 
   return (
     <View style={styles.dayPicker}>
-      <CalendarSvg stroke='#5D5D5D' width={19} height={19} strokeWidth={2} />
+      <CalendarSvg width={19} height={19} strokeWidth={1.2} stroke='black' />
       <View style={styles.dayButtonWrapper}>
         {dayList.map((day: string, index: number) => {
           return (

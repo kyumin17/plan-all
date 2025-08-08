@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS "todo" (
   "name" TEXT NOT NULL, 
   "color" TEXT NOT NULL,
   "year" INTEGER, 
-  "month" INTEGER 
+  "month" INTEGER,
   "date" INTEGER, 
   "hour" INTEGER, 
   "minute" INTEGER, 

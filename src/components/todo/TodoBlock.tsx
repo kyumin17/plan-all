@@ -24,7 +24,7 @@ const Detail = styled.View`
   margin-top: 10px;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 `;
 
 const CheckBox = styled.View<Style & { isDone: boolean }>`
@@ -76,15 +76,35 @@ const TodoBlock = (
   const db = useDB();
 
   const handleCheck = () => {
+    if (!db) return;
+
     setEventList((prev) =>
       prev.map((item) => 
         item.id === event.id ? { ...item, is_done: item.is_done === 1 ? 0 : 1 } : item
       )
     );
+
+    execDB({
+      db: db,
+      query: 'UPDATE todo SET is_done = ? WHERE id = ?',
+      params: [event.is_done === 1 ? 0 : 1, event.id],
+    }).catch((error) => {
+      console.error('Error updating todo:', error);
+    });
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (!db) return;
+
     setEventList((prev) => prev.filter((item) => item.id !== event.id));
+
+    execDB({
+      db: db,
+      query: 'DELETE FROM todo WHERE id = ?',
+      params: [event.id],
+    }).catch((error) => {
+      console.error('Error deleting todo:', error);
+    });
   }
 
   const handleEdit = () => {
@@ -114,12 +134,12 @@ const TodoBlock = (
           <Pressable
             onPress={handleEdit}
           >
-            <WriteSvg width={18} height={18} strokeWidth={1} color='#767676' />
+            <WriteSvg width={18} height={18} strokeWidth={1} stroke='#767676' />
           </Pressable>}
           <Pressable
             onPress={handleDelete}
           >
-            <XSvg width={20} height={20} strokeWidth={1} color='#767676' />
+            <XSvg width={20} height={20} strokeWidth={1} stroke='#767676' />
           </Pressable>
         </MenuWrapper>
       </Body>
@@ -131,7 +151,7 @@ const TodoBlock = (
       </Detail>}
 
       {(event.year || event.hour) && !event.is_done && <Detail>
-        <ClockSvg width={16} height={16} strokeWidth={1} color={event.color} />
+        <ClockSvg width={15} height={15} strokeWidth={1.5} stroke={event.color} />
         <Info color={event.color}>
           {event.month}.{event.date}
         </Info>

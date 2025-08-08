@@ -1,7 +1,14 @@
 import TimeInput from '../input/TimeInput';
-import { View, Text, StyleSheet } from 'react-native';
-import { TimeManageProps } from '../../../types/types';
+import { View } from 'react-native';
+import { Style, TimeManageProps } from '../../../types/types';
 import Gap from '../../common/Gap';
+import styled from 'styled-components/native';
+
+const Label = styled.Text<Style>`
+  font-size: 16px;
+  margin-bottom: 27px;
+  font-weight: bold;
+`;
 
 const DayTimeInput = ({ day, timeManage }
   : { day: number, timeManage: TimeManageProps }) => {
@@ -9,23 +16,13 @@ const DayTimeInput = ({ day, timeManage }
 
   return (
     <View>
-      <Text style={styles.header}>
+      <Label>
         {`${dayList[day]}요일`}
-      </Text>
+      </Label>
       <TimeInput timeManage={timeManage} />
       <Gap height={20} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E6E6E6',
-    paddingBottom: 15,
-    marginBottom: 25,
-  },
-});
 
 export default DayTimeInput;

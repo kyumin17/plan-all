@@ -46,7 +46,7 @@ const DateInput = (
               setIsStartOpen(!isStartOpen); 
               setIsEndOpen(false);
             }}
-            label={`${String(startDate.month).padStart(2, '0')}월 ${String(startDate.date).padStart(2, '0')}일`}
+            label={`${startDate.month}월 ${startDate.date}일`}
             isOpen={isStartOpen}
             position='left'
           />
@@ -54,8 +54,7 @@ const DateInput = (
           <Arrow  
             width={20} 
             height={20} 
-            stroke='#5D5D5D' 
-            strokeWidth={2} 
+            strokeWidth={1} 
           />
 
           <PickerButton

@@ -57,8 +57,7 @@ const TimeInput = (
           <Arrow 
             width={20} 
             height={20} 
-            stroke='#5D5D5D' 
-            strokeWidth={2} 
+            strokeWidth={1} 
           />
 
           <PickerButton

@@ -12,10 +12,10 @@ const Button = styled.Pressable<{ isOpen: boolean, position: 'left' | 'right' }>
   }
 
   ${(props) => props.isOpen &&
-    {
-      backgroundColor: '#E8E8E8',
-      borderRadius: 20,
-    }
+    `
+      background-color: #E8E8E8;
+      border-radius: 20px;
+    `
   }
 `;
 

@@ -138,7 +138,7 @@ const TimeTableEditPage = ({ route }: { route: any }) => {
 
   return (
     <Page>
-      <TitleInput name={name} setName={setName} color={color} setColor={setColor} />
+      <TitleInput name={name} setName={setName} />
 
       <Content>
         <DayPicker selectDays={selectDays} setSelectDays={setSelectDays} />

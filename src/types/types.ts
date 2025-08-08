@@ -97,6 +97,12 @@ export interface TimeProps {
   minute: number;
 }
 
+export interface DateProps {
+  year: number;
+  month: number;
+  date: number;
+}
+
 export interface TimeManageProps {
   startHour: number;
   startMinute: number;
@@ -111,12 +117,6 @@ export interface TimeManageProps {
 export interface Filter<T> {
   orderFilter?: string[],
   findFilter?: T,
-}
-
-export interface DateProps {
-  year: number;
-  month: number;
-  date: number;
 }
 
 export interface Style {
