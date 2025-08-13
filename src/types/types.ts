@@ -73,12 +73,18 @@ export interface TodoDTO {
   color: string;
   description: string;
   is_done: 0 | 1;
-}
+};
 
 export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
 
+export interface TimetableDTO {
+  id: number;
+  name: string;
+};
+
 export interface TimeblockDTO {
   id: number;
+  table_id: number;
   name: string;
   day: number;
   start_hour: number;
@@ -95,13 +101,13 @@ export type CalendarDTO = CalendarDTO_A | CalendarDTO_B;
 export interface TimeProps {
   hour: number;
   minute: number;
-}
+};
 
 export interface DateProps {
   year: number;
   month: number;
   date: number;
-}
+};
 
 export interface TimeManageProps {
   startHour: number;
@@ -115,9 +121,9 @@ export interface TimeManageProps {
 };
 
 export interface Filter<T> {
-  orderFilter?: string[],
-  findFilter?: T,
-}
+  orderFilter?: string[];
+  findFilter?: T;
+};
 
 export interface Style {
   color?: string;
@@ -128,4 +134,4 @@ export interface Style {
   left?: number;
   right?: number;
   min_height?: number;
-}
+};

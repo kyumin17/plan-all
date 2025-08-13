@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import SQLite from 'react-native-sqlite-storage';
-import { timetableCreateCommand, calendarCreateCommand, todoCreateCommand } from '../../assets/data/db_creation';
+import { timetableCreateCommand, calendarCreateCommand, todoCreateCommand, tablegroupCreateCommand } from '../../assets/data/db_creation';
 
 SQLite.enablePromise(true);
 
@@ -17,6 +17,7 @@ export const DBProvider = ({ children }: { children: React.ReactNode }) => {
           location: 'default',
         });
 
+        await res.executeSql(tablegroupCreateCommand);
         await res.executeSql(timetableCreateCommand);
         await res.executeSql(calendarCreateCommand);
         await res.executeSql(todoCreateCommand);

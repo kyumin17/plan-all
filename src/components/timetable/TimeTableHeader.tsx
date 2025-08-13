@@ -3,6 +3,9 @@ import styled from 'styled-components/native';
 import WriteSvg from '../../assets/image/write.svg';
 import MenuSvg from '../../assets/image/menu.svg';
 import { FlexRow } from '../../styles/style';
+import { Pressable } from 'react-native';
+import { useState } from 'react';
+import NameModal from './NameModal';
 
 const Title = styled.Text`
   font-size: 22px;
@@ -10,21 +13,38 @@ const Title = styled.Text`
   margin-right: 8px;
 `;
 
-const Menu = styled(MenuSvg)`
+const MenuButton = styled.Pressable`
   position: absolute;
   right: 0;
 `;
 
 const TimeTableHeader = () => {
+  const [isNameOpen, setIsNameOpen] = useState<boolean>(false);
+
   return (
     <Header>
       <FlexRow style={{ alignItems: 'center' }}>
         <Title>
           시간표
         </Title>
-        <WriteSvg width={22} height={22} strokeWidth={1} style={{ marginTop: 8 }} />
-        <Menu width={22} height={22} style={{ marginTop: 8 }} />
+
+        <Pressable
+          onPress={() => setIsNameOpen(true)}
+        >
+          <WriteSvg width={22} height={22} strokeWidth={1} style={{ marginTop: 8 }} />
+        </Pressable>
+
+        <MenuButton
+          onPress={() => {}}
+        >
+          <MenuSvg width={22} height={22} style={{ marginTop: 8 }} />
+        </MenuButton>
       </FlexRow>
+
+      <NameModal 
+        isOpen={isNameOpen} 
+        setIsOpen={setIsNameOpen} 
+      />
     </Header>
   );
 }

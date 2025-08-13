@@ -17,7 +17,7 @@ const Body = styled.Pressable<Style>`
   position: absolute;
   z-index: 10;
   background-color: white;
-  width: 70%;
+  width: 85%;
   border-radius: 10px;
   padding-top: 25px;
   padding-bottom: 30px;

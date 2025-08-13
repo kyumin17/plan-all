@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { TimeblockDTO } from '../../types/types';
+import { TimeblockDTO, TimetableDTO } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
@@ -33,7 +33,7 @@ const EventCol = styled.View`
   flex: 1;
 `;
 
-const TimeTable = () => {
+const TimeTable = ({ table }: { table: TimetableDTO }) => {
   const db = useDB();
 
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
@@ -55,10 +55,11 @@ const TimeTable = () => {
   }
 
   useEffect(() => {
-    selectDB<null>({
+    selectDB<{ table_id: number }>({
         db: db,
         tableName: 'timetable',
         filter: {
+          findFilter: { table_id: table.id },
           orderFilter: ['day', 'start_hour', 'start_minute'],
         },
       }).then((res) => {

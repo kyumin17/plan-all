@@ -9,12 +9,12 @@ const Pressable = styled.Pressable`
   z-index: 1;
 `
 
-const CreateButton = ({ link }: { link : string }) => {
+const CreateButton = <T,>({ link, params }: { link : string, params?: T }) => {
   const navigation = useNavigation<any>();
 
   return (
     <Pressable
-      onPress={() => navigation.navigate(link)}
+      onPress={() => navigation.navigate(link, params ?? {})}
     >
       <PlusSvg width={60} height={60} />
     </Pressable>

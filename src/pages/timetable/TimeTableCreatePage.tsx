@@ -5,7 +5,7 @@ import { useState } from 'react';
 import colors from '../../styles/color';
 import { getRandom } from '../../utils/random';
 import DayTimeInput from '../../components/create_form/input/DayTimeInput';
-import { TimeManageProps, TimeProps } from '../../types/types';
+import { TimeManageProps, TimeProps, TimetableDTO } from '../../types/types';
 import Button from '../../components/create_form/button/Button';
 import { useDB } from '../../components/common/DBProvider';
 import execDB from '../../utils/db/execDB';
@@ -16,6 +16,7 @@ import styled from 'styled-components/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import CancelButton from '../../components/create_form/button/CancelButton';
 import { useNavigation } from '@react-navigation/native';
+import ColorInput from '../../components/create_form/input/ColorInput';
 
 const Page = styled.View`
   margin-top: 10%;
@@ -45,7 +46,9 @@ const DayTimeWrapper = styled.View`
   margin-top: 25px;
 `;
 
-const TimeTableCreatePage = () => {
+const TimeTableCreatePage = ({ route }: { route: any }) => {
+  const { table }: { table: TimetableDTO } = route.params;
+
   const navigation = useNavigation<any>();
 
   const [name, setName] = useState<string>('');
@@ -93,12 +96,12 @@ const TimeTableCreatePage = () => {
     }
 
     for (const i of selectDays) {
-      const params = [name.trim(), i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, location, color, description];
+      const params = [name.trim(), table.id, i, startTimes[i].hour, startTimes[i].minute, endTimes[i].hour, endTimes[i].minute, location, color, description];
 
       try {
         await execDB({
           db: db,
-          query: `INSERT INTO timetable (name, day, start_hour, start_minute, end_hour, end_minute, location, color, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+          query: `INSERT INTO timetable (name, table_id, day, start_hour, start_minute, end_hour, end_minute, location, color, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
           params: params
         });
       } catch (error) {
@@ -115,7 +118,11 @@ const TimeTableCreatePage = () => {
       <TitleInput name={name} setName={setName} />
 
       <Content>
-        <DayPicker selectDays={selectDays} setSelectDays={setSelectDays} />
+        <DayPicker 
+          selectDays={selectDays} 
+          setSelectDays={setSelectDays} 
+        />
+
         <DayTimeWrapper>
           {selectDays.map((day) => {
             const timeManage: TimeManageProps = {
@@ -139,11 +146,20 @@ const TimeTableCreatePage = () => {
         </DayTimeWrapper>
         
         {selectDays.length !== 0 && <LocationInput location={location} setLocation={setLocation} />}
+
         <Gap height={10} />
+
         {selectDays.length !== 0 && <DescriptionInput 
           description={description}
           setDescription={setDescription}
         />}
+
+        <Gap height={20} />
+
+        <ColorInput
+          color={color}
+          setColor={setColor}
+        />
       </Content>
       
       <ButtonWrapper style={{ marginBottom: useBottomTabBarHeight() - 12 }}>
