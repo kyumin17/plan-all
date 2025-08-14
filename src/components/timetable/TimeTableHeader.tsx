@@ -5,7 +5,9 @@ import MenuSvg from '../../assets/image/menu.svg';
 import { FlexRow } from '../../styles/style';
 import { Pressable } from 'react-native';
 import { useState } from 'react';
-import NameModal from './NameModal';
+import TableNameModal from './TableNameModal';
+import { TimetableDTO } from '../../types/types';
+import TableMenuModal from './TableMenuModal';
 
 const Title = styled.Text`
   font-size: 22px;
@@ -18,8 +20,9 @@ const MenuButton = styled.Pressable`
   right: 0;
 `;
 
-const TimeTableHeader = () => {
+const TimeTableHeader = ({ table }: { table: TimetableDTO }) => {
   const [isNameOpen, setIsNameOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
     <Header>
@@ -35,15 +38,23 @@ const TimeTableHeader = () => {
         </Pressable>
 
         <MenuButton
-          onPress={() => {}}
+          onPress={() => setIsMenuOpen(true)}
         >
           <MenuSvg width={22} height={22} style={{ marginTop: 8 }} />
         </MenuButton>
       </FlexRow>
 
-      <NameModal 
+      <TableNameModal 
         isOpen={isNameOpen} 
         setIsOpen={setIsNameOpen} 
+        table={table}
+        type='edit'
+      />
+
+      <TableMenuModal 
+        isOpen={isMenuOpen} 
+        setIsOpen={setIsMenuOpen}
+        table={table}
       />
     </Header>
   );

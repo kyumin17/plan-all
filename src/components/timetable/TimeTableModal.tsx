@@ -55,7 +55,7 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockDTO[] }) =>
 
   const handleEdit = () => {
     navigation.replace('TimeTablePage');
-    navigation.navigate('TimeTableEditPage', { timeblockList: timeblockList});
+    navigation.navigate('TimeTableEditPage', { timeblockList: timeblockList });
   }
 
   return (

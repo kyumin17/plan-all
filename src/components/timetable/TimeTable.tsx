@@ -119,6 +119,7 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
       <Modal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        bottom={10}
       >
         <TimeTableModal
           timeblockList={eventList.filter((event) => event.name === modalName)}

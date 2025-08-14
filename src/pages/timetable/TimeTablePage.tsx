@@ -6,18 +6,20 @@ import { useState } from 'react';
 import { TimetableDTO } from '../../types/types';
 
 const TimeTablePage = () => {
-  const [table, setTable] = useState<TimetableDTO | null>(null);
+  const [table, setTable] = useState<TimetableDTO | null>({ id: 1, name: '시간표' });
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView 
+      {table && <ScrollView 
         style={{flex: 1}}
       >
-        <TimeTableHeader />
-        {table && <TimeTable 
+        <TimeTableHeader 
           table={table}
-        />}
-      </ScrollView>
+        />
+        <TimeTable 
+          table={table}
+        />
+      </ScrollView>}
       
       <CreateButton 
         link='TimeTableCreatePage' 
