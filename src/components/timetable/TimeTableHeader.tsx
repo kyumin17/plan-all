@@ -28,7 +28,7 @@ const TimeTableHeader = ({ table }: { table: TimetableDTO }) => {
     <Header>
       <FlexRow style={{ alignItems: 'center' }}>
         <Title>
-          시간표
+          {table.name}
         </Title>
 
         <Pressable

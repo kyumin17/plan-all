@@ -1,22 +1,47 @@
-import { Text, View } from 'react-native';
-import { TimeblockDTO } from '../../types/types';
+import { Text } from 'react-native';
+import { TimeblockDTO, TimetableDTO } from '../../types/types';
 import { useDB } from '../common/DBProvider';
 import execDB from '../../utils/db/execDB';
 import TrashSvg from '../../assets/image/trash.svg';
-import EditSvg from '../../assets/image/edit.svg';
+import WriteSvg from '../../assets/image/write.svg';
 import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
+import Modal from '../common/Modal';
+
+const Body = styled.View`
+  padding: 25px 30px;
+`;
+
+const Header = styled.View`
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
+  margin-bottom: 12px;
+`;
+
+const ButtonWrapper = styled.View`
+  position: absolute;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`;
 
 const Name = styled.Text`
   font-size: 18px;
   font-weight: 700;
-  margin-right: 10px;
-  margin-bottom: 7px;
+`;
+
+const DetailWrapper = styled.View`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `;
 
 const Detail = styled.Text`
-  font-size: 13px;
-  color: #A9A9A9;
+  font-size: 15px;
+  color: #767676;
 `;
 
 const Button = styled.Pressable`
@@ -26,7 +51,15 @@ const Button = styled.Pressable`
   align-items: center;
 `;
 
-const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockDTO[] }) => {
+const TimeTableModal = (
+  { timeblockList, table, isOpen, setIsOpen }: 
+  { 
+    timeblockList: TimeblockDTO[],
+    table: TimetableDTO,
+    isOpen: boolean,
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  }
+) => {
   const navigation = useNavigation<any>();
 
   const db = useDB();
@@ -34,6 +67,7 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockDTO[] }) =>
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const name = timeblockList[0].name;
   const location = timeblockList[0].location;
+  const description = timeblockList[0].description;
 
   const handleDelete = async () => {
     if (!db) {
@@ -44,8 +78,8 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockDTO[] }) =>
     try {
       await execDB({
         db: db,
-        query: 'DELETE FROM timetable WHERE name = ?',
-        params: [name]
+        query: 'DELETE FROM timetable WHERE name = ? AND table_id = ?',
+        params: [name, table.id]
       });
       navigation.replace('TimeTablePage');
     } catch (error) {
@@ -59,43 +93,59 @@ const TimeTableModal = ({ timeblockList }: { timeblockList: TimeblockDTO[] }) =>
   }
 
   return (
-    <View>
-      <Name>
-        {name}
-      </Name>
+    <Modal
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      bottom={5}
+      minHeight={15}
+    >
+      <Body>
+        <Header>
+          <Name>
+            {name}
+          </Name>
 
-      <Text>
-        {timeblockList && timeblockList.map((block, index) => {
-          return (
-            <Detail 
-              key={block.id}
+          <ButtonWrapper>
+            <Button 
+              style={{marginBottom: 15, marginTop: 15}}
+              onPress={handleEdit}
             >
-              {`${dayNameList[block.day]}  ${String(block.start_hour).padStart(2, '0')}:${String(block.start_minute).padStart(2, '0')} - ${String(block.end_hour).padStart(2, '0')}:${String(block.end_minute).padStart(2, '0')}`}
-              {index < timeblockList.length - 1 ? ', ' : ''}
-            </Detail>
-          )
-        })}
-      </Text>
+              <WriteSvg width={20} height={20} />
+            </Button>
 
-      {location && 
-      <Detail style={{ marginTop: 4 }}>
-        {location}
-      </Detail>}
+            <Button 
+              onPress={handleDelete}
+            >
+              <TrashSvg width={20} height={20} />
+            </Button>
+          </ButtonWrapper>
+        </Header>
 
-      <Button 
-        style={{marginBottom: 15, marginTop: 15}}
-        onPress={handleEdit}
-      >
-        <EditSvg width={20} height={20} />
-      </Button>
+        <DetailWrapper>
+          <Text>
+            {timeblockList && timeblockList.map((block, index) => {
+              return (
+                <Detail 
+                  key={block.id}
+                >
+                  {`${dayNameList[block.day]}  ${String(block.start_hour).padStart(2, '0')}:${String(block.start_minute).padStart(2, '0')} - ${String(block.end_hour).padStart(2, '0')}:${String(block.end_minute).padStart(2, '0')}`}
+                  {index < timeblockList.length - 1 ? ', ' : ''}
+                </Detail>
+              );
+            })}
+          </Text>
 
-      <Button 
-        onPress={handleDelete}
-      >
-        <TrashSvg width={22} height={22} />
-      </Button>
-    </View>
-  )
+          {location && <Detail>
+            {location}
+          </Detail>}
+
+          {description && <Detail>
+            {description}
+          </Detail>}
+        </DetailWrapper>
+      </Body>
+    </Modal>
+  );
 }
 
 export default TimeTableModal;

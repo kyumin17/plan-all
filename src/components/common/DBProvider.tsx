@@ -13,7 +13,7 @@ export const DBProvider = ({ children }: { children: React.ReactNode }) => {
     const open = async () => {
       try {
         const res = await SQLite.openDatabase({
-          name: 'plan.db',
+          name: 'data.db',
           location: 'default',
         });
 

@@ -156,10 +156,10 @@ const TimeTableCreatePage = ({ route }: { route: any }) => {
 
         <Gap height={20} />
 
-        <ColorInput
+        {selectDays.length !== 0 && <ColorInput
           color={color}
           setColor={setColor}
-        />
+        />}
       </Content>
       
       <ButtonWrapper style={{ marginBottom: useBottomTabBarHeight() - 12 }}>

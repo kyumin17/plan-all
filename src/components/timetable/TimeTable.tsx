@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { TimeblockDTO, TimetableDTO } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
@@ -7,7 +7,6 @@ import TimeTableBlock from './TimeTableBlock';
 import TimeAxis from '../common/TimeAxis';
 import styled from 'styled-components/native';
 import { FlexCol, FlexRow } from '../../styles/style';
-import Modal from '../common/Modal';
 import TimeTableModal from './TimeTableModal';
 
 const TableHeader = styled.View`
@@ -116,15 +115,12 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
         </EventWrapper>
       </View>
 
-      <Modal
+      {isOpen && <TimeTableModal
+        timeblockList={eventList.filter((event) => event.name === modalName)}
+        table={table}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        bottom={10}
-      >
-        <TimeTableModal
-          timeblockList={eventList.filter((event) => event.name === modalName)}
-        />
-      </Modal>
+      />}
     </FlexCol>
   );
 };
