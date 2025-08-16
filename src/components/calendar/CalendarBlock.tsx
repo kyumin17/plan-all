@@ -4,7 +4,7 @@ import { Style } from '../../types/types';
 
 const Block = styled.View`
   width: 101%;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   display: flex;
   flex-direction: row;
 `;

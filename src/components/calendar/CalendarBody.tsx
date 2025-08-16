@@ -122,6 +122,7 @@ const CalendarBody = (
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         minHeight={27}
+        bottom={5}
       >
         <CalendarModal 
           month={month}

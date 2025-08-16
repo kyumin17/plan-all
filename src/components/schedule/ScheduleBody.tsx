@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useDB } from '../common/DBProvider';
-import { ScheduleDTO } from '../../types/types';
-import selectSchedule from '../../utils/selectSchedule';
+import { ScheduleDTO_A } from '../../types/types';
 import ScheduleBlock from './ScheduleBlock';
 import styled from 'styled-components/native';
 import TimeAxis from '../common/TimeAxis';
-import { FlexRow } from '../../styles/style';
+
+import { ScrollView } from 'react-native';
+import { timeRangeToStr } from '../../utils/time';
 
 const EventWrapper = styled.View`
   left: 8%;
@@ -14,45 +14,22 @@ const EventWrapper = styled.View`
   flex: 1;
 `;
 
-const ScheduleBody = (
-  { year, month, date }: 
-  { 
-    year: number; 
-    month: number; 
-    date: number;
-  }
-) => {
-  const db = useDB();
-
-  const [eventList, setEventList] = useState<ScheduleDTO[]>([]);
-
+const ScheduleBody = ({ eventList }: { eventList: ScheduleDTO_A[] }) => {
   const [startTime, setStartTime] = useState<number>(10);
   const [endTime, setEndTime] = useState<number>(20);
 
-  const setTimeRange = (eventList: ScheduleDTO[]) => {
-    const newStartTime = Math.min(...eventList.map(block => block.start_hour ?? 24));
-    const newEndTime = Math.max(...eventList.map(block => block.end_hour ?? 0)) + 1;
+  useEffect(() => {
+    const newStartTime = Math.min(...eventList.map(block => block.start_hour));
+    const newEndTime = Math.max(...eventList.map(block => block.end_hour)) + 1;
     
     setStartTime(Math.min(startTime, newStartTime));
     setEndTime(Math.max(endTime, newEndTime));
-  }
-
-  useEffect(() => {
-    selectSchedule({
-      db: db,
-      year: year,
-      month: month,
-      date: date,
-    }).then((res) => {
-      if (res) {
-        setEventList(res);
-        setTimeRange(res);
-      }
-    })
-  }, [db, year, month, date]);
+  }, [eventList]);
 
   return (
-    <FlexRow>
+    <ScrollView
+      style={{ flex: 1 }}
+    >
       <TimeAxis 
         startTime={startTime}
         endTime={endTime}
@@ -60,18 +37,25 @@ const ScheduleBody = (
       />
 
       <EventWrapper>
-        {eventList.map((schedule: ScheduleDTO) => {
+        {eventList.map((event: ScheduleDTO_A) => {
+          const startSum = 60 * event.start_hour + event.start_minute;
+          const endSum = 60 * event.end_hour + event.end_minute;
+
+          const height = 75 * (endSum - startSum) / 60;
+          const top = startTime ? 75 * (startSum - startTime * 60) / 60: 0;
+
           return (
             <ScheduleBlock 
-              key={schedule.id} 
-              event={schedule}
-              startTime={startTime}
-              gap={75}
+              key={event.id} 
+              event={event}
+              height={height}
+              top={top}
+              time={timeRangeToStr(event.start_hour, event.start_minute, event.end_hour, event.end_minute)}
             />
           );
         })}
       </EventWrapper>
-    </FlexRow>
+    </ScrollView>
   );
 }
 

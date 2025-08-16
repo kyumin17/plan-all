@@ -1,4 +1,4 @@
-interface ScheduleDTO_A {
+export interface ScheduleDTO_A {
   id: number;
   name: string;
   start_hour: number;
@@ -11,7 +11,7 @@ interface ScheduleDTO_A {
   description: string;
 };
 
-interface ScheduleDTO_B {
+export interface ScheduleDTO_B {
   id: number;
   name: string;
   start_hour: null;
@@ -135,4 +135,5 @@ export interface Style {
   right?: number;
   min_height?: number;
   bottom?: number;
+  position?: 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
 };
