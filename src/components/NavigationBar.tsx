@@ -7,8 +7,17 @@ import ClockSvg from '../assets/image/clock.svg';
 import TableSvg from '../assets/image/table.svg';
 import TodoSvg from '../assets/image/todo.svg';
 import CalendarStack from '../pages/calendar/CalendarStack';
+import { useDB } from './common/DBProvider';
+import { useEffect } from 'react';
+import initialSetting from '../utils/initial';
 
 const NavigationBar = () => {
+  const db = useDB();
+
+  useEffect(() => {
+    if (db) initialSetting({ db: db });
+  }, [db]);
+
   const Tab = createBottomTabNavigator();
 
   return (

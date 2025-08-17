@@ -16,6 +16,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 import Button from '../../components/create_form/button/Button';
 import CancelButton from '../../components/create_form/button/CancelButton';
+import ColorInput from '../../components/create_form/input/ColorInput';
 
 const Page = styled.View`
   margin-top: 10%;
@@ -143,6 +144,12 @@ const CalendarCreatePage = () => {
         <DescriptionInput 
           description={description}
           setDescription={setDescription}
+        />
+        <Gap height={20} />
+
+        <ColorInput
+          color={color}
+          setColor={setColor}
         />
       </Content>
 

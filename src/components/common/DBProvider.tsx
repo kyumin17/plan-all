@@ -23,8 +23,8 @@ export const DBProvider = ({ children }: { children: React.ReactNode }) => {
         await res.executeSql(todoCreateCommand);
 
         setDb(res);
-      } catch (err) {
-        console.error('DB 연결 실패', err);
+      } catch (error) {
+        console.error('DB 연결 실패', error);
       }
     };
     open();
