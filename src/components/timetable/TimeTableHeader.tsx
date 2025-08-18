@@ -2,12 +2,17 @@ import Header from '../common/Header';
 import styled from 'styled-components/native';
 import WriteSvg from '../../assets/image/write.svg';
 import MenuSvg from '../../assets/image/menu.svg';
-import { FlexRow } from '../../styles/style';
 import { Pressable } from 'react-native';
 import { useState } from 'react';
 import TableNameModal from './TableNameModal';
 import { TimetableDTO } from '../../types/types';
 import TableMenuModal from './TableMenuModal';
+
+const Body = styled.View`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+`;
 
 const Title = styled.Text`
   font-size: 22px;
@@ -26,7 +31,7 @@ const TimeTableHeader = ({ table }: { table: TimetableDTO }) => {
 
   return (
     <Header>
-      <FlexRow style={{ alignItems: 'center' }}>
+      <Body>
         <Title>
           {table.name}
         </Title>
@@ -42,7 +47,7 @@ const TimeTableHeader = ({ table }: { table: TimetableDTO }) => {
         >
           <MenuSvg width={22} height={22} style={{ marginTop: 8 }} />
         </MenuButton>
-      </FlexRow>
+      </Body>
 
       <TableNameModal 
         isOpen={isNameOpen} 

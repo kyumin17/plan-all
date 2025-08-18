@@ -12,7 +12,7 @@ const selectDB = async <T>(
 ) => {
   if (!db) {
     console.error('Database connection failed');
-    return;
+    return null;
   }
 
   try {
@@ -33,10 +33,10 @@ const selectDB = async <T>(
 
     if (error) {
       console.error('Error fetching table:', error);
-      return;
+      return null;
     }
 
-    if (!data) return;
+    if (!data) return null;
 
     const newList = [];
     for (let i = 0; i < data.rows.length; i++) {
@@ -48,7 +48,7 @@ const selectDB = async <T>(
   } catch (error) {
     console.error('Error fetching table:', error);
 
-    return [];
+    return null;
   }
 }
 

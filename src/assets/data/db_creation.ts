@@ -1,7 +1,8 @@
 export const tablegroupCreateCommand = `
 CREATE TABLE IF NOT EXISTS "tablegroup" ( 
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-  "name" TEXT NOT NULL
+  "name" TEXT NOT NULL,
+  "default" INTEGER
 );
 `;
 

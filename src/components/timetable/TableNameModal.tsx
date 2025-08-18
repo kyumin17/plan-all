@@ -48,18 +48,23 @@ const TableNameModal = (
 
   const [name, setName] = useState<string>(type === 'edit' ? table.name: '');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!db) return;
     if (name.trim() === '') Alert.alert('이름을 입력해주세요.');
 
     if (type === 'add') {
-      execDB({
+      await execDB({
         db: db,
-        query: 'INSERT INTO tablegroup (name) VALUES (?)',
-        params: [name]
+        query: 'UPDATE tablegroup SET default = 1 WHERE default = 0',
+        params: [name, 1]
+      });
+      await execDB({
+        db: db,
+        query: 'INSERT INTO tablegroup (name, default) VALUES (?, ?)',
+        params: [name, 1]
       });
     } else {
-      execDB({
+      await execDB({
         db: db,
         query: 'UPDATE tablegroup SET name = ? WHERE id = ?',
         params: [name, table.id],

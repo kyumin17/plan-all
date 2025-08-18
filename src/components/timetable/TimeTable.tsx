@@ -14,6 +14,8 @@ const TableHeader = styled.View`
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  border-bottom-width: 1px;
+  border-bottom-color: #EFEFEF;
 `;
 
 const DayText = styled.Text`
@@ -85,7 +87,7 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
         ))}
       </TableHeader>
       
-      <View>
+      <ScrollView>
         <TimeAxis 
           startTime={startTime}
           endTime={endTime}
@@ -113,7 +115,7 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
             );
           })}
         </EventWrapper>
-      </View>
+      </ScrollView>
 
       {isOpen && <TimeTableModal
         timeblockList={eventList.filter((event) => event.name === modalName)}

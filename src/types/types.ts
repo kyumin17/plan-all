@@ -80,6 +80,7 @@ export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
 export interface TimetableDTO {
   id: number;
   name: string;
+  default: 0 | 1;
 };
 
 export interface TimeblockDTO {

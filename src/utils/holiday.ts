@@ -1,5 +1,4 @@
 import { HOLIDAY_KEY } from '../assets/data/key';
-import { useDB } from '../components/common/DBProvider';
 import execDB from './db/execDB';
 import SQLite from 'react-native-sqlite-storage';
 
@@ -10,7 +9,7 @@ interface HolidayAPIProps {
       resultMsg: string;
     },
     body: {
-      items: "" | {
+      items: '' | {
         item: HolidayDTO[];
       };
       numOfRows: number;
@@ -45,7 +44,7 @@ const getHoliday = async ({ year }: { year: number }) => {
 
     if (res.ok) {
       const data: HolidayAPIProps = await res.json();
-      return data.response.body.items !== "" ? data.response.body.items.item: null;
+      return data.response.body.items !== '' ? data.response.body.items.item: null;
     } else {
       return null;
     }

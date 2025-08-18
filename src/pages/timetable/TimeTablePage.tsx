@@ -1,17 +1,33 @@
 import TimeTable from '../../components/timetable/TimeTable';
-import { View, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import TimeTableHeader from '../../components/timetable/TimeTableHeader';
 import CreateButton from '../../components/create_form/button/CreateButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TimetableDTO } from '../../types/types';
+import { useDB } from '../../components/common/DBProvider';
+import selectDB from '../../utils/db/selectDB';
 
 const TimeTablePage = () => {
-  const [table, setTable] = useState<TimetableDTO | null>({ id: 1, name: '시간표' });
+  const [table, setTable] = useState<TimetableDTO | null>(null);
+  const db = useDB();
+
+  useEffect(() => {
+    selectDB<{ default: 0 | 1 }>({
+      db: db,
+      tableName: 'tablegroup',
+      filter: {
+        findFilter: { default: 1 },
+        orderFilter: []
+      }
+    }).then((res) => {
+      if (res) setTable(res[0]);
+    });
+  }, [db]);
 
   return (
     <View style={{flex: 1}}>
-      {table && <ScrollView 
-        style={{flex: 1}}
+      {table && <View 
+        style={{ flex: 1 }}
       >
         <TimeTableHeader 
           table={table}
@@ -19,7 +35,7 @@ const TimeTablePage = () => {
         <TimeTable 
           table={table}
         />
-      </ScrollView>}
+      </View>}
       
       <CreateButton 
         link='TimeTableCreatePage' 
