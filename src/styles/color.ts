@@ -1,3 +1,5 @@
+import { Color } from '../types/types';
+
 export const colorCode = {
   'red': '#F93827',
   'orange': '#FF9D23',
@@ -7,4 +9,4 @@ export const colorCode = {
   'holiday': '#6FCD3C'
 };
 
-export const colorList = ['red', 'orange', 'yellow', 'green', 'blue'];
+export const colorList: Color[] = ['red', 'orange', 'yellow', 'green', 'blue'];

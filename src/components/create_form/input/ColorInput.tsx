@@ -38,11 +38,11 @@ const ColorInput = (
         {colorList.map((c) => (
           <ColorButton
             key={c}
-            color={colorCode.c}
+            color={colorCode[c]}
             isSelected={c === color}
             onPress={() => setColor(c)}
           >
-            {c === color && <CheckSvg width={15} height={15} stroke={c} strokeWidth={2.5} />}
+            {c === color && <CheckSvg width={15} height={15} stroke={colorCode[c]} strokeWidth={2.5} />}
           </ColorButton>
         ))}
       </ColorWrapper>

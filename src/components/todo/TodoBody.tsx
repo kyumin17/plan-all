@@ -4,6 +4,7 @@ import { useState } from 'react';
 import TodoBlock from './TodoBlock';
 import styled from 'styled-components/native';
 import { useEffect } from 'react';
+import TodoEmptyState from './TodoEmptyState';
 import selectDB from '../../utils/db/selectDB';
 
 const Page = styled.View`
@@ -30,6 +31,8 @@ const TodoBody = () => {
       if (res) setEventList(res);
     });
   }, [db]);
+
+  if (eventList.length === 0) return <TodoEmptyState />
 
   return (
     <Page>
