@@ -2,7 +2,7 @@ export const tablegroupCreateCommand = `
 CREATE TABLE IF NOT EXISTS "tablegroup" ( 
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "name" TEXT NOT NULL,
-  "default" INTEGER
+  "is_default" INTEGER NOT NULL
 );
 `;
 
@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS "calendar" (
   "start_year" INTEGER NOT NULL, 
   "end_year" INTEGER NOT NULL, 
   "all_day" INTEGER NOT NULL,
-  "description" TEXT
+  "description" TEXT,
+  "holiday" INTEGER DEFAULT 0
 );
 `;
 

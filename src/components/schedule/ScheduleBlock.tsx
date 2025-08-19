@@ -1,6 +1,7 @@
 import { ScheduleDTO } from '../../types/types';
 import styled from 'styled-components/native';
 import { Style } from '../../types/types';
+import { colorCode } from '../../styles/color';
 
 const Block = styled.View<Style>`
   position: ${(props) => props.position};
@@ -37,7 +38,7 @@ const ScheduleBlock = (
 ) => {
   return (
     <Block 
-      bg_color={event.color}
+      bg_color={colorCode[event.color]}
       height={height}
       top={top}
       position={event.all_day ? 'static' : 'absolute'}

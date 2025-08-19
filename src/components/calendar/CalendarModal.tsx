@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { FlexCol } from '../../styles/style';
 import { timeRangeToStr } from '../../utils/time';
+import { colorCode } from '../../styles/color';
 
 const Title = styled.Text`
   font-size: 20px;
@@ -59,17 +60,19 @@ const CalendarModal = (
       </Title>
       <Body>
         {eventList.map((event) => {
+          const color = colorCode[event.color];
+
           return (
             <EventWrapper
               key={event.id}
               onPress={() => navigation.navigate('CalendarEditPage', { event: event })}
-              bg_color={event.all_day ? `${event.color}25` : 'white'}
+              bg_color={event.all_day ? `${color}25` : 'white'}
               allDay={event.all_day}
             >
-              <Marker bg_color={event.all_day ? '' : event.color}>
+              <Marker bg_color={event.all_day ? '' : color}>
               </Marker>
               <View>
-                <Name color={event.color}>
+                <Name color={color}>
                   {event.name}
                 </Name>
                 <Time>

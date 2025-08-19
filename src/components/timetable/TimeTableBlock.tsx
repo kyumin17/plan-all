@@ -1,6 +1,7 @@
 import { TimeblockDTO } from '../../types/types';
 import styled from 'styled-components/native';
 import { Style } from '../../types/types';
+import { colorCode } from '../../styles/color';
 
 const Block = styled.Pressable<Style>`
   position: absolute;
@@ -44,7 +45,7 @@ const TimeTableBlock = (
 
   return (
     <Block 
-      bg_color={event.color}
+      bg_color={colorCode[event.color]}
       height={height}
       top={top}
       onPress={() => {openModal(event.name)}}

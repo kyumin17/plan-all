@@ -1,5 +1,5 @@
 import InputForm from './InputForm';
-import colors from '../../../styles/color';
+import { colorCode, colorList } from '../../../styles/color';
 import styled from 'styled-components/native';
 import CheckSvg from '../../../assets/image/check.svg';
 
@@ -35,10 +35,10 @@ const ColorInput = (
       iconName='color'
     >
       <ColorWrapper>
-        {colors.map((c) => (
+        {colorList.map((c) => (
           <ColorButton
             key={c}
-            color={c}
+            color={colorCode.c}
             isSelected={c === color}
             onPress={() => setColor(c)}
           >

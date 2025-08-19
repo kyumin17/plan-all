@@ -1,6 +1,7 @@
 import { HOLIDAY_KEY } from '../assets/data/key';
 import execDB from './db/execDB';
 import SQLite from 'react-native-sqlite-storage';
+import { Query } from '../types/types';
 
 interface HolidayAPIProps {
   response: {
@@ -54,25 +55,27 @@ const getHoliday = async ({ year }: { year: number }) => {
   }
 }
 
-const saveHoliday = async ({ db }: { db: SQLite.SQLiteDatabase }) => {
+const saveHoliday = async () => {
+  let queries: Query[] = [];
   const year = new Date().getFullYear();
-
-  for (let i = year - 0; i <= year + 0; i++) {
+  
+  for (let i = year - 20; i <= year + 20; i++) {
     const holidayList: null | HolidayDTO[] = await getHoliday({year: i});
     if (!holidayList) continue;
 
     for (const holiday of holidayList) {
-      const year = String(holiday.locdate).substring(0, 4);
-      const month = String(holiday.locdate).substring(4, 6);
-      const date = String(holiday.locdate).substring(6);
+      const y = String(holiday.locdate).substring(0, 4);
+      const m = String(holiday.locdate).substring(4, 6);
+      const d = String(holiday.locdate).substring(6);
 
-      execDB({
-        db: db,
-        query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        params: [holiday.dateName, '', '#FF2A00', date, month, year, date, month, year, 1, '']
-      });
+      queries.push({
+        query: 'INSERT INTO calendar (name, location, color, start_date, start_month, start_year, end_date, end_month, end_year, all_day, description, holiday) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        params: [holiday.dateName, '', 'holiday', d, m, y, d, m, y, 1, '', 1]
+      })
     }
   }
+
+  return queries;
 }
 
 export default saveHoliday;

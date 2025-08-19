@@ -49,6 +49,14 @@ const TableMenuModal = (
       query: 'DELETE FROM tablegroup WHERE id = ?',
       params: [table.id]
     });
+
+    if (table.is_default) {
+      execDB({
+        db: db,
+        query: 'UPDATE tablegroup SET is_default = 1 WHERE is_default = 0 ORDER BY id DESC LIMIT 1',
+        params: []
+      });
+    }
     
     setIsOpen(false);
   };

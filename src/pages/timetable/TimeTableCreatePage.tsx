@@ -2,8 +2,6 @@ import TitleInput from '../../components/create_form/input/TitleInput';
 import DayPicker from '../../components/create_form/picker/DayPicker';
 import { Alert } from 'react-native';
 import { useState } from 'react';
-import colors from '../../styles/color';
-import { getRandom } from '../../utils/random';
 import DayTimeInput from '../../components/create_form/input/DayTimeInput';
 import { TimeManageProps, TimeProps, TimetableDTO } from '../../types/types';
 import Button from '../../components/create_form/button/Button';
@@ -17,6 +15,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import CancelButton from '../../components/create_form/button/CancelButton';
 import { useNavigation } from '@react-navigation/native';
 import ColorInput from '../../components/create_form/input/ColorInput';
+import { getRandomColor } from '../../utils/random';
 
 const Page = styled.View`
   margin-top: 10%;
@@ -52,7 +51,7 @@ const TimeTableCreatePage = ({ route }: { route: any }) => {
   const navigation = useNavigation<any>();
 
   const [name, setName] = useState<string>('');
-  const [color, setColor] = useState<string>(colors[getRandom(1, colors.length)]);
+  const [color, setColor] = useState<string>(getRandomColor());
   const [selectDays, setSelectDays] = useState<number[]>([]);
 
   const initTimes: TimeProps = {hour: 12, minute: 0};

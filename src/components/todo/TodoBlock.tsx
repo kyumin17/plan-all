@@ -7,6 +7,7 @@ import ClockSvg from '../../assets/image/clock.svg';
 import { Pressable } from 'react-native';
 import { useDB } from '../common/DBProvider';
 import execDB from '../../utils/db/execDB';
+import { colorCode } from '../../styles/color';
 
 const Block = styled.Pressable`
   position: relative;
@@ -74,6 +75,7 @@ const TodoBlock = (
   { event: TodoDTO, setEventList: React.Dispatch<React.SetStateAction<TodoDTO[]>> }
 ) => {
   const db = useDB();
+  const color = colorCode[event.color];
 
   const handleCheck = () => {
     if (!db) return;
@@ -117,7 +119,7 @@ const TodoBlock = (
     >
       <Body>
         <CheckBox
-          color={event.color}
+          color={color}
           isDone={event.is_done === 1}
         >
           <CheckSvg color='white' strokeWidth={2} width={16} height={16} style={{ margin: 'auto' }} />
@@ -151,8 +153,8 @@ const TodoBlock = (
       </Detail>}
 
       {(event.year || event.hour) && !event.is_done && <Detail>
-        <ClockSvg width={15} height={15} strokeWidth={1.5} stroke={event.color} />
-        <Info color={event.color}>
+        <ClockSvg width={15} height={15} strokeWidth={1.5} stroke={color} />
+        <Info color={color}>
           {event.month}.{event.date}
         </Info>
       </Detail>}

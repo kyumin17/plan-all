@@ -1,8 +1,7 @@
 import styled from 'styled-components/native';
 import TitleInput from '../../components/create_form/input/TitleInput';
 import { useState } from 'react';
-import colors from '../../styles/color';
-import { getRandom } from '../../utils/random';
+import { getRandomColor } from '../../utils/random';
 import DescriptionInput from '../../components/create_form/input/DescriptionInput';
 import { TimeProps, DateProps } from '../../types/types';
 import DateInput from '../../components/todo/DateInput';
@@ -40,7 +39,7 @@ const ButtonWrapper = styled.View`
 
 const TodoCreatePage = () => {
   const [name, setName] = useState<string>('');
-  const [color, setColor] = useState<string>(colors[getRandom(0, colors.length-1)]);
+  const [color, setColor] = useState<string>(getRandomColor());
 
   const [date, setDate] = useState<DateProps | null>({ year: new Date().getFullYear() ,month: new Date().getMonth() + 1, date: new Date().getDate() });
   const [time, setTime] = useState<TimeProps | null>({ hour: 12, minute: 0 });

@@ -1,9 +1,10 @@
-const colors: string[] = [
-  '#F93827', // r
-  '#FF9D23', // o
-  '#FFC107', // y
-  '#16C47F', // g
-  '#4076FF' // b
-];
+export const colorCode = {
+  'red': '#F93827',
+  'orange': '#FF9D23',
+  'yellow': '#FFC107',
+  'green': '#16C47F',
+  'blue': '#4076FF',
+  'holiday': '#6FCD3C'
+};
 
-export default colors;
+export const colorList = ['red', 'orange', 'yellow', 'green', 'blue'];

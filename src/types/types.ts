@@ -6,7 +6,7 @@ export interface ScheduleDTO_A {
   end_hour: number;
   end_minute: number;
   location: null | string;
-  color: string;
+  color: Color;
   all_day: 0;
   description: string;
 };
@@ -19,7 +19,7 @@ export interface ScheduleDTO_B {
   end_hour: null;
   end_minute: null;
   location: null | string;
-  color: string;
+  color: Color;
   all_day: 1;
   description: string;
 };
@@ -32,7 +32,7 @@ interface CalendarDTO_A {
   end_hour: number;
   end_minute: number;
   location: null | string;
-  color: string;
+  color: Color;
   start_date: number;
   start_month: number;
   start_year: number;
@@ -41,6 +41,7 @@ interface CalendarDTO_A {
   end_year: number;
   all_day: 0;
   description: string;
+  holiday: 0 | 1;
 };
 
 interface CalendarDTO_B {
@@ -51,7 +52,7 @@ interface CalendarDTO_B {
   end_hour: null;
   end_minute: null;
   location: null | string;
-  color: string;
+  color: Color;
   start_date: number;
   start_month: number;
   start_year: number;
@@ -60,6 +61,7 @@ interface CalendarDTO_B {
   end_year: number;
   all_day: 1;
   description: string;
+  holiday: 0 | 1;
 };
 
 export interface TodoDTO {
@@ -70,7 +72,7 @@ export interface TodoDTO {
   date: number | null;
   hour: number | null;
   minute: number | null;
-  color: string;
+  color: Color;
   description: string;
   is_done: 0 | 1;
 };
@@ -80,7 +82,7 @@ export type ScheduleDTO = ScheduleDTO_A | ScheduleDTO_B;
 export interface TimetableDTO {
   id: number;
   name: string;
-  default: 0 | 1;
+  is_default: 0 | 1;
 };
 
 export interface TimeblockDTO {
@@ -93,7 +95,7 @@ export interface TimeblockDTO {
   end_hour: number;
   end_minute: number;
   location: null | string;
-  color: string;
+  color: Color;
   description: string;
 };
 
@@ -137,4 +139,11 @@ export interface Style {
   min_height?: number;
   bottom?: number;
   position?: 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
+};
+
+export type Color = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'holiday';
+
+export interface Query {
+  query: string;
+  params: (string | number)[]
 };

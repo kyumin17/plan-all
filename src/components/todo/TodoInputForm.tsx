@@ -35,25 +35,25 @@ const ToggleLabel = styled.Text`
 `;
 
 const TodoInputForm = (
-  { iconName, label, onPress, isOpen }:
+  { iconName, label, children }:
   { 
     iconName: 'clock' | 'calendar',
-    label: string | null,
-    onPress: () => void,
-    isOpen: boolean,
+    label: string,
+    children: React.ReactNode,
   }
 ) => {
-  const [isOn, setIsOn] = useState<boolean>(false);
+  const [isInputOn, setIsInputOn] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
     <InputForm
       iconName={iconName}
     >
       <Input>
-        {label ? <PickerButton
+        {!isInputOn ? <PickerButton
           label={label}
-          onPress={onPress}
-          isOpen={isOpen}
+          onPress={() => {setIsModalOpen(!isModalOpen)}}
+          isOpen={isModalOpen}
           position='left'
         />:
         <NoDateText>
@@ -66,11 +66,13 @@ const TodoInputForm = (
             미설정
           </ToggleLabel>
           <ToggleButton
-            isOn={isOn}
-            setIsOn={setIsOn}
+            isOn={isInputOn}
+            setIsOn={setIsInputOn}
           />
         </ToggleWrapper>
       </Input>
+
+      {isModalOpen && children}
     </InputForm>
   )
 }

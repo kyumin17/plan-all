@@ -1,5 +1,4 @@
 import { TimeProps } from '../../types/types';
-import { useState } from 'react';
 import { timeToStr } from '../../utils/time';
 import TodoInputForm from './TodoInputForm';
 
@@ -10,10 +9,10 @@ const TimeInput = (
   return (
     <TodoInputForm
       iconName='clock'
-      label={time ? timeToStr(time.hour, time.minute) : null}
-      onPress={() => {}}
-      isOpen={false}
-    />
+      label={time ? timeToStr(time.hour, time.minute) : ''}
+    >
+      <></>
+    </TodoInputForm>
   );
 }
 

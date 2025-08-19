@@ -55,12 +55,12 @@ const TableNameModal = (
     if (type === 'add') {
       await execDB({
         db: db,
-        query: 'UPDATE tablegroup SET default = 1 WHERE default = 0',
+        query: 'UPDATE tablegroup SET is_default = 1 WHERE is_default = 0',
         params: [name, 1]
       });
       await execDB({
         db: db,
-        query: 'INSERT INTO tablegroup (name, default) VALUES (?, ?)',
+        query: 'INSERT INTO tablegroup (name, is_default) VALUES (?, ?)',
         params: [name, 1]
       });
     } else {

@@ -12,11 +12,11 @@ const TimeTablePage = () => {
   const db = useDB();
 
   useEffect(() => {
-    selectDB<{ default: 0 | 1 }>({
+    selectDB<{ is_default: 0 | 1 }>({
       db: db,
       tableName: 'tablegroup',
       filter: {
-        findFilter: { default: 1 },
+        findFilter: { is_default: 1 },
         orderFilter: []
       }
     }).then((res) => {

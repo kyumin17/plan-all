@@ -3,7 +3,6 @@ import TimeInput from '../../components/create_form/input/TimeInput';
 import LocationInput from '../../components/create_form/input/LocationInput';
 import { Alert } from 'react-native';
 import { useState } from 'react';
-import colors from '../../styles/color';
 import DateInput from '../../components/create_form/input/DateInput';
 import { useNavigation } from '@react-navigation/native';
 import execDB from '../../utils/db/execDB';
@@ -16,6 +15,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 import Button from '../../components/create_form/button/Button';
 import CancelButton from '../../components/create_form/button/CancelButton';
+import { getRandomColor } from '../../utils/random';
 
 const Page = styled.View`
   margin-top: 10%;
@@ -65,7 +65,7 @@ const CalendarEditPage = ({ route }: { route: any }) => {
 
   const [location, setLocation] = useState<string>(event.location ?? '');
   const [description, setDescription] = useState<string>(event.description);
-  const [color, setColor] = useState<string>(colors[4]);
+  const [color, setColor] = useState<string>(event.color);
 
   const [isAllDay, setIsAllDay] = useState<boolean>(event.all_day ? true : false);
   

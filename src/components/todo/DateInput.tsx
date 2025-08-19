@@ -8,10 +8,10 @@ const DateInput = (
   return (
     <TodoInputForm
       iconName='calendar'
-      label={date ? `${date.month}월 ${date.date}일` : null}
-      onPress={() => {}}
-      isOpen={false}
-    />
+      label={date ? `${date.month}월 ${date.date}일` : ''}
+    >
+      <></>
+    </TodoInputForm>
   );
 }
 

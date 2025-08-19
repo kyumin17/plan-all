@@ -1,6 +1,7 @@
 import { CalendarDTO } from '../../types/types';
 import styled from 'styled-components/native';
 import { Style } from '../../types/types';
+import { colorCode } from '../../styles/color';
 
 const Block = styled.View`
   width: 101%;
@@ -25,15 +26,17 @@ const Name = styled.Text<Style>`
 `;
 
 const CalendarBlock = ({ event, date }: { event: CalendarDTO, date: number | null }) => {
+  const color = colorCode[event.color];
+
   return (
     <Block>
       <Marker
-        bg_color={event.color}
+        bg_color={color}
       >
       </Marker>
       <Name 
-        color={event.all_day ? 'white' : event.color}
-        bg_color={event.all_day ? event.color : 'white'}
+        color={event.all_day ? 'white' : color}
+        bg_color={event.all_day ? color : 'white'}
         numberOfLines={1}
       >
         {event.start_date === date ? event.name : ''}
