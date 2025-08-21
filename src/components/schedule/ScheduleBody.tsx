@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
 import { ScheduleDTO_A } from '../../types/types';
 import ScheduleBlock from './ScheduleBlock';
 import styled from 'styled-components/native';
 import TimeAxis from '../common/TimeAxis';
-
-import { ScrollView } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { timeRangeToStr } from '../../utils/time';
 
 const EventWrapper = styled.View`
@@ -15,16 +13,8 @@ const EventWrapper = styled.View`
 `;
 
 const ScheduleBody = ({ eventList }: { eventList: ScheduleDTO_A[] }) => {
-  const [startTime, setStartTime] = useState<number>(10);
-  const [endTime, setEndTime] = useState<number>(20);
-
-  useEffect(() => {
-    const newStartTime = Math.min(...eventList.map(block => block.start_hour));
-    const newEndTime = Math.max(...eventList.map(block => block.end_hour)) + 1;
-    
-    setStartTime(Math.min(startTime, newStartTime));
-    setEndTime(Math.max(endTime, newEndTime));
-  }, [eventList]);
+  const startTime = Math.min(10, ...eventList.map(block => block.start_hour));
+  const endTime = Math.max(20, ...eventList.map(block => block.end_hour)) + 1;
 
   return (
     <ScrollView

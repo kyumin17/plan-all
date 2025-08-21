@@ -1,5 +1,5 @@
 import selectDB from './db/selectDB';
-import { TimeblockDTO, CalendarDTO, ScheduleDTO } from '../types/types';
+import { TimeblockDTO, CalendarDTO, ScheduleDTO, DateProps } from '../types/types';
 import SQLite from 'react-native-sqlite-storage';
 
 interface TimeTableFilter {
@@ -12,64 +12,102 @@ interface CalendarFilter {
   start_date: number;
 }
 
-const changeScheduleFormat = (schedule: TimeblockDTO | CalendarDTO) => {
-  return {
-    id: schedule.id,
-    name: schedule.name,
-    start_hour: schedule.start_hour,
-    start_minute: schedule.start_minute,
-    end_hour: schedule.end_hour,
-    end_minute: schedule.end_minute,
-    location: schedule.location,
-    color: schedule.color,
-    all_day: 'all_day' in schedule ? schedule.all_day : 0,
-  };
-}
+// const timeblockToSchedule = (schedule: TimeblockDTO) => {
+//   return {
+//     id: schedule.id,
+//     year: schedule.year,
+//     month: number,
+//     date: number,
+//     name: schedule.name,
+//     start_hour: schedule.start_hour,
+//     start_minute: schedule.start_minute,
+//     end_hour: schedule.end_hour,
+//     end_minute: schedule.end_minute,
+//     location: schedule.location,
+//     color: schedule.color,
+//     all_day: 0,
+//   };
+// }
+
+// const calendarToSchedule = (event: CalendarDTO) => {
+//   return {
+//     id: event.id,
+//     year: event.start_year,
+//     month: event.start_month,
+//     date: event.start_date,
+//     name: event.name,
+//     start_hour: event.start_hour,
+//     start_minute: event.start_minute,
+//     end_hour: event.end_hour,
+//     end_minute: event.end_minute,
+//     location: event.location,
+//     color: event.color,
+//     all_day: event.all_day,
+//     description: event.description,
+//   };
+// }
+
+// const changeScheduleFormat = (schedule: TimeblockDTO | CalendarDTO) => {
+//   return {
+//     id: schedule.id,
+//     year: schedule.,
+//     month: number,
+//     date: number,
+//     name: schedule.name,
+//     start_hour: schedule.start_hour,
+//     start_minute: schedule.start_minute,
+//     end_hour: schedule.end_hour,
+//     end_minute: schedule.end_minute,
+//     location: schedule.location,
+//     color: schedule.color,
+//     all_day: 'all_day' in schedule ? schedule.all_day : 0,
+//   };
+// }
 
 const selectSchedule = async (
-  { db, year, month, date }:
+  { db, date }:
   {
-    db: SQLite.SQLiteDatabase | null;
-    year: number; 
-    month: number; 
-    date: number;
+    db: SQLite.SQLiteDatabase | null,
+    date?: DateProps,
   }
 ) => {
   if (!db) return null;
 
   const scheduleList: ScheduleDTO[] = [];
 
-  await selectDB<TimeTableFilter>({
-    db: db,
-    tableName: 'timetable',
-    filter: {
-      findFilter: { day: (new Date(year, month - 1, date).getDay() + 6) % 7 },
-    },
-  }).then((res) => {
-    if (!res) return;
+  // await selectDB<TimeTableFilter>({
+  //   db: db,
+  //   tableName: 'timetable',
+  //   filter: {
+  //     findFilter: date ? { 
+  //       day: (new Date(date.year, date.month - 1, date.date).getDay() + 6) % 7
+  //     } : undefined,
+  //   },
+  // }).then((res) => {
+  //   if (!res) return;
   
-    for (const item of res) {
-      scheduleList.push(changeScheduleFormat(item));
-    }
-  });
+  //   for (const item of res) {
+  //     scheduleList.push(changeScheduleFormat(item));
+  //   }
+  // });
 
-  await selectDB<CalendarFilter>({
-    db: db,
-    tableName: 'calendar',
-    filter: {
-      findFilter: {
-        start_year: year,
-        start_month: month,
-        start_date: date,
-      },
-    },
-  }).then((res) => {
-    if (!res) return;
+  // await selectDB<CalendarFilter>({
+  //   db: db,
+  //   tableName: 'calendar',
+  //   filter: {
+  //     findFilter: date ? {
+  //       start_year: date.year,
+  //       start_month: date.month,
+  //       start_date: date.date,
+  //     } : undefined,
+  //   },
+  // }).then((res) => {
+  //   if (!res) return;
 
-    for (const item of res) {
-      scheduleList.push(changeScheduleFormat(item));
-    }
-  });
+  //   for (const item of res) {
+  //     scheduleList.push(calendarToSchedule(item));
+  //   }
+  // });
 
   scheduleList.sort((a, b) => {
     const startHourA = a.start_hour ?? -1;

@@ -1,8 +1,9 @@
 import CreateButton from '../../components/create_form/button/CreateButton';
-import { View, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import TodoHeader from '../../components/todo/TodoHeader';
 import TodoBody from '../../components/todo/TodoBody';
 import { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const TodoPage = () => {
   const [year, setYear] = useState<number>(new Date().getFullYear());

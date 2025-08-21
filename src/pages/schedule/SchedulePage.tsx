@@ -1,48 +1,64 @@
-import { View } from 'react-native';
-import { useState, useEffect } from 'react';
-import ScheduleBody from '../../components/schedule/ScheduleBody';
-import ScheduleHeader from '../../components/schedule/ScheduleHeader';
-import ScheduleAllday from '../../components/schedule/ScheduleAllday';
+import ScheduleItem from '../../components/schedule/ScheduleItem';
+import Carousel from '../../components/common/Carousel';
+import { useEffect, useState } from 'react';
+import { DateProps, ScheduleDTO } from '../../types/types';
 import { useDB } from '../../components/common/DBProvider';
 import selectSchedule from '../../utils/selectSchedule';
-import { ScheduleDTO } from '../../types/types';
+import { View } from 'react-native';
+import ScheduleHeader from '../../components/schedule/ScheduleHeader';
 
 const SchedulePage = () => {
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
-  const [date, setDate] = useState<number>(new Date().getDate());
+  const db = useDB();
 
   const [eventList, setEventList] = useState<ScheduleDTO[]>([]);
 
-  const db = useDB();
+  // useEffect(() => {
+  //   selectSchedule({
+  //     db: db,
+  //   }).then((res) => {
+  //     if (res) setEventList(res);
+  //   })
+  // }, [db]);
+
+  const dateToDateProps = (date: Date) => {
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      date: date.getDate(),
+    }
+  }
+
+  const [data, setData] = useState<DateProps[]>([dateToDateProps(new Date())]);
 
   useEffect(() => {
-    selectSchedule({
-      db: db,
-      year: year,
-      month: month,
-      date: date,
-    }).then((res) => {
-      if (res) setEventList(res);
-    })
-  }, [db, year, month, date]);
+    const date = new Date();
+    date.setDate(date.getDate() - 100);
+
+    let newData = [];
+
+    for (let i = -100; i <= 100; i++) {
+      date.setDate(date.getDate() + 1);
+      newData.push(dateToDateProps(date));
+    }
+
+    setData(newData);
+  }, []);
 
   return (
-    <View 
-      style={{flex: 1}}
-    >
+    <View>
       <ScheduleHeader 
-        year={year} 
-        month={month} 
-        date={date}
+        year={2025} 
+        month={1} 
+        date={1}
       />
-      <ScheduleAllday
-        eventList={eventList.filter((event) => event.all_day === 1)}
-        month={month}
-        date={date}
-      />
-      <ScheduleBody 
-        eventList={eventList.filter((event) => event.all_day === 0)}
+      <Carousel
+        data={data}
+        startIndex={Math.floor(data.length / 2)}
+        renderItem={({ item }) => 
+          ScheduleItem({
+            item: item, 
+            eventList: eventList
+          })}
       />
     </View>
   );

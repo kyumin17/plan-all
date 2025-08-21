@@ -1,4 +1,5 @@
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { TimeblockDTO, TimetableDTO } from '../../types/types';
 import { useState, useEffect } from 'react';
 import { useDB } from '../common/DBProvider';
@@ -40,20 +41,12 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   const [isOpen, setIsOpen] = useState<boolean>(false);
   
-  const [startTime, setStartTime] = useState<number>(10);
-  const [endTime, setEndTime] = useState<number>(20);
-  
   const [eventList, setEventList] = useState<TimeblockDTO[]>([]);
 
   const [modalName, setModalName] = useState<null | string>(null);
 
-  const setTimeRange = (eventList: TimeblockDTO[]) => {
-    const newStartTime = Math.min(...eventList.map(block => block.start_hour));
-    const newEndTime = Math.max(...eventList.map(block => block.end_hour));
-    
-    setStartTime(Math.min(startTime, newStartTime));
-    setEndTime(Math.max(endTime, newEndTime + 1));
-  }
+  const startTime = Math.min(10, ...eventList.map(block => block.start_hour));
+  const endTime = Math.max(20, ...eventList.map(block => block.end_hour)) + 1;
 
   useEffect(() => {
     selectDB<{ table_id: number }>({
@@ -64,10 +57,7 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
           orderFilter: ['day', 'start_hour', 'start_minute'],
         },
       }).then((res) => {
-        if (res) {
-          setEventList(res);
-          setTimeRange(res);
-        }
+        if (res) setEventList(res);
       });
   }, [db]);
 
@@ -87,7 +77,9 @@ const TimeTable = ({ table }: { table: TimetableDTO }) => {
         ))}
       </TableHeader>
       
-      <ScrollView>
+      <ScrollView
+        style={{ flex: 1 }}
+      >
         <TimeAxis 
           startTime={startTime}
           endTime={endTime}

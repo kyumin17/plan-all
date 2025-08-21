@@ -1,48 +1,59 @@
-import TimeTable from '../../components/timetable/TimeTable';
-import { View } from 'react-native';
-import TimeTableHeader from '../../components/timetable/TimeTableHeader';
-import CreateButton from '../../components/create_form/button/CreateButton';
 import { useEffect, useState } from 'react';
-import { TimetableDTO } from '../../types/types';
+import { TimeblockDTO, TimetableDTO, TimetableItemProps } from '../../types/types';
 import { useDB } from '../../components/common/DBProvider';
 import selectDB from '../../utils/db/selectDB';
+import TimeTableItem from '../../components/timetable/TimeTableItem';
+import Carousel from '../../components/common/Carousel';
+import { View } from 'react-native';
+import CreateButton from '../../components/create_form/button/CreateButton';
 
 const TimeTablePage = () => {
-  const [table, setTable] = useState<TimetableDTO | null>(null);
+  const [tableList, setTableList] = useState<TimetableDTO[]>([]);
+  const [eventList, setEventList] = useState<TimeblockDTO[]>([]);
+  const data: TimetableItemProps[] = tableList.map((item) => {
+    return {
+      table: item,
+      events: eventList.filter((event) => event.table_id === item.id)
+    };
+  });
+
   const db = useDB();
 
   useEffect(() => {
-    selectDB<{ is_default: 0 | 1 }>({
+    selectDB<null>({
       db: db,
       tableName: 'tablegroup',
       filter: {
-        findFilter: { is_default: 1 },
-        orderFilter: []
+        orderFilter: ['is_default']
       }
     }).then((res) => {
-      if (res) setTable(res[0]);
+      if (res) setTableList(res);
+    });
+
+    selectDB<null>({
+      db: db,
+      tableName: 'timetable',
+      filter: {
+
+      }
+    }).then((res) => {
+      if (res) setEventList(res);
     });
   }, [db]);
 
   return (
-    <View style={{flex: 1}}>
-      {table && <View 
-        style={{ flex: 1 }}
-      >
-        <TimeTableHeader 
-          table={table}
-        />
-        <TimeTable 
-          table={table}
-        />
-      </View>}
-      
+    <View>
+      <Carousel
+        data={data}
+        startIndex={tableList.length - 1}
+        renderItem={TimeTableItem}
+      />
       <CreateButton 
         link='TimeTableCreatePage' 
-        params={{ table: table }}
+        params={{ table: tableList[0] }}
       />
     </View>
-  );
+  )
 };
 
 export default TimeTablePage;

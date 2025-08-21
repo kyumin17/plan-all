@@ -7,7 +7,7 @@ const Pressable = styled.Pressable`
   bottom: 20px;
   right: 20px;
   z-index: 1;
-`
+`;
 
 const CreateButton = <T,>({ link, params }: { link : string, params?: T }) => {
   const navigation = useNavigation<any>();

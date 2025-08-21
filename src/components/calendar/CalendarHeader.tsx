@@ -7,11 +7,10 @@ const Title = styled.Text`
 `;
 
 const CalendarHeader = (
-  { year, setYear, month, setMonth }: 
-  { year: number, 
-    setYear: React.Dispatch<React.SetStateAction<number>>, 
+  { year, month }: 
+  { 
+    year: number, 
     month: number,
-    setMonth: React.Dispatch<React.SetStateAction<number>>
   }
 ) => {
   const currentYear = new Date().getFullYear();

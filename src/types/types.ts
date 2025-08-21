@@ -1,6 +1,9 @@
 export interface ScheduleDTO_A {
   id: number;
   name: string;
+  year: number;
+  month: number;
+  date: number;
   start_hour: number;
   start_minute: number;
   end_hour: number;
@@ -14,6 +17,9 @@ export interface ScheduleDTO_A {
 export interface ScheduleDTO_B {
   id: number;
   name: string;
+  year: number;
+  month: number;
+  date: number;
   start_hour: null;
   start_minute: null;
   end_hour: null;
@@ -145,5 +151,16 @@ export type Color = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'holiday';
 
 export interface Query {
   query: string;
-  params: (string | number)[]
+  params: (string | number)[];
+};
+
+export interface TimetableItemProps {
+  table: TimetableDTO;
+  events: TimeblockDTO[];
+};
+
+export interface CalendarItemProps {
+  year: number;
+  month: number;
+  events: CalendarDTO[];
 };
