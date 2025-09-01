@@ -11,14 +11,11 @@ const SchedulePage = () => {
   const db = useDB();
 
   const [eventList, setEventList] = useState<ScheduleDTO[]>([]);
-
-  // useEffect(() => {
-  //   selectSchedule({
-  //     db: db,
-  //   }).then((res) => {
-  //     if (res) setEventList(res);
-  //   })
-  // }, [db]);
+  const [selectDate, setSelectDate] = useState<DateProps>({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    date: new Date().getDate(),
+  });
 
   const dateToDateProps = (date: Date) => {
     return {
@@ -28,15 +25,15 @@ const SchedulePage = () => {
     }
   }
 
-  const [data, setData] = useState<DateProps[]>([dateToDateProps(new Date())]);
+  const [data, setData] = useState<DateProps[]>([]);
 
   useEffect(() => {
     const date = new Date();
-    date.setDate(date.getDate() - 100);
+    date.setDate(date.getDate() - 36);
 
     let newData = [];
 
-    for (let i = -100; i <= 100; i++) {
+    for (let i = -36; i <= 36; i++) {
       date.setDate(date.getDate() + 1);
       newData.push(dateToDateProps(date));
     }
@@ -47,9 +44,9 @@ const SchedulePage = () => {
   return (
     <View>
       <ScheduleHeader 
-        year={2025} 
-        month={1} 
-        date={1}
+        year={selectDate.year} 
+        month={selectDate.month}
+        date={selectDate.date}
       />
       <Carousel
         data={data}
@@ -59,6 +56,7 @@ const SchedulePage = () => {
             item: item, 
             eventList: eventList
           })}
+        onSnapToItem={(index: number) => setSelectDate(data[index-1])}
       />
     </View>
   );

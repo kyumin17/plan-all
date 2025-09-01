@@ -1,29 +1,40 @@
-import CreateButton from '../../components/create_form/button/CreateButton';
-import { View } from 'react-native';
-import TodoHeader from '../../components/todo/TodoHeader';
-import TodoBody from '../../components/todo/TodoBody';
-import { useState } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useEffect, useState } from 'react';
+import TodoItem from '../../components/todo/TodoItem';
+import Carousel from '../../components/common/Carousel';
+import { DateProps } from '../../types/types';
 
 const TodoPage = () => {
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
-  const [date, setDate] = useState<number>(new Date().getDate());
+  const [selectDate, setSelectDate] = useState<DateProps>({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    date: new Date().getDate(),
+  });
+  
+  const [data, setData] = useState<DateProps[]>([selectDate]);
+
+  useEffect(() => {
+    const newData = [];
+    let date = new Date(selectDate.year, selectDate.month, selectDate.date);
+    date.setDate(date.getDate() - 100);
+
+    for (let i = 0; i <= 200; i++) {
+      date.setDate(date.getDate() + 1);
+      newData.push({
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        date: date.getDate(),
+      });
+    }
+
+    setData(newData);
+  }, [selectDate]);
 
   return (
-    <View style={{flex: 1}}>
-      <ScrollView 
-        style={{flex: 1}}
-      >
-        <TodoHeader 
-          year={year} 
-          month={month} 
-          date={date} 
-        />
-        <TodoBody />
-      </ScrollView>
-      <CreateButton link='TodoCreatePage' />
-    </View>
+    <Carousel
+      data={data}
+      startIndex={Math.floor(data.length / 2)}
+      renderItem={TodoItem}
+    />
   );
 };
 

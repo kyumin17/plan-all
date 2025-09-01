@@ -3,11 +3,12 @@ import { Dimensions } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 const Carousel = <T,>(
-  { data, startIndex, renderItem }:
+  { data, startIndex, renderItem, onSnapToItem }:
   { 
     data: T[],
     startIndex: number,
     renderItem: CarouselRenderItem<T>,
+    onSnapToItem?: (index: number) => void,
   }
 ) => {
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -21,6 +22,7 @@ const Carousel = <T,>(
       data={data}
       defaultIndex={startIndex}
       renderItem={renderItem}
+      onSnapToItem={onSnapToItem}
     />
   );
 }

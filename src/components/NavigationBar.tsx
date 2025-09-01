@@ -36,7 +36,7 @@ const NavigationBar = () => {
         options={{ 
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TableSvg stroke={color} />
+            <ClockSvg stroke={color} />
           ),
         }}
       />
@@ -46,7 +46,7 @@ const NavigationBar = () => {
         options={{ 
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <ClockSvg stroke={color} />
+            <TableSvg stroke={color} />
           ),
         }} 
       />
