@@ -164,3 +164,10 @@ export interface CalendarItemProps {
   month: number;
   events: CalendarDTO[];
 };
+
+export interface CalendarEventInfo {
+  event: CalendarDTO,
+  width: number,
+  top: number,
+  start: number,
+};

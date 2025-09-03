@@ -1,5 +1,5 @@
 import CalendarBlock from './CalendarBlock';
-import { CalendarDTO, Style } from '../../types/types';
+import { CalendarDTO, CalendarEventInfo, Style } from '../../types/types';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -33,13 +33,13 @@ const DateText = styled.Text<Style & { isToday: boolean }>`
 `;
 
 const CalendarCell = (
-  { date, day, eventList, isToday, openModal }: 
+  { date, day, eventInfoList, isToday, openModal }: 
   { 
     date: number | null,
     day: number,
-    eventList: CalendarDTO[],
+    eventInfoList: CalendarEventInfo[],
     isToday: boolean,
-    openModal: (date: number, day: number, eventList: CalendarDTO[]) => void,
+    openModal: (date: number, day: number, eventInfoList: CalendarDTO[]) => void,
   }
 ) => {
   const navigation = useNavigation<any>();
@@ -51,7 +51,7 @@ const CalendarCell = (
   }
 
   const handlePress = () => {
-    if (date && eventList.length !== 0) openModal(date, day, eventList);
+    if (date && eventInfoList.length !== 0) openModal(date, day, eventInfoList.map(item => item.event));
     else navigation.navigate('CalendarCreatePage');
   }
 
@@ -67,8 +67,16 @@ const CalendarCell = (
       </DateText>
 
       <View>
-        {eventList.map((event: CalendarDTO) => {
-          return <CalendarBlock event={event} date={date} key={event.id} />;
+        {eventInfoList.map((info: CalendarEventInfo) => {
+          return (
+            <CalendarBlock 
+              key={info.event.id} 
+              event={info.event} 
+              date={date} 
+              width={info.width}
+              top={info.top}
+            />
+          );
         })}
       </View>
     </Cell>

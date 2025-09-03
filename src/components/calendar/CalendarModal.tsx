@@ -77,7 +77,7 @@ const CalendarModal = (
                 </Name>
                 <Time>
                   {event.all_day ? 
-                    `${event.start_month}.${event.start_date}` : 
+                    `${event.start_month}.${event.start_date} - ${event.end_month}.${event.end_date}` : 
                     `${timeRangeToStr(event.start_hour, event.start_minute, event.end_hour, event.end_minute)}`}
                   {event.location && `, ${event.location}`}
                 </Time>

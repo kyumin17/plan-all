@@ -6,7 +6,7 @@ export const colorCode = {
   'yellow': '#FFC107',
   'green': '#16C47F',
   'blue': '#4076FF',
-  'holiday': '#6FCD3C'
+  'holiday': '#e51313'
 };
 
 export const colorList: Color[] = ['red', 'orange', 'yellow', 'green', 'blue'];
