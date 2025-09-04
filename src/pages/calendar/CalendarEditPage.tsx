@@ -15,7 +15,6 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 import Button from '../../components/create_form/button/Button';
 import CancelButton from '../../components/create_form/button/CancelButton';
-import { getRandomColor } from '../../utils/random';
 
 const Page = styled.View`
   margin-top: 10%;

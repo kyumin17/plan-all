@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import CalendarCell from './CalendarCell';
 import { CalendarDTO } from '../../types/types';
 import { useState } from 'react';
@@ -7,12 +6,19 @@ import CalendarModal from './CalendarModal';
 import Modal from '../common/Modal';
 import { getCalEventInfo } from '../../utils/getCalEventInfo';
 
+const Body = styled.View`
+  position: relative;
+  box-sizing: border-box;
+  flex: 1;
+`;
+
 const Row = styled.View`
   display: flex;
   flex-direction: row;
   border-bottom-width: 1px;
   border-bottom-color: #EFEFEF;
-  height: 15.3%;
+  box-sizing: border-box;
+  flex: 1;
 `;
 
 interface ModalItem {
@@ -37,8 +43,7 @@ const CalendarBody = (
   const rowNum: number = 6;
   const eventInfoList = getCalEventInfo({
     eventList: eventList,
-    startDay: startDay,
-    dateNum: dateNum,
+    date: { year: year, month: month },
   });
 
   const openModal = (date: number, day: number, eventList: CalendarDTO[]) => {
@@ -55,7 +60,7 @@ const CalendarBody = (
   }
 
   return (
-    <View>
+    <Body>
       {Array.from({ length: rowNum }, (_, i) => i).map((week: number) => {
         return (
           <Row key={week}>
@@ -91,7 +96,7 @@ const CalendarBody = (
           eventList={modalItem.events}
         />
       </Modal>}
-    </View>
+    </Body>
   );
 }
 

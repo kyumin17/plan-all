@@ -72,7 +72,6 @@ const CalendarCell = (
             <CalendarBlock 
               key={info.event.id} 
               event={info.event} 
-              date={date} 
               width={info.width}
               top={info.top}
             />

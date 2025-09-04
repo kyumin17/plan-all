@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import CreateButton from '../../components/create_form/button/CreateButton';
 import Carousel from '../../components/common/Carousel';
 import CalendarItem from '../../components/calendar/CalendarItem';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CalendarDTO, CalendarItemProps, Style } from '../../types/types';
 import selectDB from '../../utils/db/selectDB';
 import { useDB } from '../../components/common/DBProvider';
@@ -25,7 +25,6 @@ const DayText = styled.Text<Style>`
 
 const CalendarPage = () => {
   const [data, setData] = useState<CalendarItemProps[]>([]);
-  const [events, setEvents] = useState<CalendarDTO[]>([]);
   const [selectDate, setSelectDate] = useState<{year: number, month: number}>({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
@@ -44,8 +43,6 @@ const CalendarPage = () => {
           orderFilter: ['start_year', 'start_month', 'start_date', 'start_hour', 'start_minute'],
         },
       });
-
-      setEvents(newEvents ?? []);
 
       let newData: CalendarItemProps[] = [];
 
@@ -67,7 +64,7 @@ const CalendarPage = () => {
         newData.push({
           year: date.getFullYear(),
           month: date.getMonth() + 1,
-          events: events.filter(event => 
+          events: (newEvents ?? []).filter(event => 
             (getEventTime(event).start <= calEndTime && getEventTime(event).end >= calStartTime)
           ),
         });
@@ -78,6 +75,13 @@ const CalendarPage = () => {
 
     getData();
   }, [db]);
+
+  const handleSnapItem = useCallback((index: number) => {
+    setSelectDate({
+      year: data[index].year,
+      month: data[index].month,
+    });
+  }, [data]);
 
   const dayNameList: string[] = ['월', '화', '수', '목', '금', '토', '일'];
 
@@ -95,17 +99,12 @@ const CalendarPage = () => {
           </DayText>
         ))}
       </TableHeader>
-
-      <Carousel 
+      
+      <Carousel
         data={data}
         startIndex={Math.floor(data.length / 2)}
         renderItem={CalendarItem}
-        onSnapToItem={(index: number) => {
-          setSelectDate({
-            year: data[index].year,
-            month: data[index].month,
-          });
-        }}
+        onSnapToItem={handleSnapItem}
       />
       <CreateButton link='CalendarCreatePage' />
     </View>

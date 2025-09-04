@@ -24,18 +24,17 @@ const Name = styled.Text<Style>`
   height: 16px;
   flex: 1;
   font-size: 10px;
-  padding-left: 6px;
-  padding-right: 6px;
+  padding-left: 9px;
+  padding-right: 9px;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bg_color};
   padding-bottom: 2px;
 `;
 
 const CalendarBlock = (
-  { event, date, width, top }: 
+  { event, width, top }: 
   { 
     event: CalendarDTO, 
-    date: number | null,
     width: number,
     top: number,
   }
@@ -58,7 +57,7 @@ const CalendarBlock = (
         bg_color={type === 'all-day' ? color : 'white'}
         numberOfLines={1}
       >
-        {event.start_date === date ? event.name : ''}
+        {event.name}
       </Name>
     </Block>
   );
