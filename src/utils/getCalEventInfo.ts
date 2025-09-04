@@ -1,17 +1,20 @@
-import { CalendarDTO, CalendarEventInfo, DateProps } from '../types/types';
+import { CalendarDTO, CalendarEventInfo, CalendarOverflowInfo } from '../types/types';
 
 export const getCalEventInfo = (
-  { date, eventList }:
+  { date, eventList, height }:
   {
     date: { year: number, month: number },
     eventList: CalendarDTO[],
+    height: number,
   }
 ) => {
   const dateNum: number = new Date(date.year, date.month - 1, 0).getDate();
   const startDay: number = (new Date(date.year, date.month - 1, 1).getDay() - 1) % 7;
 
-  let eventInfoList: CalendarEventInfo[] = [];
-  let topList: number[][] = Array.from({ length: dateNum + 1 }, () => new Array(4).fill(0));
+  const eventInfoList: CalendarEventInfo[] = [];
+  const overflowList: CalendarOverflowInfo[] = [];
+  const topList: number[][] = Array.from({ length: dateNum + 1 }, () => new Array(height).fill(0));
+  const overflowDate = new Set<number>();
 
   for (const event of eventList) {
     let top = 0;
@@ -23,8 +26,8 @@ export const getCalEventInfo = (
       const day = (i + startDay - 1) % 7;
 
       if (i === s || day === 0) {
-        top = 3;
-        for (let j = 0; j < 4; j++) {
+        top = height-1;
+        for (let j = 0; j < height; j++) {
           if (topList[i][j] == 0) {
             top = j;
             break;
@@ -32,7 +35,7 @@ export const getCalEventInfo = (
         }
       }
 
-      topList[i][top] = 1;
+      topList[i][top] += 1;
 
       if (i === e) {
         let day = (i + startDay - 1) % 7 + 1;
@@ -54,5 +57,49 @@ export const getCalEventInfo = (
     }
   }
 
-  return eventInfoList;
+  for (let i = 1; i <= dateNum; i++) {
+    if (topList[i][height-1] > 1) {
+      overflowDate.add(i);
+
+      overflowList.push({
+        eventNum: topList[i][height-1],
+        top: height-1,
+        start: i,
+      });
+    }
+  }
+
+  const eventNum = eventInfoList.length;
+
+  for (let i = 0; i < eventNum; i++) {
+    const info = eventInfoList[i];
+    if (info.top !== height-1) continue;
+
+    const event = info.event;
+    const s = event.start_year === date.year && event.start_month === date.month ? event.start_date : 1;
+    const e = event.end_year === date.year && event.end_month === date.month ? event.end_date : dateNum;
+
+    for (let j = s; j <= e; j++) {
+      if (overflowDate.has(j)) {
+        const curStart = eventInfoList[i].start;
+
+        if (j !== curStart) {
+            eventInfoList.push({
+            event: event,
+            width: j - curStart,
+            top: info.top,
+            start: curStart,
+          });
+        }
+
+        eventInfoList[i].start = j + 1;
+        eventInfoList[i].width -= j - curStart + 1;
+      }
+    }
+  }
+
+  return {
+    eventInfoList: eventInfoList.filter((event) => event.width !== 0),
+    overflowList: overflowList,
+  };
 }

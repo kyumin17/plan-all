@@ -145,6 +145,7 @@ export interface Style {
   min_height?: number;
   bottom?: number;
   position?: 'static' | 'relative' | 'absolute' | 'sticky' | 'fixed';
+  align?: 'center' | 'left' | 'right';
 };
 
 export type Color = 'red' | 'orange' | 'yellow' | 'green' | 'blue' | 'holiday';
@@ -171,3 +172,9 @@ export interface CalendarEventInfo {
   top: number,
   start: number,
 };
+
+export interface CalendarOverflowInfo {
+  eventNum: number,
+  top: number,
+  start: number,
+}

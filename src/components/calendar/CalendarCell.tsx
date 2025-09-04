@@ -1,8 +1,9 @@
 import CalendarBlock from './CalendarBlock';
-import { CalendarDTO, CalendarEventInfo, Style } from '../../types/types';
+import { CalendarDTO, CalendarEventInfo, CalendarOverflowInfo, Style } from '../../types/types';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CalendarOverflowBlock from './CalendarOverflowBlock';
 
 const Cell = styled.Pressable`
   position: relative;
@@ -33,11 +34,12 @@ const DateText = styled.Text<Style & { isToday: boolean }>`
 `;
 
 const CalendarCell = (
-  { date, day, eventInfoList, isToday, openModal }: 
+  { date, day, eventInfoList, overflowInfoList, isToday, openModal }: 
   { 
     date: number | null,
     day: number,
     eventInfoList: CalendarEventInfo[],
+    overflowInfoList: CalendarOverflowInfo[],
     isToday: boolean,
     openModal: (date: number, day: number, eventInfoList: CalendarDTO[]) => void,
   }
@@ -70,10 +72,18 @@ const CalendarCell = (
         {eventInfoList.map((info: CalendarEventInfo) => {
           return (
             <CalendarBlock 
-              key={info.event.id} 
+              key={`${info.event.id}-${info.start}-${info.top}`} 
               event={info.event} 
               width={info.width}
               top={info.top}
+            />
+          );
+        })}
+        {overflowInfoList.map((info: CalendarOverflowInfo) => {
+          return (
+            <CalendarOverflowBlock
+              key={info.start}
+              overflow={info}
             />
           );
         })}

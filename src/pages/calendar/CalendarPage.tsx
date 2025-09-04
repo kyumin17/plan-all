@@ -40,7 +40,7 @@ const CalendarPage = () => {
         db: db,
         tableName: 'calendar',
         filter: {
-          orderFilter: ['start_year', 'start_month', 'start_date', 'start_hour', 'start_minute'],
+          orderFilter: ['start_year', 'start_month', 'start_date', 'end_year DESC', 'end_month DESC', 'end_date DESC', 'start_hour', 'start_minute'],
         },
       });
 
