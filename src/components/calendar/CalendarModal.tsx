@@ -1,92 +1,68 @@
-import { View } from 'react-native';
-import { CalendarDTO, Style } from '../../types/types';
-import { useNavigation } from '@react-navigation/native';
+import { CalendarDTO } from '../../types/types';
 import styled from 'styled-components/native';
-import { FlexCol } from '../../styles/style';
-import { timeRangeToStr } from '../../utils/time';
-import { colorCode } from '../../styles/color';
+import Modal from '../common/Modal';
+import CalendarModalBlock from './CalendarModalBlock';
+import { ScrollView } from 'react-native-gesture-handler';
+
+const Body = styled.View`
+  padding: 25px 10px;
+`;
 
 const Title = styled.Text`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 18px;
+  padding: 0 20px;
 `;
 
-const Body = styled(FlexCol)`
-  gap: 12px;
+const DayLabel = styled.Text`
+  font-size: 18px;
 `;
 
-const EventWrapper = styled.Pressable<Style & { allDay: 0 | 1 }>`
+const EventWrapper = styled.View`
   display: flex;
-  flex-direction: row;
-  gap: 15px;
-  background-color: ${(props) => props.bg_color};
-  padding-top: ${(props) => props.allDay ? '7px' : 0};
-  padding-bottom: 11px;
-  border-radius: 3px;
-`;
-
-const Marker = styled.View<Style>`
-  width: 3px;
-  background-color: ${(props) => props.bg_color};
-`;
-
-const Name = styled.Text<Style>`
-  font-size: 14px;
-  color: ${(props) => props.color};
-`;
-
-const Time = styled.Text`
-  font-size: 11px;
-  color: #A9A9A9;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 20px;
 `;
 
 const CalendarModal = (
-  { month, date, day, eventList }:
+  { month, date, day, eventList, isOpen, setIsOpen }:
   {
-    month: number;
-    date: number;
-    day: number;
-    eventList: CalendarDTO[];
+    month: number,
+    date: number,
+    day: number,
+    eventList: CalendarDTO[],
+    isOpen: boolean,
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   }
 ) => {
   const dayNameList = ['월', '화', '수', '목', '금', '토', '일'];
-  const navigation = useNavigation<any>();
 
   return (
-    <View>
-      <Title>
-        {month}.{date} {dayNameList[day]}
-      </Title>
+    <Modal
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+      bottom={5}
+    >
       <Body>
-        {eventList.map((event) => {
-          const color = colorCode[event.color];
-
-          return (
-            <EventWrapper
-              key={event.id}
-              onPress={() => navigation.navigate('CalendarEditPage', { event: event })}
-              bg_color={event.all_day ? `${color}25` : 'white'}
-              allDay={event.all_day}
-            >
-              <Marker bg_color={event.all_day ? '' : color}>
-              </Marker>
-              <View>
-                <Name color={color}>
-                  {event.name}
-                </Name>
-                <Time>
-                  {event.all_day ? 
-                    `${event.start_month}.${event.start_date} - ${event.end_month}.${event.end_date}` : 
-                    `${timeRangeToStr(event.start_hour, event.start_minute, event.end_hour, event.end_minute)}`}
-                  {event.location && `, ${event.location}`}
-                </Time>
-              </View>
-            </EventWrapper>
-          );
-        })}
+        <Title>
+          {month}.{date} <DayLabel>{dayNameList[day]}요일</DayLabel>
+        </Title>
+        <ScrollView style={{ maxHeight: 420 }}>
+          <EventWrapper>
+            {eventList.map((event) => {
+              return (
+                <CalendarModalBlock
+                  key={event.id}
+                  event={event}
+                />
+              );
+            })}
+          </EventWrapper>
+        </ScrollView>
       </Body>
-    </View>
+    </Modal>
   );
 }
 

@@ -8,11 +8,12 @@ export const getCalEventInfo = (
     height: number,
   }
 ) => {
-  const dateNum: number = new Date(date.year, date.month - 1, 0).getDate();
+  const dateNum: number = new Date(date.year, date.month, 0).getDate();
   const startDay: number = (new Date(date.year, date.month - 1, 1).getDay() - 1) % 7;
 
   const eventInfoList: CalendarEventInfo[] = [];
   const overflowList: CalendarOverflowInfo[] = [];
+  const dateEventList: CalendarDTO[][] = Array.from({ length: dateNum + 1 }, () => new Array(0));
   const topList: number[][] = Array.from({ length: dateNum + 1 }, () => new Array(height).fill(0));
   const overflowDate = new Set<number>();
 
@@ -23,6 +24,8 @@ export const getCalEventInfo = (
     const e = event.end_year == date.year && event.end_month == date.month ? event.end_date : dateNum;
 
     for (let i = s; i <= e; i++) {
+      dateEventList[i].push(event);
+
       const day = (i + startDay - 1) % 7;
 
       if (i === s || day === 0) {
@@ -101,5 +104,6 @@ export const getCalEventInfo = (
   return {
     eventInfoList: eventInfoList.filter((event) => event.width !== 0),
     overflowList: overflowList,
+    dateEventList: dateEventList,
   };
 }

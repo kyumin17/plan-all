@@ -3,7 +3,6 @@ import { CalendarDTO } from '../../types/types';
 import { useState } from 'react';
 import styled from 'styled-components/native';
 import CalendarModal from './CalendarModal';
-import Modal from '../common/Modal';
 import { getCalEventInfo } from '../../utils/getCalEventInfo';
 
 const Body = styled.View`
@@ -36,27 +35,28 @@ const CalendarBody = (
   }
 ) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [modalItem, setModalItem] = useState<null | ModalItem>(null);
 
   const startDay: number = (new Date(year, month - 1, 1).getDay() + 6) % 7; // mon: 0
   const dateNum: number = new Date(year, month, 0).getDate();
   const rowNum: number = startDay + dateNum <= 34 ? 5 : 6;
-  const { eventInfoList, overflowList } = getCalEventInfo({
+  const { eventInfoList, overflowList, dateEventList } = getCalEventInfo({
     eventList: eventList,
     date: { year: year, month: month },
     height: rowNum === 6 ? 4 : 6,
   });
 
-  const openModal = (date: number, day: number, eventList: CalendarDTO[]) => {
-    if (eventList.length !== 0) {
+  const openModal = (date: number) => {
+    if (dateEventList[date].length === 0) {
+
+    } else {
+      setIsOpen(true);
       setModalItem({
         date: date,
-        day: day,
-        events: eventList,
-      }); 
-      setIsOpen(true);
-    } else {
-      setModalItem(null);
+        day: (new Date(year, month - 1, date).getDay() + 6) % 7,
+        events: dateEventList[date],
+      });
     }
   }
 
@@ -78,7 +78,7 @@ const CalendarBody = (
                   eventInfoList={info}
                   overflowInfoList={overflow}
                   isToday={date === new Date().getDate() && month === new Date().getMonth() + 1 && year === new Date().getFullYear()}
-                  openModal={openModal}
+                  handlePress={openModal}
                 />
               );
             })}
@@ -86,19 +86,16 @@ const CalendarBody = (
         );
       })}
 
-      {modalItem && <Modal
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        minHeight={27}
-        bottom={5}
-      >
+      {modalItem && 
         <CalendarModal 
           month={month}
           date={modalItem.date}
           day={modalItem.day}
           eventList={modalItem.events}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
         />
-      </Modal>}
+      }
     </Body>
   );
 }

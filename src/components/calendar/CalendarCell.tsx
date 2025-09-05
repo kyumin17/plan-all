@@ -1,5 +1,5 @@
 import CalendarBlock from './CalendarBlock';
-import { CalendarDTO, CalendarEventInfo, CalendarOverflowInfo, Style } from '../../types/types';
+import { CalendarEventInfo, CalendarOverflowInfo, Style } from '../../types/types';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -34,32 +34,25 @@ const DateText = styled.Text<Style & { isToday: boolean }>`
 `;
 
 const CalendarCell = (
-  { date, day, eventInfoList, overflowInfoList, isToday, openModal }: 
+  { date, day, eventInfoList, overflowInfoList, isToday, handlePress }: 
   { 
     date: number | null,
     day: number,
     eventInfoList: CalendarEventInfo[],
     overflowInfoList: CalendarOverflowInfo[],
     isToday: boolean,
-    openModal: (date: number, day: number, eventInfoList: CalendarDTO[]) => void,
+    handlePress: (date: number) => void,
   }
 ) => {
-  const navigation = useNavigation<any>();
-
   const getDateColor = () => {
     if (day === 5) return '#1753b4';
     else if (day === 6) return '#db300e';
     else return '#3B3B3B';
   }
 
-  const handlePress = () => {
-    if (date && eventInfoList.length !== 0) openModal(date, day, eventInfoList.map(item => item.event));
-    else navigation.navigate('CalendarCreatePage');
-  }
-
   return (
     <Cell 
-      onPress={handlePress}
+      onPress={() => {date && handlePress(date)}}
     >
       <DateText 
         color={getDateColor()}
